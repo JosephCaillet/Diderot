@@ -6,7 +6,7 @@ package model;
 public class Parameter
 {
 	private boolean required;
-	private boolean description;
+	private String description;
 
 	public boolean isRequired()
 	{
@@ -18,12 +18,12 @@ public class Parameter
 		this.required = required;
 	}
 
-	public boolean isDescription()
+	public String getDescription()
 	{
 		return description;
 	}
 
-	public void setDescription(boolean description)
+	public void setDescription(String description)
 	{
 		this.description = description;
 	}
