@@ -1,5 +1,6 @@
 package gui;
 
+import gui.dialog.InputStringDialog;
 import model.Route;
 
 import javax.swing.*;
@@ -24,17 +25,31 @@ public class MainWindow extends JFrame
 
 		rootRoutes = new Route();
 
-		System.out.println((rootRoutes.addRoute("index")));
-		System.out.println((rootRoutes.addRoute("index")));
-		System.out.println((rootRoutes.addRoute("home")));
-		System.out.println((rootRoutes.addRoute("home/page1")));
-		System.out.println((rootRoutes.addRoute("home/page2")));
-		System.out.println((rootRoutes.addRoute("data/type/subtype1")));
-		System.out.println((rootRoutes.addRoute("data/type/subtype2")));
-		System.out.println((rootRoutes.addRoute("data/type2")));
-		System.out.println((rootRoutes.addRoute("home/page2")));
-		System.out.println((rootRoutes.addRoute("home/page2")));
+		//System.out.println((rootRoutes.addRoute("index")));
+		//System.out.println((rootRoutes.addRoute("index")));
+		//System.out.println((rootRoutes.addRoute("home")));
+		//System.out.println((rootRoutes.addRoute("home/page1")));
+		//System.out.println((rootRoutes.addRoute("home/page2")));
+		//System.out.println((rootRoutes.addRoute("data/type/subtype1")));
+		//System.out.println((rootRoutes.addRoute("data/type/subtype2")));
+		//System.out.println((rootRoutes.addRoute("data/type2")));
+		//System.out.println((rootRoutes.addRoute("home/page2")));
+		//System.out.println((rootRoutes.addRoute("home/page2")));
 
+		rootRoutes.addRoute("index");
+		rootRoutes.addRoute("index");
+		rootRoutes.addRoute("home");
+		rootRoutes.addRoute("home/page1");
+		rootRoutes.addRoute("home/page2");
+		rootRoutes.addRoute("data/type/subtype1");
+		rootRoutes.addRoute("data/type/subtype2");
+		rootRoutes.addRoute("data/type2");
+		rootRoutes.addRoute("home/page2");
+		rootRoutes.addRoute("home/page2");
+
+		InputStringDialog inputStringDialog = new InputStringDialog(this,"Add new route", "Add",
+				"Begin with / to add from root. Otherwise route will be add from current folder.", "");
+		System.out.println(inputStringDialog.showDialog());
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("/");
 		fillTree(root, rootRoutes);
 		routesTree = new JTree(root);
