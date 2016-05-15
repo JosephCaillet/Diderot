@@ -1,6 +1,5 @@
 package model;
 
-import javax.swing.tree.TreePath;
 import java.util.TreeMap;
 
 /**
@@ -141,11 +140,29 @@ public class Route
 			if(lastPart.isEmpty())
 			{
 				Route r = subRoutes.remove(firstPart);
-				if(r != null)
+				return r != null;
+			}
+			return subRoutes.get(firstPart).deleteRoute(lastPart);
+		}
+		return false;
+	}
+
+	public boolean renameRoute(String oldName, String newName)
+	{
+		String firstPart = extractRouteFirstPart(newName);
+		String lastPart = extractRouteLastPart(newName);
+
+		if(subRoutes.containsKey(firstPart))
+		{
+			if(lastPart.isEmpty())
+			{
+				Route r = subRoutes.remove(firstPart);
+				if(r == null)
 				{
-					return true;
+					return false;
 				}
-				return false;
+				subRoutes.put(newName, r);
+				return true;
 			}
 			return subRoutes.get(firstPart).deleteRoute(lastPart);
 		}
