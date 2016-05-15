@@ -21,8 +21,7 @@ public class InputStringDialog extends JDialog implements ActionListener
 		super(owner, title, true);
 		okBtn = new JButton(validateBtnText);
 		cancelBtn = new JButton("Cancel");
-		helper = new JLabel("Help");
-		helper.setToolTipText(helperText);
+		helper = new JLabel(helperText);
 		input = new JTextField();
 		input.setText(defaultValue);
 		buildInterface();

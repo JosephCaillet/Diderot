@@ -4,26 +4,38 @@ import gui.dialog.InputStringDialog;
 import model.Route;
 
 import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Map;
 
 /**
  * Created by joseph on 14/05/16.
  */
-public class MainWindow extends JFrame
+public class MainWindow extends JFrame implements TreeSelectionListener, ActionListener
 {
+	private String projectName = "domain.com";
+
 	private Route rootRoutes;
 	private JTree routesTree;
+
+	private JButton addRouteBtn = new JButton("Add route", new ImageIcon("rsc/plus.png"));
+	private JButton delRouteBtn = new JButton("Delete route", new ImageIcon("rsc/del.png"));
+	private JButton renameRouteBtn = new JButton("Rename route", new ImageIcon("rsc/edit.png"));
+	private JLabel currentRouteLbl = new JLabel(" ");
 
 	public MainWindow()
 	{
 		super("Diderot");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		setSystemLookAndFeel();
-
 		rootRoutes = new Route();
+		routesTree = new JTree();
 
 		//System.out.println((rootRoutes.addRoute("index")));
 		//System.out.println((rootRoutes.addRoute("index")));
@@ -47,18 +59,50 @@ public class MainWindow extends JFrame
 		rootRoutes.addRoute("home/page2");
 		rootRoutes.addRoute("home/page2");
 
-		InputStringDialog inputStringDialog = new InputStringDialog(this,"Add new route", "Add",
-				"Begin with / to add from root. Otherwise route will be add from current folder.", "");
-		System.out.println(inputStringDialog.showDialog());
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode("/");
-		fillTree(root, rootRoutes);
-		routesTree = new JTree(root);
-		add(routesTree);
+		rebuildTree();
+		buildUI();
+
 		setMinimumSize(new Dimension(200, 200));
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
+
+	private void buildUI()
+	{
+		rebuildTree();
+
+		setLayout(new BorderLayout());
+
+		routesTree.addTreeSelectionListener(this);
+
+		Box btnPannel = Box.createVerticalBox();
+		btnPannel.add(addRouteBtn);
+		btnPannel.add(renameRouteBtn);
+		btnPannel.add(delRouteBtn);
+
+		addRouteBtn.setAlignmentX(CENTER_ALIGNMENT);
+		delRouteBtn.setAlignmentX(CENTER_ALIGNMENT);
+		renameRouteBtn.setAlignmentX(CENTER_ALIGNMENT);
+		addRouteBtn.setMaximumSize(new Dimension(208,34));
+		delRouteBtn.setMaximumSize(new Dimension(208,34));
+		renameRouteBtn.setMaximumSize(new Dimension(208,34));
+		addRouteBtn.addActionListener(this);
+		delRouteBtn.addActionListener(this);
+		renameRouteBtn.addActionListener(this);
+
+		add(new JScrollPane(routesTree,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
+		add(currentRouteLbl, BorderLayout.NORTH);
+		add(btnPannel, BorderLayout.SOUTH);
+	}
+
+	private void rebuildTree()
+	{
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode(projectName);
+		fillTree(root, rootRoutes);
+		routesTree.setModel(new DefaultTreeModel(root));
+	}
+
 
 	public void fillTree(DefaultMutableTreeNode node, Route route)
 	{
@@ -70,18 +114,88 @@ public class MainWindow extends JFrame
 		}
 	}
 
-	public void setSystemLookAndFeel()
+	private String getAbsoluteNodePath(TreePath treePath, boolean removeRoot)
 	{
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		String absPath = "";
+
+		for(Object name : treePath.getPath())
+		{
+			if(removeRoot && (name.toString().equals(projectName)))
+			{
+				continue;
+			}
+
+			absPath += "/" + name.toString();
 		}
-		catch (UnsupportedLookAndFeelException e) {
+
+		if(!removeRoot)
+		{
+			absPath = absPath.substring(1);
 		}
-		catch (ClassNotFoundException e) {
+
+		return absPath;
+	}
+
+	@Override
+	public void valueChanged(TreeSelectionEvent e)
+	{
+		String absPath = getAbsoluteNodePath(e.getPath(), false);
+		currentRouteLbl.setText(absPath);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		if(e.getSource() == addRouteBtn)
+		{
+			String defaultRoute = "";
+			TreePath treePath = routesTree.getSelectionPath();
+			if(treePath != null)
+			{
+				defaultRoute = getAbsoluteNodePath(treePath, true);
+			}
+
+			String routeToAdd = (String) JOptionPane.showInputDialog(this,
+					"Enter route path:", "Add new route", JOptionPane.QUESTION_MESSAGE, null, null, defaultRoute + "/");
+
+			if(routeToAdd != null)
+			{
+				if(!rootRoutes.addRoute(routeToAdd))
+				{
+					JOptionPane.showMessageDialog(this, "This route already exists, or contains multiple occurrence of '/' without character between them.", "Cannot add route", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				rebuildTree();
+			}
 		}
-		catch (InstantiationException e) {
-		}
-		catch (IllegalAccessException e) {
+		else if(e.getSource() == delRouteBtn)
+		{
+			TreePath treePath = routesTree.getSelectionPath();
+			if(treePath == null)
+			{
+				JOptionPane.showMessageDialog(this, "No route selected");
+				return;
+			}
+
+			String routeToDelete = getAbsoluteNodePath(treePath, true);
+
+			if(routeToDelete.isEmpty())
+			{
+				JOptionPane.showMessageDialog(this, "You can't delete project root.", "Cannot delete project root", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
+			if(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(this,
+				"Are you sure you want to delete the following route and its sub-routes?\n" + routeToDelete, "Delete route", JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE))
+			{
+				if(!rootRoutes.deleteRoute(routeToDelete))
+				{
+					JOptionPane.showMessageDialog(this, "This route does not exists.", "Cannot delete route", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				rebuildTree();
+				currentRouteLbl.setText(" ");
+			}
 		}
 	}
 }

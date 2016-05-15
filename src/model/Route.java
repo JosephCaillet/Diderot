@@ -1,5 +1,6 @@
 package model;
 
+import javax.swing.tree.TreePath;
 import java.util.TreeMap;
 
 /**
@@ -68,40 +69,86 @@ public class Route
 		return subRoutes;
 	}
 
+	private String extractRouteFirstPart(String name)
+	{
+		if(name.startsWith("/"))
+		{
+			name = name.substring(1);
+		}
+
+		if(name.indexOf('/') != -1)
+		{
+			name = name.substring(0, name.indexOf('/'));
+		}
+		return name;
+	}
+
+	private String extractRouteLastPart(String name)
+	{
+		String lastPart = "";
+
+		if(name.startsWith("/"))
+		{
+			name = name.substring(1);
+		}
+
+		if(name.indexOf('/') != -1)
+		{
+			lastPart = name.substring(name.indexOf('/') + 1);
+		}
+		return lastPart;
+	}
+
 	public boolean addRoute(String name)
 	{
-		String firstPart = name;
-		if(name.indexOf('/') != -1)
-		{
-			firstPart = name.substring(0, name.indexOf('/'));
-		}
+		String firstPart = extractRouteFirstPart(name);
+		String lastPart = extractRouteLastPart(name);
 
-		String secondPart = "";
-		if(name.indexOf('/') != -1)
+		if(firstPart.isEmpty())
 		{
-			secondPart = name.substring(name.indexOf('/') + 1);
+			return false;
 		}
-
 
 		if(subRoutes.containsKey(firstPart))
 		{
-			if(secondPart.isEmpty())
+			if(lastPart.isEmpty())
 			{
 				return false;
 			}
-			return subRoutes.get(firstPart).addRoute(secondPart);
+			return subRoutes.get(firstPart).addRoute(lastPart);
 		}
 		else
 		{
 			Route newRoute = new Route();
 			subRoutes.put(firstPart, newRoute);
 
-			if(secondPart.isEmpty())
+			if(lastPart.isEmpty())
 			{
 				return true;
 			}
 
-			return newRoute.addRoute(secondPart);
+			return newRoute.addRoute(lastPart);
 		}
+	}
+
+	public boolean deleteRoute(String name)
+	{
+		String firstPart = extractRouteFirstPart(name);
+		String lastPart = extractRouteLastPart(name);
+
+		if(subRoutes.containsKey(firstPart))
+		{
+			if(lastPart.isEmpty())
+			{
+				Route r = subRoutes.remove(firstPart);
+				if(r != null)
+				{
+					return true;
+				}
+				return false;
+			}
+			return subRoutes.get(firstPart).deleteRoute(lastPart);
+		}
+		return false;
 	}
 }
