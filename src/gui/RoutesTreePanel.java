@@ -5,9 +5,9 @@ import model.Route;
 import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.tree.*;
 import java.util.Map;
 import java.util.Vector;
 
@@ -18,18 +18,20 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 {
 	private Vector<TreePath> expandedNodes = new Vector<TreePath>();
 
-	public RoutesTreePanel()
+	public RoutesTreePanel(Route rootRoutes)
 	{
 		super();
 		addTreeExpansionListener(this);
+		setModel(rootRoutes);
 	}
 
-	public void rebuildTree(String projectName, Route rootRoutes)
+	/*public void rebuildTree()
 	{
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode(projectName);
+		//DefaultMutableTreeNode root = new DefaultMutableTreeNode(projectName);
 		removeTreeExpansionListener(this);
-		fillTree(root, rootRoutes);
-		setModel(new DefaultTreeModel(root));
+		//fillTree(root, rootRoutes);
+		//setModel(new DefaultTreeModel(root));
+
 		for(TreePath tp : expandedNodes)
 		{
 			expandPath(tp);
@@ -46,7 +48,7 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 			fillTree(newNode, entry.getValue());
 			node.add(newNode);
 		}
-	}
+	}*/
 
 	@Override
 	public void treeExpanded(TreeExpansionEvent treeExpansionEvent)
@@ -58,20 +60,21 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 	@Override
 	public void treeCollapsed(TreeExpansionEvent treeExpansionEvent)
 	{
-		expandedNodes.remove(treeExpansionEvent.getPath());
+		expandedNodes.remove(treeExpansionEvent.getPath());//not perfect: if user delete subroutes, they will still remain in this vector.
 		System.out.println("colapse : " + treeExpansionEvent.getPath());
 	}
 
-	public void test()
+	public void updateModel()
 	{
-		DefaultTreeModel model = (DefaultTreeModel)getModel();
-		DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
-		root.add(new DefaultMutableTreeNode("another_child"));
-		model.reload(root);
+		TreeModel model = getModel();
+		Route root = (Route) model.getRoot();
+		setModel(new Route(""));
+		setModel(root);
+
 		removeTreeExpansionListener(this);
 		for(TreePath tp : expandedNodes)
 		{
-			//expandPath(tp);
+			expandPath(tp);
 			System.out.println("expanding : " + tp);
 		}
 		addTreeExpansionListener(this);

@@ -1,6 +1,5 @@
 package gui;
 
-import gui.dialog.InputStringDialog;
 import model.Route;
 
 import javax.swing.*;
@@ -37,33 +36,33 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 		super("Diderot");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		rootRoutes = new Route();
-		routesTreePanel = new RoutesTreePanel();
+		rootRoutes = new Route(projectName);
+		routesTreePanel = new RoutesTreePanel(rootRoutes);
 
-		System.out.println((rootRoutes.addRoute("index", new Route())));
-		System.out.println((rootRoutes.addRoute("index", new Route())));
-		System.out.println((rootRoutes.addRoute("home", new Route())));
-		System.out.println((rootRoutes.addRoute("home/page1", new Route())));
-		System.out.println((rootRoutes.addRoute("home/page2", new Route())));
-		System.out.println((rootRoutes.addRoute("data/type/subtype1", new Route())));
-		System.out.println((rootRoutes.addRoute("data/type/subtype2", new Route())));
-		System.out.println((rootRoutes.addRoute("data/type2", new Route())));
-		System.out.println((rootRoutes.addRoute("home/page2", new Route())));
-		System.out.println((rootRoutes.addRoute("home/page2", new Route())));
+		/*System.out.println((rootRoutes.addRoute("index", new Route(rootRoutes))));
+		System.out.println((rootRoutes.addRoute("index", new Route(rootRoutes))));
+		System.out.println((rootRoutes.addRoute("home", new Route(rootRoutes))));
+		System.out.println((rootRoutes.addRoute("home/page1", new Route(rootRoutes))));
+		System.out.println((rootRoutes.addRoute("home/page2", new Route(rootRoutes))));
+		System.out.println((rootRoutes.addRoute("data/type/subtype1", new Route(rootRoutes))));
+		System.out.println((rootRoutes.addRoute("data/type/subtype2", new Route(rootRoutes))));
+		System.out.println((rootRoutes.addRoute("data/type2", new Route(rootRoutes))));
+		System.out.println((rootRoutes.addRoute("home/page2", new Route(rootRoutes))));
+		System.out.println((rootRoutes.addRoute("home/page2", new Route(rootRoutes))));*/
 
-		/*rootRoutes.addRoute("index", new Route());
-		rootRoutes.addRoute("index", new Route());
-		rootRoutes.addRoute("home", new Route());
-		rootRoutes.addRoute("home/page1", new Route());
-		rootRoutes.addRoute("home/page2", new Route());
-		rootRoutes.addRoute("data/type/subtype1", new Route());
-		rootRoutes.addRoute("data/type/subtype2", new Route());
-		rootRoutes.addRoute("bidule/truc", new Route());
-		rootRoutes.addRoute("data/type2", new Route());
-		rootRoutes.addRoute("home/page2", new Route());
-		rootRoutes.addRoute("home/page2", new Route());*/
+		rootRoutes.addRoute("index");
+		rootRoutes.addRoute("index");
+		rootRoutes.addRoute("home");
+		rootRoutes.addRoute("home/page1");
+		rootRoutes.addRoute("home/page2");
+		rootRoutes.addRoute("data/type/subtype1");
+		rootRoutes.addRoute("data/type/subtype2");
+		rootRoutes.addRoute("bidule/truc");
+		rootRoutes.addRoute("data/type2");
+		rootRoutes.addRoute("home/page2");
+		rootRoutes.addRoute("home/page2");
 
-		routesTreePanel.rebuildTree(projectName, rootRoutes);
+		routesTreePanel.updateModel();
 		buildUI();
 
 		setMinimumSize(new Dimension(200, 200));
@@ -122,12 +121,12 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 
 			if(routeToAdd != null)
 			{
-				if(!rootRoutes.addRoute(routeToAdd, new Route()))
+				if(!rootRoutes.addRoute(routeToAdd))
 				{
 					JOptionPane.showMessageDialog(this, "This route already exists, or contains multiple occurrence of '/' without character between them.", "Cannot add route", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
-				routesTreePanel.rebuildTree(projectName, rootRoutes);
+				routesTreePanel.updateModel();
 			}
 		}
 		else if(e.getSource() == delRouteBtn)
@@ -155,13 +154,9 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 					JOptionPane.showMessageDialog(this, "This route does not exists.", "Cannot delete route", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				routesTreePanel.rebuildTree(projectName, rootRoutes);
+				routesTreePanel.updateModel();
 				currentRouteLbl.setText(" ");
 			}
-		}
-		else if(e.getSource() == renameRouteBtn)
-		{
-			routesTreePanel.test();
 		}
 	}
 }

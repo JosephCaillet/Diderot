@@ -6,12 +6,14 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.Vector;
 
 /**
  * Created by joseph on 13/05/16.
  */
-public class Route
+public class Route implements TreeModel
 {
+	private String name = "";
 	private String description = "";
 
 	private String controller = "";
@@ -20,6 +22,8 @@ public class Route
 
 	private TreeMap<String, Route> subRoutes;
 	private TreeMap<String, HttpMethod> httpMethods;
+
+	private Route root;
 
 
 	public static String getAbsoluteNodePath(TreePath treePath, boolean removeRoot)
@@ -46,10 +50,28 @@ public class Route
 		return absPath;
 	}
 
-	public Route()
+	public Route(String name)
 	{
 		subRoutes = new TreeMap<String, Route>();
 		httpMethods = new TreeMap<String, HttpMethod>();
+		this.name = name;
+		root = this;
+	}
+
+	public Route(String name, Route root)
+	{
+		this(name);
+		this.root = root;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 
 	public String getDescription()
@@ -97,7 +119,7 @@ public class Route
 		return subRoutes;
 	}
 
-	private String extractRouteFirstPart(String name)
+	private static String extractRouteFirstPart(String name)
 	{
 		if(name.startsWith("/"))
 		{
@@ -111,7 +133,7 @@ public class Route
 		return name;
 	}
 
-	private String extractRouteLastPart(String name)
+	private static String extractRouteLastPart(String name)
 	{
 		String lastPart = "";
 
@@ -125,6 +147,23 @@ public class Route
 			lastPart = name.substring(name.indexOf('/') + 1);
 		}
 		return lastPart;
+	}
+
+	public boolean addRoute(String path)
+	{
+		Route r;
+		String name = extractRouteLastPart(path);
+
+		if(name.isEmpty())
+		{
+			r = new Route(extractRouteFirstPart(path));
+		}
+		else
+		{
+			r = new Route(name);
+		}
+
+		return addRoute(path, r);
 	}
 
 	public boolean addRoute(String name, Route newRoute)
@@ -153,7 +192,7 @@ public class Route
 				return true;
 			}
 
-			Route route = new Route();
+			Route route = new Route(firstPart, root);
 			subRoutes.put(firstPart, route);
 			return route.addRoute(lastPart, newRoute);
 		}
@@ -196,5 +235,59 @@ public class Route
 			return subRoutes.get(firstPart).deleteRoute(lastPart);
 		}
 		return false;
+	}
+
+	@Override
+	public Object getRoot()
+	{
+		return root;
+	}
+
+	@Override
+	public Object getChild(Object o, int i)
+	{
+		Route r = (Route)o;
+		return r.subRoutes.get(r.subRoutes.keySet().toArray()[i]);
+	}
+
+	@Override
+	public int getChildCount(Object o)
+	{
+		Route r = (Route)o;
+		return r.subRoutes.size();
+	}
+
+	@Override
+	public boolean isLeaf(Object o)
+	{
+		Route r = (Route)o;
+		return r.subRoutes.size() == 0;
+	}
+
+	@Override
+	public void valueForPathChanged(TreePath treePath, Object o)
+	{
+	}
+
+	@Override
+	public int getIndexOfChild(Object o, Object o1)
+	{
+		return 0;
+	}
+
+	@Override
+	public void addTreeModelListener(TreeModelListener treeModelListener)
+	{
+	}
+
+	@Override
+	public void removeTreeModelListener(TreeModelListener treeModelListener)
+	{
+	}
+
+	@Override
+	public String toString()
+	{
+		return name;
 	}
 }
