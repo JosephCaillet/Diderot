@@ -6,6 +6,7 @@ import model.Route;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.plaf.TreeUI;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -13,6 +14,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
+
+import static model.Route.getAbsoluteNodePath;
 
 /**
  * Created by joseph on 14/05/16.
@@ -22,7 +25,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 	private String projectName = "domain.com";
 
 	private Route rootRoutes;
-	private JTree routesTree;
+	private RoutesTreePanel routesTreePanel;
 
 	private JButton addRouteBtn = new JButton("Add route", new ImageIcon("rsc/plus.png"));
 	private JButton delRouteBtn = new JButton("Delete route", new ImageIcon("rsc/del.png"));
@@ -35,31 +38,32 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		rootRoutes = new Route();
-		routesTree = new JTree();
+		routesTreePanel = new RoutesTreePanel();
 
-		//System.out.println((rootRoutes.addRoute("index")));
-		//System.out.println((rootRoutes.addRoute("index")));
-		//System.out.println((rootRoutes.addRoute("home")));
-		//System.out.println((rootRoutes.addRoute("home/page1")));
-		//System.out.println((rootRoutes.addRoute("home/page2")));
-		//System.out.println((rootRoutes.addRoute("data/type/subtype1")));
-		//System.out.println((rootRoutes.addRoute("data/type/subtype2")));
-		//System.out.println((rootRoutes.addRoute("data/type2")));
-		//System.out.println((rootRoutes.addRoute("home/page2")));
-		//System.out.println((rootRoutes.addRoute("home/page2")));
+		System.out.println((rootRoutes.addRoute("index", new Route())));
+		System.out.println((rootRoutes.addRoute("index", new Route())));
+		System.out.println((rootRoutes.addRoute("home", new Route())));
+		System.out.println((rootRoutes.addRoute("home/page1", new Route())));
+		System.out.println((rootRoutes.addRoute("home/page2", new Route())));
+		System.out.println((rootRoutes.addRoute("data/type/subtype1", new Route())));
+		System.out.println((rootRoutes.addRoute("data/type/subtype2", new Route())));
+		System.out.println((rootRoutes.addRoute("data/type2", new Route())));
+		System.out.println((rootRoutes.addRoute("home/page2", new Route())));
+		System.out.println((rootRoutes.addRoute("home/page2", new Route())));
 
-		rootRoutes.addRoute("index");
-		rootRoutes.addRoute("index");
-		rootRoutes.addRoute("home");
-		rootRoutes.addRoute("home/page1");
-		rootRoutes.addRoute("home/page2");
-		rootRoutes.addRoute("data/type/subtype1");
-		rootRoutes.addRoute("data/type/subtype2");
-		rootRoutes.addRoute("data/type2");
-		rootRoutes.addRoute("home/page2");
-		rootRoutes.addRoute("home/page2");
+		/*rootRoutes.addRoute("index", new Route());
+		rootRoutes.addRoute("index", new Route());
+		rootRoutes.addRoute("home", new Route());
+		rootRoutes.addRoute("home/page1", new Route());
+		rootRoutes.addRoute("home/page2", new Route());
+		rootRoutes.addRoute("data/type/subtype1", new Route());
+		rootRoutes.addRoute("data/type/subtype2", new Route());
+		rootRoutes.addRoute("bidule/truc", new Route());
+		rootRoutes.addRoute("data/type2", new Route());
+		rootRoutes.addRoute("home/page2", new Route());
+		rootRoutes.addRoute("home/page2", new Route());*/
 
-		rebuildTree();
+		routesTreePanel.rebuildTree(projectName, rootRoutes);
 		buildUI();
 
 		setMinimumSize(new Dimension(200, 200));
@@ -70,11 +74,9 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 
 	private void buildUI()
 	{
-		rebuildTree();
-
 		setLayout(new BorderLayout());
 
-		routesTree.addTreeSelectionListener(this);
+		routesTreePanel.addTreeSelectionListener(this);
 
 		Box btnPannel = Box.createVerticalBox();
 		btnPannel.add(addRouteBtn);
@@ -91,49 +93,9 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 		delRouteBtn.addActionListener(this);
 		renameRouteBtn.addActionListener(this);
 
-		add(new JScrollPane(routesTree,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
+		add(new JScrollPane(routesTreePanel,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
 		add(currentRouteLbl, BorderLayout.NORTH);
 		add(btnPannel, BorderLayout.SOUTH);
-	}
-
-	private void rebuildTree()
-	{
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode(projectName);
-		fillTree(root, rootRoutes);
-		routesTree.setModel(new DefaultTreeModel(root));
-	}
-
-
-	public void fillTree(DefaultMutableTreeNode node, Route route)
-	{
-		for(Map.Entry<String, Route> entry : route.getSubRoutes().entrySet())
-		{
-			DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(entry.getKey());
-			fillTree(newNode, entry.getValue());
-			node.add(newNode);
-		}
-	}
-
-	private String getAbsoluteNodePath(TreePath treePath, boolean removeRoot)
-	{
-		String absPath = "";
-
-		for(Object name : treePath.getPath())
-		{
-			if(removeRoot && (name.toString().equals(projectName)))
-			{
-				continue;
-			}
-
-			absPath += "/" + name.toString();
-		}
-
-		if(!removeRoot)
-		{
-			absPath = absPath.substring(1);
-		}
-
-		return absPath;
 	}
 
 	@Override
@@ -149,7 +111,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 		if(e.getSource() == addRouteBtn)
 		{
 			String defaultRoute = "";
-			TreePath treePath = routesTree.getSelectionPath();
+			TreePath treePath = routesTreePanel.getSelectionPath();
 			if(treePath != null)
 			{
 				defaultRoute = getAbsoluteNodePath(treePath, true);
@@ -160,17 +122,17 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 
 			if(routeToAdd != null)
 			{
-				if(!rootRoutes.addRoute(routeToAdd))
+				if(!rootRoutes.addRoute(routeToAdd, new Route()))
 				{
 					JOptionPane.showMessageDialog(this, "This route already exists, or contains multiple occurrence of '/' without character between them.", "Cannot add route", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
-				rebuildTree();
+				routesTreePanel.rebuildTree(projectName, rootRoutes);
 			}
 		}
 		else if(e.getSource() == delRouteBtn)
 		{
-			TreePath treePath = routesTree.getSelectionPath();
+			TreePath treePath = routesTreePanel.getSelectionPath();
 			if(treePath == null)
 			{
 				JOptionPane.showMessageDialog(this, "No route selected");
@@ -193,9 +155,13 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 					JOptionPane.showMessageDialog(this, "This route does not exists.", "Cannot delete route", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				rebuildTree();
+				routesTreePanel.rebuildTree(projectName, rootRoutes);
 				currentRouteLbl.setText(" ");
 			}
+		}
+		else if(e.getSource() == renameRouteBtn)
+		{
+			routesTreePanel.test();
 		}
 	}
 }

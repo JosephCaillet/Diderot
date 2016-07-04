@@ -1,5 +1,10 @@
 package model;
 
+import javax.swing.*;
+import javax.swing.event.TreeModelListener;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -16,6 +21,30 @@ public class Route
 	private TreeMap<String, Route> subRoutes;
 	private TreeMap<String, HttpMethod> httpMethods;
 
+
+	public static String getAbsoluteNodePath(TreePath treePath, boolean removeRoot)
+	{
+		String absPath = "";
+
+		int i = 0;
+		if(removeRoot)
+		{
+			i++;
+		}
+
+		Object[] names = treePath.getPath();
+		for(; i<names.length; i++)
+		{
+			absPath += "/" + names[i].toString();
+		}
+
+		if(!removeRoot)
+		{
+			absPath = absPath.substring(1);
+		}
+
+		return absPath;
+	}
 
 	public Route()
 	{
@@ -98,7 +127,7 @@ public class Route
 		return lastPart;
 	}
 
-	public boolean addRoute(String name)
+	public boolean addRoute(String name, Route newRoute)
 	{
 		String firstPart = extractRouteFirstPart(name);
 		String lastPart = extractRouteLastPart(name);
@@ -114,19 +143,19 @@ public class Route
 			{
 				return false;
 			}
-			return subRoutes.get(firstPart).addRoute(lastPart);
+			return subRoutes.get(firstPart).addRoute(lastPart, newRoute);
 		}
 		else
 		{
-			Route newRoute = new Route();
-			subRoutes.put(firstPart, newRoute);
-
 			if(lastPart.isEmpty())
 			{
+				subRoutes.put(firstPart, newRoute);
 				return true;
 			}
 
-			return newRoute.addRoute(lastPart);
+			Route route = new Route();
+			subRoutes.put(firstPart, route);
+			return route.addRoute(lastPart, newRoute);
 		}
 	}
 
