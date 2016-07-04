@@ -4,9 +4,7 @@ import javax.swing.*;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-import java.util.Set;
 import java.util.TreeMap;
-import java.util.Vector;
 
 /**
  * Created by joseph on 13/05/16.
@@ -265,22 +263,34 @@ public class Route implements TreeModel
 	}
 
 	@Override
+	/**
+	 * Unused
+	 */
 	public void valueForPathChanged(TreePath treePath, Object o)
 	{
 	}
 
 	@Override
+	/**
+	 * Unused
+	 */
 	public int getIndexOfChild(Object o, Object o1)
 	{
 		return 0;
 	}
 
 	@Override
+	/**
+	 * Unused
+	 */
 	public void addTreeModelListener(TreeModelListener treeModelListener)
 	{
 	}
 
 	@Override
+	/**
+	 * Unused
+	 */
 	public void removeTreeModelListener(TreeModelListener treeModelListener)
 	{
 	}

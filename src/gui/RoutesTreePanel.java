@@ -5,10 +5,7 @@ import model.Route;
 import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
 import javax.swing.tree.*;
-import java.util.Map;
 import java.util.Vector;
 
 /**
