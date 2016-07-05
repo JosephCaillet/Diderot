@@ -58,7 +58,7 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 	@Override
 	public void treeCollapsed(TreeExpansionEvent treeExpansionEvent)
 	{
-		expandedNodes.remove(treeExpansionEvent.getPath());//not perfect: if user delete subroutes, they will still remain in this vector.
+		expandedNodes.remove(treeExpansionEvent.getPath());
 		//System.out.println("colapse : " + treeExpansionEvent.getPath());
 	}
 

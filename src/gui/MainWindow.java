@@ -62,7 +62,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 		routesTreePanel.updateModel();
 		buildUI();
 
-		setMinimumSize(new Dimension(200, 200));
+		setMinimumSize(new Dimension(400, 400));
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -100,7 +100,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 
 		JSplitPane mainPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, leftPanel, rightPanel);
 		mainPanel.setBorder(BorderFactory.createLineBorder(mainPanel.getBackground(), 5));
-		mainPanel.setResizeWeight(0.5);
+		mainPanel.setResizeWeight(0.2);
 		add(mainPanel);
 	}
 
@@ -172,12 +172,13 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 		if(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(this,
 				"Are you sure you want to delete the following route and its sub-routes?\n" + routeToDelete, "Delete route", JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE))
 		{
+			TreePath tp = new TreePath(rootRoutes.getPathToRoute(routeToDelete));
 			if(!rootRoutes.deleteRoute(routeToDelete))
 			{
 				JOptionPane.showMessageDialog(this, "This route does not exists.", "Cannot delete route", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			routesTreePanel.treeCollapsed(new TreeExpansionEvent(null, new TreePath(rootRoutes.getPathToRoute(routeToDelete))));
+			routesTreePanel.treeCollapsed(new TreeExpansionEvent(this, tp));
 			routesTreePanel.updateModel();
 			currentRouteLbl.setText(" ");
 		}
