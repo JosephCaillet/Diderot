@@ -123,6 +123,9 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 					return;
 				}
 				routesTreePanel.updateModel();
+				//System.out.println(rootRoutes.getPathToRoute(routeToAdd));
+				System.out.println("\n" + new TreePath(rootRoutes.getPathToRoute(routeToAdd)));
+				routesTreePanel.setSelectionPath(new TreePath(rootRoutes.getPathToRoute(routeToAdd)));
 			}
 		}
 		else if(e.getSource() == delRouteBtn)

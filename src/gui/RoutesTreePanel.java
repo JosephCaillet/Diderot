@@ -52,14 +52,14 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 	public void treeExpanded(TreeExpansionEvent treeExpansionEvent)
 	{
 		expandedNodes.add(treeExpansionEvent.getPath());
-		System.out.println("expand : " + treeExpansionEvent.getPath());
+		//System.out.println("expand : " + treeExpansionEvent.getPath());
 	}
 
 	@Override
 	public void treeCollapsed(TreeExpansionEvent treeExpansionEvent)
 	{
 		expandedNodes.remove(treeExpansionEvent.getPath());//not perfect: if user delete subroutes, they will still remain in this vector.
-		System.out.println("colapse : " + treeExpansionEvent.getPath());
+		//System.out.println("colapse : " + treeExpansionEvent.getPath());
 	}
 
 	public void updateModel()
@@ -73,7 +73,7 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 		for(TreePath tp : expandedNodes)
 		{
 			expandPath(tp);
-			System.out.println("expanding : " + tp);
+			//System.out.println("expanding : " + tp);
 		}
 		addTreeExpansionListener(this);
 	}

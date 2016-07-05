@@ -4,6 +4,7 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import java.util.TreeMap;
+import java.util.Vector;
 
 /**
  * Created by joseph on 13/05/16.
@@ -246,6 +247,35 @@ public class Route implements TreeModel
 				return true;
 			}
 			return subRoutes.get(firstPart).deleteRoute(lastPart);
+		}
+		return false;
+	}
+
+	public Object[] getPathToRoute(String path)
+	{
+		Vector<Route> routeVector = new Vector<Route>();
+		routeVector.add(this);
+		if(getPathToRoute(path, routeVector))
+		{
+			return routeVector.toArray();
+		}
+		return null;
+		//return routeVector.toArray();
+	}
+
+	private boolean getPathToRoute(String path, Vector<Route> routeVector)
+	{
+		String firstPart = extractRouteFirstPart(path);
+		String lastPart = extractRouteWithoutFirstPart(path);
+
+		if(subRoutes.containsKey(firstPart))
+		{
+			routeVector.add(subRoutes.get(firstPart));
+			if(lastPart.isEmpty())
+			{
+				return true;
+			}
+			return subRoutes.get(firstPart).getPathToRoute(lastPart, routeVector);
 		}
 		return false;
 	}
