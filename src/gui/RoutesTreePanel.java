@@ -20,6 +20,7 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 		super();
 		addTreeExpansionListener(this);
 		setModel(rootRoutes);
+		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 	}
 
 	/*public void rebuildTree()

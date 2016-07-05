@@ -1,6 +1,5 @@
 package model;
 
-import javax.swing.*;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
@@ -131,7 +130,7 @@ public class Route implements TreeModel
 		return name;
 	}
 
-	private static String extractRouteLastPart(String name)
+	private static String extractRouteWithoutFirstPart(String name)
 	{
 		String lastPart = "";
 
@@ -147,10 +146,32 @@ public class Route implements TreeModel
 		return lastPart;
 	}
 
+	private static String extractRouteLastPart(String name)
+	{
+		String lastPart = "";
+
+		if(name.startsWith("/"))
+		{
+			name = name.substring(1);
+		}
+
+		if(name.lastIndexOf('/') != -1)
+		{
+			lastPart = name.substring(name.lastIndexOf('/') + 1);
+		}
+		return lastPart;
+	}
+
 	public boolean addRoute(String path)
 	{
-		Route r;
 		String name = extractRouteLastPart(path);
+		Route r;
+
+		System.out.println("Path:\t" + path);
+		System.out.println("First:\t" + extractRouteFirstPart(path));
+		System.out.println("Rest:\t" + extractRouteWithoutFirstPart(path));
+		System.out.println("Last:\t" + extractRouteLastPart(path));
+		System.out.println();
 
 		if(name.isEmpty())
 		{
@@ -167,7 +188,7 @@ public class Route implements TreeModel
 	public boolean addRoute(String name, Route newRoute)
 	{
 		String firstPart = extractRouteFirstPart(name);
-		String lastPart = extractRouteLastPart(name);
+		String lastPart = extractRouteWithoutFirstPart(name);
 
 		if(firstPart.isEmpty())
 		{
@@ -199,7 +220,7 @@ public class Route implements TreeModel
 	public boolean deleteRoute(String name)
 	{
 		String firstPart = extractRouteFirstPart(name);
-		String lastPart = extractRouteLastPart(name);
+		String lastPart = extractRouteWithoutFirstPart(name);
 
 		if(subRoutes.containsKey(firstPart))
 		{
@@ -216,7 +237,7 @@ public class Route implements TreeModel
 	public boolean renameRoute(String oldName, String newName)
 	{
 		String firstPart = extractRouteFirstPart(newName);
-		String lastPart = extractRouteLastPart(newName);
+		String lastPart = extractRouteWithoutFirstPart(newName);
 
 		if(subRoutes.containsKey(firstPart))
 		{
