@@ -260,7 +260,6 @@ public class Route implements TreeModel
 			return routeVector.toArray();
 		}
 		return null;
-		//return routeVector.toArray();
 	}
 
 	private boolean getPathToRoute(String path, Vector<Route> routeVector)

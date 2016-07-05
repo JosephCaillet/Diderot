@@ -73,7 +73,7 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 		for(TreePath tp : expandedNodes)
 		{
 			expandPath(tp);
-			//System.out.println("expanding : " + tp);
+			System.out.println("expanding : " + tp);
 		}
 		addTreeExpansionListener(this);
 	}
