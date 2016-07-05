@@ -167,12 +167,6 @@ public class Route implements TreeModel
 		String name = extractRouteLastPart(path);
 		Route r;
 
-		System.out.println("Path:\t" + path);
-		System.out.println("First:\t" + extractRouteFirstPart(path));
-		System.out.println("Rest:\t" + extractRouteWithoutFirstPart(path));
-		System.out.println("Last:\t" + extractRouteLastPart(path));
-		System.out.println();
-
 		if(name.isEmpty())
 		{
 			r = new Route(extractRouteFirstPart(path));
