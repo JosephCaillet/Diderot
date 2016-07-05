@@ -14,6 +14,7 @@ import java.util.Vector;
 public class RoutesTreePanel extends JTree implements TreeExpansionListener
 {
 	private Vector<TreePath> expandedNodes = new Vector<TreePath>();
+	private Vector<TreePath> collapsedNodes = new Vector<TreePath>();
 
 	public RoutesTreePanel(Route rootRoutes)
 	{
@@ -51,7 +52,8 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 	@Override
 	public void treeExpanded(TreeExpansionEvent treeExpansionEvent)
 	{
-		expandedNodes.add(treeExpansionEvent.getPath());
+		expandedNodes.add(treeExpansionEvent.getPath());//not perfect: is a sub node is opened, and after a parent node is cloded, the sub node will be expanded, with all parent nodes.
+		collapsedNodes.remove(treeExpansionEvent.getPath());
 		//System.out.println("expand : " + treeExpansionEvent.getPath());
 	}
 
@@ -59,7 +61,15 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 	public void treeCollapsed(TreeExpansionEvent treeExpansionEvent)
 	{
 		expandedNodes.remove(treeExpansionEvent.getPath());
+		collapsedNodes.add(treeExpansionEvent.getPath());
 		//System.out.println("colapse : " + treeExpansionEvent.getPath());
+	}
+
+	public void updateModel(TreePath treePath)
+	{
+		expandedNodes.remove(treePath);
+		collapsedNodes.remove(treePath);
+		updateModel();
 	}
 
 	public void updateModel()
@@ -73,7 +83,12 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 		for(TreePath tp : expandedNodes)
 		{
 			expandPath(tp);
-			System.out.println("expanding : " + tp);
+			//System.out.println("expanding : " + tp);
+		}
+		for(TreePath tp : collapsedNodes)
+		{
+			collapsePath(tp);
+			//System.out.println("collapsing : " + tp);
 		}
 		addTreeExpansionListener(this);
 	}

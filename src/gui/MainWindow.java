@@ -94,13 +94,17 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 		leftPanel.add(new JScrollPane(routesTreePanel,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
 		leftPanel.add(btnPannel, BorderLayout.SOUTH);
 
-		JPanel rightPanel = new JPanel(new BorderLayout());
 
+		currentRouteLbl.setOpaque(true);
+		//currentRouteLbl.setBackground(cr);
+		currentRouteLbl.setBorder(BorderFactory.createLineBorder(currentRouteLbl.getBackground().darker(), 1));
+
+		JPanel rightPanel = new JPanel(new BorderLayout());
 		rightPanel.add(currentRouteLbl, BorderLayout.NORTH);
 
 		JSplitPane mainPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, leftPanel, rightPanel);
 		mainPanel.setBorder(BorderFactory.createLineBorder(mainPanel.getBackground(), 5));
-		mainPanel.setResizeWeight(0.2);
+		mainPanel.setResizeWeight(0.4);
 		add(mainPanel);
 	}
 
@@ -116,19 +120,19 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 	{
 		if(e.getSource() == addRouteBtn)
 		{
-			actionAddRoute(e);
+			actionAddRoute();
 		}
 		else if(e.getSource() == delRouteBtn)
 		{
-			actionRemoveRoute(e);
+			actionRemoveRoute();
 		}
 		else if(e.getSource() == renameRouteBtn)
 		{
-			actionRenameRoute(e);
+			actionRenameRoute();
 		}
 	}
 
-	private void actionAddRoute(ActionEvent e)
+	private void actionAddRoute()
 	{
 		String defaultRoute = "";
 		TreePath treePath = routesTreePanel.getSelectionPath();
@@ -152,7 +156,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 		}
 	}
 
-	private void actionRemoveRoute(ActionEvent e)
+	private void actionRemoveRoute()
 	{
 		TreePath treePath = routesTreePanel.getSelectionPath();
 		if(treePath == null)
@@ -178,14 +182,13 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 				JOptionPane.showMessageDialog(this, "This route does not exists.", "Cannot delete route", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			routesTreePanel.treeCollapsed(new TreeExpansionEvent(this, tp));
-			routesTreePanel.updateModel();
+			routesTreePanel.updateModel(tp);
 			currentRouteLbl.setText(" ");
 		}
 	}
 
-	private void actionRenameRoute(ActionEvent e)
+	private void actionRenameRoute()
 	{
-
+		//rename a route
 	}
 }
