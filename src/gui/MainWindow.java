@@ -3,7 +3,6 @@ package gui;
 import model.Route;
 
 import javax.swing.*;
-import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
@@ -23,10 +22,13 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 	private Route rootRoutes;
 	private RoutesTreePanel routesTreePanel;
 
-	private JButton addRouteBtn = new JButton("Add route", new ImageIcon("rsc/plus.png"));
-	private JButton delRouteBtn = new JButton("Delete route", new ImageIcon("rsc/del.png"));
-	private JButton renameRouteBtn = new JButton("Rename route", new ImageIcon("rsc/edit.png"));
+	private JButton addRouteBtn = new JButton("Add route", ImageIconProxy.getIcon("rsc/plus.png"));
+	private JButton delRouteBtn = new JButton("Delete route", ImageIconProxy.getIcon("rsc/del.png"));
+	private JButton renameRouteBtn = new JButton("Rename route", ImageIconProxy.getIcon("rsc/edit.png"));
 	private JLabel currentRouteLbl = new JLabel(" ");
+	private final JPanel leftPanel = new JPanel(new BorderLayout());
+	private final JPanel rightPanel = new JPanel(new BorderLayout());
+	private JLabel defaultCenterLabel = new JLabel("Select an existing route or create one.");
 
 	public MainWindow()
 	{
@@ -62,7 +64,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 		routesTreePanel.updateModel();
 		buildUI();
 
-		setMinimumSize(new Dimension(400, 400));
+		setPreferredSize(new Dimension(850, 400));
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -90,21 +92,19 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 		delRouteBtn.addActionListener(this);
 		renameRouteBtn.addActionListener(this);
 
-		JPanel leftPanel = new JPanel(new BorderLayout());
 		leftPanel.add(new JScrollPane(routesTreePanel,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
 		leftPanel.add(btnPannel, BorderLayout.SOUTH);
 
-
 		currentRouteLbl.setOpaque(true);
-		//currentRouteLbl.setBackground(cr);
 		currentRouteLbl.setBorder(BorderFactory.createLineBorder(currentRouteLbl.getBackground().darker(), 1));
 
-		JPanel rightPanel = new JPanel(new BorderLayout());
 		rightPanel.add(currentRouteLbl, BorderLayout.NORTH);
+		defaultCenterLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		rightPanel.add(defaultCenterLabel, BorderLayout.CENTER);
 
 		JSplitPane mainPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, leftPanel, rightPanel);
 		mainPanel.setBorder(BorderFactory.createLineBorder(mainPanel.getBackground(), 5));
-		mainPanel.setResizeWeight(0.4);
+		mainPanel.setResizeWeight(0.2);
 		add(mainPanel);
 	}
 
@@ -113,6 +113,23 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 	{
 		String absPath = getAbsoluteNodePath(e.getPath(), false);
 		currentRouteLbl.setText(absPath);
+
+		BorderLayout layout = (BorderLayout) rightPanel.getLayout();
+		rightPanel.remove(layout.getLayoutComponent(BorderLayout.CENTER));
+
+		if(routesTreePanel.getLastSelectedPathComponent() != null)
+		{
+			Object[] routePath = rootRoutes.getPathToRoute(getAbsoluteNodePath(e.getPath(), true));
+			rightPanel.add(new RouteHttpMethodsManagementPanel((Route) routePath[routePath.length-1]), BorderLayout.CENTER);
+		}
+		else
+		{
+			rightPanel.add(defaultCenterLabel, BorderLayout.CENTER);
+		}
+
+
+		rightPanel.revalidate();
+		rightPanel.repaint();
 	}
 
 	@Override
@@ -169,12 +186,13 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 
 		if(routeToDelete.isEmpty())
 		{
-			JOptionPane.showMessageDialog(this, "You can't delete project root.", "Cannot delete project root", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "You cannot delete project's root.", "Cannot delete project root", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
 		if(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(this,
-				"Are you sure you want to delete the following route and its sub-routes?\n" + routeToDelete, "Delete route", JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE))
+				"Are you sure you want to delete the following route and its sub-routes?\n" + routeToDelete,
+				"Delete route", JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE))
 		{
 			TreePath tp = new TreePath(rootRoutes.getPathToRoute(routeToDelete));
 			if(!rootRoutes.deleteRoute(routeToDelete))

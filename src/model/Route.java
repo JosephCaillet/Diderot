@@ -112,9 +112,9 @@ public class Route implements TreeModel
 		this.viewTemplate = viewTemplate;
 	}
 
-	public TreeMap<String, Route> getSubRoutes()
+	public TreeMap<String, HttpMethod> getHttpMethods()
 	{
-		return subRoutes;
+		return httpMethods;
 	}
 
 	private static String extractRouteFirstPart(String name)
@@ -253,6 +253,11 @@ public class Route implements TreeModel
 
 	public Object[] getPathToRoute(String path)
 	{
+		if(extractRouteLastPart(path).isEmpty())
+		{
+			return new Route[]{this};
+		}
+
 		Vector<Route> routeVector = new Vector<Route>();
 		routeVector.add(this);
 		if(getPathToRoute(path, routeVector))
