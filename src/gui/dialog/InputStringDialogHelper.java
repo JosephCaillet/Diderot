@@ -1,11 +1,8 @@
 package gui.dialog;
 
-import com.sun.xml.internal.ws.api.ha.StickyFeature;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Created by joseph on 14/05/16.
