@@ -29,7 +29,7 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 	{
 		expandedNodes.add(treeExpansionEvent.getPath());
 		collapsedNodes.remove(treeExpansionEvent.getPath());
-		System.out.println("expand : " + treeExpansionEvent.getPath());
+		//System.out.println("expand : " + treeExpansionEvent.getPath());
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 	{
 		expandedNodes.remove(treeExpansionEvent.getPath());
 		collapsedNodes.add(treeExpansionEvent.getPath());
-		System.out.println("colapse : " + treeExpansionEvent.getPath());
+		//System.out.println("colapse : " + treeExpansionEvent.getPath());
 	}
 
 	public void updateModel(TreePath treePathToRemove, TreePath treePathToAdd)
@@ -67,7 +67,7 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 		for(TreePath tp : expandedNodes)
 		{
 			expandPath(tp);
-			System.out.println("expanding : " + tp);
+			//System.out.println("expanding : " + tp);
 		}
 		for(TreePath tp : collapsedNodes)
 		{

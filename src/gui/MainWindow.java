@@ -1,5 +1,6 @@
 package gui;
 
+import gui.dialog.InputStringDialogHelper;
 import model.Route;
 
 import javax.swing.*;
@@ -147,8 +148,8 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 			defaultRoute = getAbsoluteNodePath(treePath, true);
 		}
 
-		String routeToAdd = (String) JOptionPane.showInputDialog(this,
-				"Enter route path:", "Add new route", JOptionPane.PLAIN_MESSAGE, null, null, defaultRoute + "/");
+		String routeToAdd = InputStringDialogHelper.showInputNoSpacesDialog(this,
+				"Enter route path:", "Add new route", JOptionPane.PLAIN_MESSAGE, defaultRoute + "/");
 
 		if(routeToAdd != null)
 		{
@@ -192,15 +193,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 			currentRouteLbl.setText(" ");
 		}
 	}
-//
-//
-//
-//          replaceAll("\\s","")
-//
-//
-//
-//
-//
+
 	private void actionMoveRoute()
 	{
 		TreePath treePath = routesTreePanel.getSelectionPath();
@@ -219,8 +212,8 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 		}
 
 
-		String newRoutePath = (String) JOptionPane.showInputDialog(this,
-				"Move route:\n" + oldRoutePath + "\nto:", "Move route", JOptionPane.PLAIN_MESSAGE, null, null, oldRoutePath);
+		String newRoutePath = InputStringDialogHelper.showInputNoSpacesDialog(this,
+				"Move route:\n" + oldRoutePath + "\nto:", "Move route", JOptionPane.PLAIN_MESSAGE, oldRoutePath);
 
 		if(newRoutePath != null)
 		{
