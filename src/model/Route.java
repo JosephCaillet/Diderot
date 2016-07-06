@@ -149,8 +149,6 @@ public class Route implements TreeModel
 
 	private static String extractRouteLastPart(String name)
 	{
-		String lastPart = "";
-
 		if(name.startsWith("/"))
 		{
 			name = name.substring(1);
@@ -158,9 +156,9 @@ public class Route implements TreeModel
 
 		if(name.lastIndexOf('/') != -1)
 		{
-			lastPart = name.substring(name.lastIndexOf('/') + 1);
+			name = name.substring(name.lastIndexOf('/') + 1);
 		}
-		return lastPart;
+		return name;
 	}
 
 	public boolean addRoute(String path)
@@ -229,26 +227,25 @@ public class Route implements TreeModel
 		return false;
 	}
 
-	public boolean renameRoute(String oldName, String newName)
+	public boolean moveRoute(String oldPath, String newPath)
 	{
-		String firstPart = extractRouteFirstPart(newName);
-		String lastPart = extractRouteWithoutFirstPart(newName);
+		Route movedRoute = getLastRoute(oldPath);
 
-		if(subRoutes.containsKey(firstPart))
+		if(movedRoute == null)
 		{
-			if(lastPart.isEmpty())
-			{
-				Route r = subRoutes.remove(firstPart);
-				if(r == null)
-				{
-					return false;
-				}
-				subRoutes.put(newName, r);
-				return true;
-			}
-			return subRoutes.get(firstPart).deleteRoute(lastPart);
+			return false;
 		}
-		return false;
+
+		deleteRoute(oldPath);//no error check, because we know the route exists.
+
+		if(!addRoute(newPath, movedRoute))
+		{
+			addRoute(oldPath, movedRoute);//rollback
+			return false;
+		}
+
+		movedRoute.setName(extractRouteLastPart(newPath));
+		return true;
 	}
 
 	public Object[] getPathToRoute(String path)
@@ -265,6 +262,16 @@ public class Route implements TreeModel
 			return routeVector.toArray();
 		}
 		return null;
+	}
+
+	public Route getLastRoute(String path)
+	{
+		Object[] routePath = this.getPathToRoute(path);
+		if(routePath == null)
+		{
+			return null;
+		}
+		return (Route) routePath[routePath.length-1];
 	}
 
 	private boolean getPathToRoute(String path, Vector<Route> routeVector)

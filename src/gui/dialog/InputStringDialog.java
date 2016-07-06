@@ -16,6 +16,11 @@ public class InputStringDialog extends JDialog implements ActionListener
 	private JTextField input;
 	private boolean status;
 
+	public static String showInputDialog()
+	{
+		return null;
+	}
+
 	public InputStringDialog(Frame owner, String title, String validateBtnText, String helperText, String defaultValue)
 	{
 		super(owner, title, true);

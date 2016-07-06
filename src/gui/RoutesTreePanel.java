@@ -24,37 +24,12 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 	}
 
-	/*public void rebuildTree()
-	{
-		//DefaultMutableTreeNode root = new DefaultMutableTreeNode(projectName);
-		removeTreeExpansionListener(this);
-		//fillTree(root, rootRoutes);
-		//setModel(new DefaultTreeModel(root));
-
-		for(TreePath tp : expandedNodes)
-		{
-			expandPath(tp);
-			System.out.println("expanding : " + tp);
-		}
-		addTreeExpansionListener(this);
-	}
-
-	private void fillTree(DefaultMutableTreeNode node, Route route)
-	{
-		for(Map.Entry<String, Route> entry : route.getSubRoutes().entrySet())
-		{
-			DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(entry.getKey());
-			fillTree(newNode, entry.getValue());
-			node.add(newNode);
-		}
-	}*/
-
 	@Override
 	public void treeExpanded(TreeExpansionEvent treeExpansionEvent)
 	{
-		expandedNodes.add(treeExpansionEvent.getPath());//not perfect: is a sub node is opened, and after a parent node is cloded, the sub node will be expanded, with all parent nodes.
+		expandedNodes.add(treeExpansionEvent.getPath());
 		collapsedNodes.remove(treeExpansionEvent.getPath());
-		//System.out.println("expand : " + treeExpansionEvent.getPath());
+		System.out.println("expand : " + treeExpansionEvent.getPath());
 	}
 
 	@Override
@@ -62,13 +37,22 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 	{
 		expandedNodes.remove(treeExpansionEvent.getPath());
 		collapsedNodes.add(treeExpansionEvent.getPath());
-		//System.out.println("colapse : " + treeExpansionEvent.getPath());
+		System.out.println("colapse : " + treeExpansionEvent.getPath());
 	}
 
-	public void updateModel(TreePath treePath)
+	public void updateModel(TreePath treePathToRemove, TreePath treePathToAdd)
 	{
-		expandedNodes.remove(treePath);
-		collapsedNodes.remove(treePath);
+		if(treePathToAdd != null && expandedNodes.contains(treePathToRemove))
+		{
+			expandedNodes.add(treePathToAdd);
+		}
+		updateModel(treePathToRemove);
+	}
+
+	public void updateModel(TreePath treePathToRemove)
+	{
+		expandedNodes.remove(treePathToRemove);
+		collapsedNodes.remove(treePathToRemove);
 		updateModel();
 	}
 
@@ -83,7 +67,7 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 		for(TreePath tp : expandedNodes)
 		{
 			expandPath(tp);
-			//System.out.println("expanding : " + tp);
+			System.out.println("expanding : " + tp);
 		}
 		for(TreePath tp : collapsedNodes)
 		{
