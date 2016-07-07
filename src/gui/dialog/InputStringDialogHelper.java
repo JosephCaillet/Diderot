@@ -14,6 +14,10 @@ public class InputStringDialogHelper
 		String str = (String) JOptionPane.showInputDialog(parentComponent, message, title, messageType, null, null, defaultInput);
 		if(str != null)
 		{
+			if(str.endsWith("/"))
+			{
+				str = str.substring(0, str.length() - 1);
+			}
 			return str.replaceAll("\\s","");
 		}
 		return null;

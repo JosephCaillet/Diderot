@@ -4,6 +4,8 @@ import model.HttpMethod;
 import model.Route;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,23 +38,63 @@ public class RouteHttpMethodsManagementPanel extends JPanel implements ActionLis
 
 	private void buildUI()
 	{
+		JPanel topPanel = new JPanel(new BorderLayout());
+
+		final JTextArea descriptionTextArea = new JTextArea(route.getDescription());
+		JScrollPane scrollPanel = new JScrollPane(descriptionTextArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+		topPanel.add(new JLabel("Global route description:"), BorderLayout.NORTH);
+		topPanel.add(scrollPanel, BorderLayout.SOUTH);
+
+
+		JPanel bottomPanel = new JPanel(new BorderLayout());
+
 		JPanel btnPanel = new JPanel();
 		btnPanel.add(addMethodBtn);
 		btnPanel.add(updMethodBtn);
 		btnPanel.add(delMethodBtn);
 
-		add(btnPanel, BorderLayout.NORTH);
-		add(methodsTabbedPanel, BorderLayout.CENTER);
+		bottomPanel.add(btnPanel, BorderLayout.NORTH);
+		bottomPanel.add(methodsTabbedPanel, BorderLayout.CENTER);
+
+		JSplitPane mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, topPanel, bottomPanel);
+		add(mainPanel);
 
 		addMethodBtn.addActionListener(this);
 		updMethodBtn.addActionListener(this);
 		delMethodBtn.addActionListener(this);
+
+		descriptionTextArea.getDocument().addDocumentListener(new DocumentListener()
+		{
+			@Override
+			public void insertUpdate(DocumentEvent documentEvent)
+			{
+				route.setDescription(descriptionTextArea.getText());
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent documentEvent)
+			{
+				insertUpdate(documentEvent);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent documentEvent)
+			{
+			}
+		});
 
 		if(methodsTabbedPanel.getTabCount() == 0)
 		{
 			delMethodBtn.setEnabled(false);
 			updMethodBtn.setEnabled(false);
 		}
+	}
+
+	private void setEnabledButton(boolean enabled)
+	{
+		updMethodBtn.setEnabled(enabled);
+		delMethodBtn.setEnabled(enabled);
 	}
 
 	@Override
@@ -86,8 +128,8 @@ public class RouteHttpMethodsManagementPanel extends JPanel implements ActionLis
 
 			route.getHttpMethods().put(methodToAdd, new HttpMethod());
 			methodsTabbedPanel.add(methodToAdd, new JLabel(methodToAdd));
-			delMethodBtn.setEnabled(true);
-			updMethodBtn.setEnabled(true);
+			setEnabledButton(true);
+			methodsTabbedPanel.setSelectedIndex(methodsTabbedPanel.getTabCount()-1);
 		}
 	}
 
@@ -127,8 +169,7 @@ public class RouteHttpMethodsManagementPanel extends JPanel implements ActionLis
 
 			if(methodsTabbedPanel.getTabCount() == 0)
 			{
-				delMethodBtn.setEnabled(false);
-				updMethodBtn.setEnabled(false);
+				setEnabledButton(false);
 			}
 		}
 	}

@@ -48,6 +48,50 @@ public class Route implements TreeModel
 		return absPath;
 	}
 
+	private static String extractRouteFirstPart(String name)
+	{
+		if(name.startsWith("/"))
+		{
+			name = name.substring(1);
+		}
+
+		if(name.indexOf('/') != -1)
+		{
+			name = name.substring(0, name.indexOf('/'));
+		}
+		return name;
+	}
+
+	private static String extractRouteWithoutFirstPart(String name)
+	{
+		String lastPart = "";
+
+		if(name.startsWith("/"))
+		{
+			name = name.substring(1);
+		}
+
+		if(name.indexOf('/') != -1)
+		{
+			lastPart = name.substring(name.indexOf('/') + 1);
+		}
+		return lastPart;
+	}
+
+	private static String extractRouteLastPart(String name)
+	{
+		if(name.startsWith("/"))
+		{
+			name = name.substring(1);
+		}
+
+		if(name.lastIndexOf('/') != -1)
+		{
+			name = name.substring(name.lastIndexOf('/') + 1);
+		}
+		return name;
+	}
+
 	public Route(String name)
 	{
 		subRoutes = new TreeMap<String, Route>();
@@ -61,6 +105,7 @@ public class Route implements TreeModel
 		this(name);
 		this.root = root;
 	}
+
 
 	public String getName()
 	{
@@ -112,53 +157,10 @@ public class Route implements TreeModel
 		this.viewTemplate = viewTemplate;
 	}
 
+
 	public TreeMap<String, HttpMethod> getHttpMethods()
 	{
 		return httpMethods;
-	}
-
-	private static String extractRouteFirstPart(String name)
-	{
-		if(name.startsWith("/"))
-		{
-			name = name.substring(1);
-		}
-
-		if(name.indexOf('/') != -1)
-		{
-			name = name.substring(0, name.indexOf('/'));
-		}
-		return name;
-	}
-
-	private static String extractRouteWithoutFirstPart(String name)
-	{
-		String lastPart = "";
-
-		if(name.startsWith("/"))
-		{
-			name = name.substring(1);
-		}
-
-		if(name.indexOf('/') != -1)
-		{
-			lastPart = name.substring(name.indexOf('/') + 1);
-		}
-		return lastPart;
-	}
-
-	private static String extractRouteLastPart(String name)
-	{
-		if(name.startsWith("/"))
-		{
-			name = name.substring(1);
-		}
-
-		if(name.lastIndexOf('/') != -1)
-		{
-			name = name.substring(name.lastIndexOf('/') + 1);
-		}
-		return name;
 	}
 
 	public boolean addRoute(String path)
@@ -264,16 +266,6 @@ public class Route implements TreeModel
 		return null;
 	}
 
-	public Route getLastRoute(String path)
-	{
-		Object[] routePath = this.getPathToRoute(path);
-		if(routePath == null)
-		{
-			return null;
-		}
-		return (Route) routePath[routePath.length-1];
-	}
-
 	private boolean getPathToRoute(String path, Vector<Route> routeVector)
 	{
 		String firstPart = extractRouteFirstPart(path);
@@ -290,6 +282,17 @@ public class Route implements TreeModel
 		}
 		return false;
 	}
+
+	public Route getLastRoute(String path)
+	{
+		Object[] routePath = this.getPathToRoute(path);
+		if(routePath == null)
+		{
+			return null;
+		}
+		return (Route) routePath[routePath.length-1];
+	}
+
 
 	@Override
 	public Object getRoot()

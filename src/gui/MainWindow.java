@@ -62,8 +62,6 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 
 	private void buildUI()
 	{
-		//setLayout(new BorderLayout());
-
 		routesTreePanel.addTreeSelectionListener(this);
 
 		Box btnPannel = Box.createVerticalBox();
@@ -81,21 +79,31 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 		addRouteBtn.addActionListener(this);
 		delRouteBtn.addActionListener(this);
 		moveRouteBtn.addActionListener(this);
+		enableButton(false);
+
 
 		leftPanel.add(new JScrollPane(routesTreePanel,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
 		leftPanel.add(btnPannel, BorderLayout.SOUTH);
 
 		currentRouteLbl.setOpaque(true);
-		currentRouteLbl.setBorder(BorderFactory.createLineBorder(currentRouteLbl.getBackground().darker(), 1));
+		currentRouteLbl.setBorder(BorderFactory.createLineBorder(currentRouteLbl.getBackground().darker(), 2));
 
 		rightPanel.add(currentRouteLbl, BorderLayout.NORTH);
-		defaultCenterLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		rightPanel.add(defaultCenterLabel, BorderLayout.CENTER);
+		defaultCenterLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+		leftPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 1));
 
 		JSplitPane mainPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, leftPanel, rightPanel);
 		mainPanel.setBorder(BorderFactory.createLineBorder(mainPanel.getBackground(), 5));
 		mainPanel.setResizeWeight(0.2);
 		add(mainPanel);
+	}
+
+	private void enableButton(boolean enabled)
+	{
+		moveRouteBtn.setEnabled(enabled);
+		delRouteBtn.setEnabled(enabled);
 	}
 
 	@Override
@@ -110,7 +118,10 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 		if(routesTreePanel.getLastSelectedPathComponent() != null)
 		{
 			Route lastRoute = rootRoutes.getLastRoute(getAbsoluteNodePath(e.getPath(), true));
-			rightPanel.add(new RouteHttpMethodsManagementPanel(lastRoute), BorderLayout.CENTER);
+			RouteHttpMethodsManagementPanel routeHttpMethodsManagementPanel = new RouteHttpMethodsManagementPanel(lastRoute);
+			rightPanel.add(routeHttpMethodsManagementPanel, BorderLayout.CENTER);
+			routeHttpMethodsManagementPanel.setBorder(BorderFactory.createEmptyBorder(7, 2, 0, 0));
+			enableButton(true);
 		}
 		else
 		{
@@ -166,12 +177,6 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 	private void actionRemoveRoute()
 	{
 		TreePath treePath = routesTreePanel.getSelectionPath();
-		if(treePath == null)
-		{
-			JOptionPane.showMessageDialog(this, "No route selected", "Cannot delete route", JOptionPane.WARNING_MESSAGE);
-			return;
-		}
-
 		String routeToDelete = getAbsoluteNodePath(treePath, true);
 
 		if(routeToDelete.isEmpty())
@@ -191,18 +196,13 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 			}
 			routesTreePanel.updateModel(treePath, null);
 			currentRouteLbl.setText(" ");
+			enableButton(false);
 		}
 	}
 
 	private void actionMoveRoute()
 	{
 		TreePath treePath = routesTreePanel.getSelectionPath();
-		if(treePath == null)
-		{
-			JOptionPane.showMessageDialog(this, "No route selected", "Cannot rename route", JOptionPane.WARNING_MESSAGE);
-			return;
-		}
-
 		String oldRoutePath = getAbsoluteNodePath(treePath, true);
 
 		if(oldRoutePath.isEmpty())
