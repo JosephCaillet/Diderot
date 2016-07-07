@@ -44,7 +44,7 @@ public class RouteHttpMethodsManagementPanel extends JPanel implements ActionLis
 		JScrollPane scrollPanel = new JScrollPane(descriptionTextArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 		topPanel.add(new JLabel("Global route description:"), BorderLayout.NORTH);
-		topPanel.add(scrollPanel, BorderLayout.SOUTH);
+		topPanel.add(scrollPanel, BorderLayout.CENTER);
 
 
 		JPanel bottomPanel = new JPanel(new BorderLayout());
@@ -79,8 +79,12 @@ public class RouteHttpMethodsManagementPanel extends JPanel implements ActionLis
 			}
 
 			@Override
+			/**
+			 * Not implemented
+			 */
 			public void changedUpdate(DocumentEvent documentEvent)
 			{
+				//This not the implementation you are looking for.
 			}
 		});
 
