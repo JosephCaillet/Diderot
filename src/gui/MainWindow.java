@@ -9,7 +9,6 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
@@ -33,6 +32,11 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 	private final JPanel leftPanel = new JPanel(new BorderLayout()),
 			rightPanel = new JPanel(new BorderLayout());
 	private JLabel defaultCenterLabel = new JLabel("Select an existing route or create one.");
+
+	private JMenu methodMenu;
+	private JMenuItem addMethodMenuItem;
+	private JMenuItem updMethodMenuItem;
+	private JMenuItem delMethodMenuItem;
 
 	public MainWindow()
 	{
@@ -167,7 +171,28 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		delRouteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));
 		routeMenu.add(delRouteMenuItem);
 
+		JMenuItem focusRouteMenuItem = new JMenuItem(focusOnRouteAction);
+		focusRouteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK));
+		routeMenu.add(focusRouteMenuItem);
+
 		menuBar.add(routeMenu);
+
+		methodMenu = new JMenu("Method");
+		methodMenu.setEnabled(false);
+
+		addMethodMenuItem = new JMenuItem();
+		addMethodMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.SHIFT_DOWN_MASK));
+		methodMenu.add(addMethodMenuItem);
+
+		updMethodMenuItem = new JMenuItem();
+		updMethodMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.SHIFT_DOWN_MASK));
+		methodMenu.add(updMethodMenuItem);
+
+		delMethodMenuItem = new JMenuItem();
+		delMethodMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.SHIFT_DOWN_MASK));
+		methodMenu.add(delMethodMenuItem);
+
+		menuBar.add(methodMenu);
 
 		setJMenuBar(menuBar);
 	}
@@ -193,10 +218,26 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 			RouteHttpMethodsManagementPanel routeHttpMethodsManagementPanel = new RouteHttpMethodsManagementPanel(lastRoute);
 			rightPanel.add(routeHttpMethodsManagementPanel, BorderLayout.CENTER);
 			routeHttpMethodsManagementPanel.setBorder(BorderFactory.createEmptyBorder(7, 2, 0, 0));
+
+
+			KeyStroke k = addMethodMenuItem.getAccelerator();
+			addMethodMenuItem.setAction(routeHttpMethodsManagementPanel.getAddMethodAction());
+			addMethodMenuItem.setAccelerator(k);
+
+			k = updMethodMenuItem.getAccelerator();
+			updMethodMenuItem.setAction(routeHttpMethodsManagementPanel.getUpdMethodAction());
+			updMethodMenuItem.setAccelerator(k);
+
+			k = delMethodMenuItem.getAccelerator();
+			delMethodMenuItem.setAction(routeHttpMethodsManagementPanel.getDelMethodAction());
+			delMethodMenuItem.setAccelerator(k);
+
+			methodMenu.setEnabled(true);
 			enableButton(true);
 		}
 		else
 		{
+			methodMenu.setEnabled(false);
 			rightPanel.add(defaultCenterLabel, BorderLayout.CENTER);
 		}
 

@@ -6,6 +6,7 @@ import model.Route;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,14 +15,17 @@ import java.util.Map;
 /**
  * Created by joseph on 06/07/16.
  */
-public class RouteHttpMethodsManagementPanel extends JPanel implements ActionListener
+public class RouteHttpMethodsManagementPanel extends JPanel
 {
-	private JButton addMethodBtn = new JButton("Add http method", ImageIconProxy.getIcon("rsc/plus.png"));
-	private JButton updMethodBtn = new JButton("Change http method", ImageIconProxy.getIcon("rsc/edit.png"));
-	private JButton delMethodBtn = new JButton("Delete http method", ImageIconProxy.getIcon("rsc/del.png"));
+	private AbstractAction addMethodAction, updMethodAction, delMethodAction;
+
+	private JButton addMethodBtn = new JButton(),
+			updMethodBtn = new JButton(),
+			delMethodBtn = new JButton();
 
 	private JTabbedPane methodsTabbedPanel = new JTabbedPane();
 	private Route route;
+	private JTextComponent descriptionTextArea;
 
 	public RouteHttpMethodsManagementPanel(Route route)
 	{
@@ -36,11 +40,26 @@ public class RouteHttpMethodsManagementPanel extends JPanel implements ActionLis
 		buildUI();
 	}
 
+	public AbstractAction getAddMethodAction()
+	{
+		return addMethodAction;
+	}
+
+	public AbstractAction getUpdMethodAction()
+	{
+		return updMethodAction;
+	}
+
+	public AbstractAction getDelMethodAction()
+	{
+		return delMethodAction;
+	}
+
 	private void buildUI()
 	{
 		JPanel topPanel = new JPanel(new BorderLayout());
 
-		final JTextArea descriptionTextArea = new JTextArea(route.getDescription());
+		descriptionTextArea = new JTextArea(route.getDescription());
 		JScrollPane scrollPanel = new JScrollPane(descriptionTextArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 		topPanel.add(new JLabel("Global route description:"), BorderLayout.NORTH);
@@ -60,9 +79,46 @@ public class RouteHttpMethodsManagementPanel extends JPanel implements ActionLis
 		JSplitPane mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, topPanel, bottomPanel);
 		add(mainPanel);
 
-		addMethodBtn.addActionListener(this);
-		updMethodBtn.addActionListener(this);
-		delMethodBtn.addActionListener(this);
+		addListeners();
+
+		if(methodsTabbedPanel.getTabCount() == 0)
+		{
+			setEnabledButton(false);
+		}
+	}
+
+	private void addListeners()
+	{
+		addMethodAction = new AbstractAction("Add new http method", ImageIconProxy.getIcon("rsc/plus.png"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				actionAddMethod();
+			}
+		};
+
+		updMethodAction = new AbstractAction("Change http method", ImageIconProxy.getIcon("rsc/edit.png"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				actionUpdateMethod();
+			}
+		};
+
+		delMethodAction = new AbstractAction("Delete http method", ImageIconProxy.getIcon("rsc/del.png"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				actionRemoveMethod();
+			}
+		};
+
+		addMethodBtn.setAction(addMethodAction);
+		updMethodBtn.setAction(updMethodAction);
+		delMethodBtn.setAction(delMethodAction);
 
 		descriptionTextArea.getDocument().addDocumentListener(new DocumentListener()
 		{
@@ -87,35 +143,12 @@ public class RouteHttpMethodsManagementPanel extends JPanel implements ActionLis
 				//This not the implementation you are looking for.
 			}
 		});
-
-		if(methodsTabbedPanel.getTabCount() == 0)
-		{
-			delMethodBtn.setEnabled(false);
-			updMethodBtn.setEnabled(false);
-		}
 	}
 
 	private void setEnabledButton(boolean enabled)
 	{
-		updMethodBtn.setEnabled(enabled);
-		delMethodBtn.setEnabled(enabled);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent actionEvent)
-	{
-		if(actionEvent.getSource() == addMethodBtn)
-		{
-			actionAddMethod();
-		}
-		else if(actionEvent.getSource() == updMethodBtn)
-		{
-			actionUpdateMethod();
-		}
-		else if(actionEvent.getSource() == delMethodBtn)
-		{
-			actionRemoveMethod();
-		}
+		updMethodAction.setEnabled(enabled);
+		delMethodAction.setEnabled(enabled);
 	}
 
 	private void actionAddMethod()
