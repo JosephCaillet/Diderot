@@ -32,7 +32,6 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 	private JLabel defaultCenterLabel = new JLabel("Select an existing route or create one.");
 
 	private JMenu methodMenu;
-	private JMenu routeMenu;
 	private JMenuItem addMethodMenuItem;
 	private JMenuItem updMethodMenuItem;
 	private JMenuItem delMethodMenuItem;
@@ -150,7 +149,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		moveRouteBtn.setAction(moveRouteAction);
 
 		routesTreePanel.addTreeSelectionListener(this);
-		routesTreePanel.addMouseListener ( new MouseAdapter()
+		routesTreePanel.addMouseListener(new MouseAdapter()
 		{
 			@Override
 			public void mousePressed(MouseEvent e )
@@ -161,22 +160,43 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 					if(treePath != null)
 					{
 						routesTreePanel.setSelectionPath(treePath);
-						JPopupMenu jPopupMenu = new JPopupMenu();
-						jPopupMenu.add(new JMenuItem(addRouteAction));
-						jPopupMenu.add(new JMenuItem(moveRouteAction));
-						jPopupMenu.add(new JMenuItem(delRouteAction));
-						jPopupMenu.show(routesTreePanel, e.getX(), e.getY());
+						showRoutePopUpMenu(e.getX(), e.getY());
 					}
 				}
 			}
-		} );
+		});
+		routesTreePanel.addKeyListener(new KeyAdapter()
+		{
+			@Override
+			public void keyReleased(KeyEvent e)
+			{
+				if(e.getKeyCode() == KeyEvent.VK_CONTEXT_MENU)
+				{
+					TreePath treePath = routesTreePanel.getSelectionPath();
+					if(treePath != null)
+					{
+						Rectangle bounds = routesTreePanel.getPathBounds(treePath);
+						showRoutePopUpMenu(bounds.x + 30, bounds.y + bounds.height);
+					}
+				}
+			}
+		});
+	}
+
+	private void showRoutePopUpMenu(int x, int y)
+	{
+		JPopupMenu jPopupMenu = new JPopupMenu();
+		jPopupMenu.add(new JMenuItem(addRouteAction));
+		jPopupMenu.add(new JMenuItem(moveRouteAction));
+		jPopupMenu.add(new JMenuItem(delRouteAction));
+		jPopupMenu.show(routesTreePanel, x, y);
 	}
 
 	private void buildMenuBar()
 	{
 		JMenuBar menuBar = new JMenuBar();
 
-		routeMenu = new JMenu("Route");
+		JMenu routeMenu = new JMenu("Route");
 
 		JMenuItem addRouteMenuItem = new JMenuItem(addRouteAction);
 		addRouteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
