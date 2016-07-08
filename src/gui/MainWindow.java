@@ -8,9 +8,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 import static model.Route.getAbsoluteNodePath;
 
@@ -34,6 +32,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 	private JLabel defaultCenterLabel = new JLabel("Select an existing route or create one.");
 
 	private JMenu methodMenu;
+	private JMenu routeMenu;
 	private JMenuItem addMethodMenuItem;
 	private JMenuItem updMethodMenuItem;
 	private JMenuItem delMethodMenuItem;
@@ -151,13 +150,33 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		moveRouteBtn.setAction(moveRouteAction);
 
 		routesTreePanel.addTreeSelectionListener(this);
+		routesTreePanel.addMouseListener ( new MouseAdapter()
+		{
+			@Override
+			public void mousePressed(MouseEvent e )
+			{
+				if(e.isPopupTrigger())
+				{
+					TreePath treePath = routesTreePanel.getPathForLocation(e.getX(), e.getY());
+					if(treePath != null)
+					{
+						routesTreePanel.setSelectionPath(treePath);
+						JPopupMenu jPopupMenu = new JPopupMenu();
+						jPopupMenu.add(new JMenuItem(addRouteAction));
+						jPopupMenu.add(new JMenuItem(moveRouteAction));
+						jPopupMenu.add(new JMenuItem(delRouteAction));
+						jPopupMenu.show(routesTreePanel, e.getX(), e.getY());
+					}
+				}
+			}
+		} );
 	}
 
 	private void buildMenuBar()
 	{
 		JMenuBar menuBar = new JMenuBar();
 
-		JMenu routeMenu = new JMenu("Route");
+		routeMenu = new JMenu("Route");
 
 		JMenuItem addRouteMenuItem = new JMenuItem(addRouteAction);
 		addRouteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
