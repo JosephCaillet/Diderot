@@ -10,25 +10,28 @@ import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 import static model.Route.getAbsoluteNodePath;
 
 /**
  * Created by joseph on 14/05/16.
  */
-public class MainWindow extends JFrame implements TreeSelectionListener, ActionListener
+public class MainWindow extends JFrame implements TreeSelectionListener
 {
 	private String projectName = "domain.com";
 
 	private Route rootRoutes;
 	private RoutesTreePanel routesTreePanel;
 
-	private JButton addRouteBtn = new JButton("Add route", ImageIconProxy.getIcon("rsc/plus.png"));
-	private JButton delRouteBtn = new JButton("Delete route", ImageIconProxy.getIcon("rsc/del.png"));
-	private JButton moveRouteBtn = new JButton("Move route", ImageIconProxy.getIcon("rsc/edit.png"));
+	private AbstractAction addRouteAction, delRouteAction, moveRouteAction, focusOnRouteAction;
+	private JButton addRouteBtn = new JButton(),
+			delRouteBtn = new JButton(),
+			moveRouteBtn = new JButton();
 	private JLabel currentRouteLbl = new JLabel(" ");
-	private final JPanel leftPanel = new JPanel(new BorderLayout());
-	private final JPanel rightPanel = new JPanel(new BorderLayout());
+	private final JPanel leftPanel = new JPanel(new BorderLayout()),
+			rightPanel = new JPanel(new BorderLayout());
 	private JLabel defaultCenterLabel = new JLabel("Select an existing route or create one.");
 
 	public MainWindow()
@@ -54,7 +57,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 		routesTreePanel.updateModel();
 		buildUI();
 
-		setPreferredSize(new Dimension(850, 400));
+		setPreferredSize(new Dimension(850, 500));
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -62,8 +65,6 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 
 	private void buildUI()
 	{
-		routesTreePanel.addTreeSelectionListener(this);
-
 		Box btnPannel = Box.createVerticalBox();
 		btnPannel.add(addRouteBtn);
 		btnPannel.add(moveRouteBtn);
@@ -76,17 +77,16 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 		addRouteBtn.setMaximumSize(new Dimension(208,34));
 		delRouteBtn.setMaximumSize(new Dimension(208,34));
 		moveRouteBtn.setMaximumSize(new Dimension(208,34));
-		addRouteBtn.addActionListener(this);
-		delRouteBtn.addActionListener(this);
-		moveRouteBtn.addActionListener(this);
-		enableButton(false);
 
 
 		leftPanel.add(new JScrollPane(routesTreePanel,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
 		leftPanel.add(btnPannel, BorderLayout.SOUTH);
 
 		currentRouteLbl.setOpaque(true);
-		currentRouteLbl.setBorder(BorderFactory.createLineBorder(currentRouteLbl.getBackground().darker(), 2));
+		currentRouteLbl.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createLineBorder(currentRouteLbl.getBackground().darker(), 2),
+				BorderFactory.createEmptyBorder(2,2,2,2)));
+		currentRouteLbl.setBackground(currentRouteLbl.getBackground());
 
 		rightPanel.add(currentRouteLbl, BorderLayout.NORTH);
 		rightPanel.add(defaultCenterLabel, BorderLayout.CENTER);
@@ -98,12 +98,84 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 		mainPanel.setBorder(BorderFactory.createLineBorder(mainPanel.getBackground(), 5));
 		mainPanel.setResizeWeight(0.2);
 		add(mainPanel);
+
+		addListeners();
+		buildMenuBar();
+		enableButton(false);
+	}
+
+	private void addListeners()
+	{
+		focusOnRouteAction = new AbstractAction("Set focus on route panel")
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				routesTreePanel.requestFocusInWindow();
+			}
+		};
+
+		addRouteAction = new AbstractAction("Add new route", ImageIconProxy.getIcon("rsc/plus.png"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				actionAddRoute();
+			}
+		};
+
+		delRouteAction = new AbstractAction("Delete route", ImageIconProxy.getIcon("rsc/del.png"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				actionRemoveRoute();
+			}
+		};
+
+		moveRouteAction = new AbstractAction("Move route", ImageIconProxy.getIcon("rsc/edit.png"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				actionMoveRoute();
+			}
+		};
+
+		addRouteBtn.setAction(addRouteAction);
+		delRouteBtn.setAction(delRouteAction);
+		moveRouteBtn.setAction(moveRouteAction);
+
+		routesTreePanel.addTreeSelectionListener(this);
+	}
+
+	private void buildMenuBar()
+	{
+		JMenuBar menuBar = new JMenuBar();
+
+		JMenu routeMenu = new JMenu("Route");
+
+		JMenuItem addRouteMenuItem = new JMenuItem(addRouteAction);
+		addRouteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
+		routeMenu.add(addRouteMenuItem);
+
+		JMenuItem moveRouteMenuItem = new JMenuItem(moveRouteAction);
+		moveRouteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK));
+		routeMenu.add(moveRouteMenuItem);
+
+		JMenuItem delRouteMenuItem = new JMenuItem(delRouteAction);
+		delRouteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));
+		routeMenu.add(delRouteMenuItem);
+
+		menuBar.add(routeMenu);
+
+		setJMenuBar(menuBar);
 	}
 
 	private void enableButton(boolean enabled)
 	{
-		moveRouteBtn.setEnabled(enabled);
-		delRouteBtn.setEnabled(enabled);
+		moveRouteAction.setEnabled(enabled);
+		delRouteAction.setEnabled(enabled);
 	}
 
 	@Override
@@ -131,23 +203,6 @@ public class MainWindow extends JFrame implements TreeSelectionListener, ActionL
 
 		rightPanel.revalidate();
 		rightPanel.repaint();
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e)
-	{
-		if(e.getSource() == addRouteBtn)
-		{
-			actionAddRoute();
-		}
-		else if(e.getSource() == delRouteBtn)
-		{
-			actionRemoveRoute();
-		}
-		else if(e.getSource() == moveRouteBtn)
-		{
-			actionMoveRoute();
-		}
 	}
 
 	private void actionAddRoute()
