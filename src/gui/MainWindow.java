@@ -17,6 +17,9 @@ import static model.Route.getAbsoluteNodePath;
  */
 public class MainWindow extends JFrame implements TreeSelectionListener
 {
+	private final static String NO_ROUTE_SELECTED = "nrs";
+	private final static String ROUTE_SELECTED = "rs";
+
 	private String projectName = "domain.com";
 
 	private Route rootRoutes;
@@ -25,16 +28,11 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 	private AbstractAction addRouteAction, delRouteAction, moveRouteAction, focusOnRouteAction;
 	private JButton addRouteBtn = new JButton(),
 			delRouteBtn = new JButton(),
-			moveRouteBtn = new JButton();
-	private JLabel currentRouteLbl = new JLabel(" ");
-	private final JPanel leftPanel = new JPanel(new BorderLayout()),
-			rightPanel = new JPanel(new BorderLayout());
-	private JLabel defaultCenterLabel = new JLabel("Select an existing route or create one.");
-
+		moveRouteBtn = new JButton();
+	private JTextField currentRouteLbl = new JTextField();
 	private JMenu methodMenu;
-	private JMenuItem addMethodMenuItem;
-	private JMenuItem updMethodMenuItem;
-	private JMenuItem delMethodMenuItem;
+	private RouteHttpMethodsManagementPanel routeHttpMethodsManagementPanel = new RouteHttpMethodsManagementPanel();
+	private JPanel routeMethodPanel;
 
 	public MainWindow()
 	{
@@ -80,19 +78,35 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		delRouteBtn.setMaximumSize(new Dimension(208,34));
 		moveRouteBtn.setMaximumSize(new Dimension(208,34));
 
-
+		JPanel leftPanel = new JPanel(new BorderLayout());
 		leftPanel.add(new JScrollPane(routesTreePanel,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
 		leftPanel.add(btnPannel, BorderLayout.SOUTH);
 
 		currentRouteLbl.setOpaque(true);
 		currentRouteLbl.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createLineBorder(currentRouteLbl.getBackground().darker(), 2),
+				BorderFactory.createLineBorder(currentRouteLbl.getBackground().darker(), 3),
 				BorderFactory.createEmptyBorder(2,2,2,2)));
 		currentRouteLbl.setBackground(currentRouteLbl.getBackground());
+		currentRouteLbl.setVisible(false);
+		currentRouteLbl.setEditable(false);
+		currentRouteLbl.setBackground(null);
+		currentRouteLbl.setBackground(null);
 
+		CardLayout cardLayout = new CardLayout();
+		routeMethodPanel = new JPanel(cardLayout);
+		JLabel noRouteSelectedLabel = new JLabel("Select an existing route or create one.");
+		noRouteSelectedLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		routeMethodPanel.add(noRouteSelectedLabel, NO_ROUTE_SELECTED);
+
+		routeHttpMethodsManagementPanel.setBorder(BorderFactory.createEmptyBorder(7, 2, 0, 0));
+		routeMethodPanel.add(routeHttpMethodsManagementPanel, ROUTE_SELECTED);
+
+		cardLayout.show(routeMethodPanel, NO_ROUTE_SELECTED);
+
+
+		JPanel rightPanel = new JPanel(new BorderLayout());
 		rightPanel.add(currentRouteLbl, BorderLayout.NORTH);
-		rightPanel.add(defaultCenterLabel, BorderLayout.CENTER);
-		defaultCenterLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		rightPanel.add(routeMethodPanel, BorderLayout.CENTER);
 
 		leftPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 1));
 
@@ -219,15 +233,15 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		methodMenu = new JMenu("Method");
 		methodMenu.setEnabled(false);
 
-		addMethodMenuItem = new JMenuItem();
+		JMenuItem addMethodMenuItem = new JMenuItem(routeHttpMethodsManagementPanel.getAddMethodAction());
 		addMethodMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.SHIFT_DOWN_MASK));
 		methodMenu.add(addMethodMenuItem);
 
-		updMethodMenuItem = new JMenuItem();
+		JMenuItem updMethodMenuItem = new JMenuItem(routeHttpMethodsManagementPanel.getUpdMethodAction());
 		updMethodMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.SHIFT_DOWN_MASK));
 		methodMenu.add(updMethodMenuItem);
 
-		delMethodMenuItem = new JMenuItem();
+		JMenuItem delMethodMenuItem = new JMenuItem(routeHttpMethodsManagementPanel.getDelMethodAction());
 		delMethodMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.SHIFT_DOWN_MASK));
 		methodMenu.add(delMethodMenuItem);
 
@@ -247,42 +261,24 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 	{
 		String absPath = getAbsoluteNodePath(e.getPath(), false);
 		currentRouteLbl.setText(absPath);
-
-		BorderLayout layout = (BorderLayout) rightPanel.getLayout();
-		rightPanel.remove(layout.getLayoutComponent(BorderLayout.CENTER));
+		currentRouteLbl.setVisible(true);
 
 		if(routesTreePanel.getLastSelectedPathComponent() != null)
 		{
 			Route lastRoute = rootRoutes.getLastRoute(getAbsoluteNodePath(e.getPath(), true));
-			RouteHttpMethodsManagementPanel routeHttpMethodsManagementPanel = new RouteHttpMethodsManagementPanel(lastRoute);
-			rightPanel.add(routeHttpMethodsManagementPanel, BorderLayout.CENTER);
-			routeHttpMethodsManagementPanel.setBorder(BorderFactory.createEmptyBorder(7, 2, 0, 0));
-
-
-			KeyStroke k = addMethodMenuItem.getAccelerator();
-			addMethodMenuItem.setAction(routeHttpMethodsManagementPanel.getAddMethodAction());
-			addMethodMenuItem.setAccelerator(k);
-
-			k = updMethodMenuItem.getAccelerator();
-			updMethodMenuItem.setAction(routeHttpMethodsManagementPanel.getUpdMethodAction());
-			updMethodMenuItem.setAccelerator(k);
-
-			k = delMethodMenuItem.getAccelerator();
-			delMethodMenuItem.setAction(routeHttpMethodsManagementPanel.getDelMethodAction());
-			delMethodMenuItem.setAccelerator(k);
+			routeHttpMethodsManagementPanel.setRoute(lastRoute);
+			CardLayout cl = (CardLayout) routeMethodPanel.getLayout();
+			cl.show(routeMethodPanel, ROUTE_SELECTED);
 
 			methodMenu.setEnabled(true);
 			enableButton(true);
 		}
 		else
 		{
+			CardLayout cl = (CardLayout) routeMethodPanel.getLayout();
+			cl.show(routeMethodPanel, NO_ROUTE_SELECTED);
 			methodMenu.setEnabled(false);
-			rightPanel.add(defaultCenterLabel, BorderLayout.CENTER);
 		}
-
-
-		rightPanel.revalidate();
-		rightPanel.repaint();
 	}
 
 	private void actionAddRoute()
@@ -330,7 +326,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 				return;
 			}
 			routesTreePanel.updateModel(treePath, null);
-			currentRouteLbl.setText(" ");
+			currentRouteLbl.setVisible(false);
 			enableButton(false);
 		}
 	}

@@ -24,18 +24,11 @@ public class RouteHttpMethodsManagementPanel extends JPanel
 
 	private JTabbedPane methodsTabbedPanel = new JTabbedPane();
 	private Route route;
-	private JTextComponent descriptionTextArea;
+	private JTextArea descriptionTextArea = new JTextArea();
 
-	public RouteHttpMethodsManagementPanel(Route route)
+	public RouteHttpMethodsManagementPanel()
 	{
 		super(new BorderLayout());
-		this.route = route;
-
-		for(Map.Entry<String, HttpMethod> entry: route.getHttpMethods().entrySet())
-		{
-			methodsTabbedPanel.addTab(entry.getKey(), new JLabel(entry.getKey()));
-		}
-
 		buildUI();
 	}
 
@@ -54,11 +47,23 @@ public class RouteHttpMethodsManagementPanel extends JPanel
 		return delMethodAction;
 	}
 
+	public void setRoute(Route route)
+	{
+		this.route = route;
+		descriptionTextArea.setText(route.getDescription());
+
+		methodsTabbedPanel.removeAll();
+		for(Map.Entry<String, HttpMethod> entry: route.getHttpMethods().entrySet())
+		{
+			methodsTabbedPanel.addTab(entry.getKey(), new JLabel(entry.getKey()));
+		}
+	}
+
 	private void buildUI()
 	{
 		JPanel topPanel = new JPanel(new BorderLayout());
 
-		descriptionTextArea = new JTextArea(route.getDescription());
+		descriptionTextArea = new JTextArea();
 		JScrollPane scrollPanel = new JScrollPane(descriptionTextArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 		topPanel.add(new JLabel("Global route description:"), BorderLayout.NORTH);
