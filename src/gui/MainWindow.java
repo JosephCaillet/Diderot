@@ -211,6 +211,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		JMenuBar menuBar = new JMenuBar();
 
 		JMenu routeMenu = new JMenu("Route");
+		routeMenu.setMnemonic('R');
 
 		JMenuItem addRouteMenuItem = new JMenuItem(addRouteAction);
 		addRouteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
@@ -231,6 +232,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		menuBar.add(routeMenu);
 
 		methodMenu = new JMenu("Method");
+		methodMenu.setMnemonic('M');
 		methodMenu.setEnabled(false);
 
 		JMenuItem addMethodMenuItem = new JMenuItem(routeHttpMethodsManagementPanel.getAddMethodAction());
