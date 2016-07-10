@@ -40,7 +40,6 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		rootRoutes = new Route(projectName);
-		routesTreePanel = new RoutesTreePanel(rootRoutes);
 
 		rootRoutes.addRoute("index");
 		rootRoutes.addRoute("index");
@@ -54,7 +53,6 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		rootRoutes.addRoute("home/page2");
 		rootRoutes.addRoute("home/page2");
 
-		routesTreePanel.updateModel();
 		buildUI();
 
 		setPreferredSize(new Dimension(850, 500));
@@ -65,6 +63,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 	private void buildUI()
 	{
+		//button for route management
 		Box btnPannel = Box.createVerticalBox();
 		btnPannel.add(addRouteBtn);
 		btnPannel.add(moveRouteBtn);
@@ -78,10 +77,16 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		delRouteBtn.setMaximumSize(new Dimension(208,34));
 		moveRouteBtn.setMaximumSize(new Dimension(208,34));
 
+		//route tree
+		routesTreePanel = new RoutesTreePanel(rootRoutes);
+
+		//panel containing routes tree and associated buttons
 		JPanel leftPanel = new JPanel(new BorderLayout());
-		leftPanel.add(new JScrollPane(routesTreePanel,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
+		leftPanel.add(new JScrollPane(routesTreePanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
 		leftPanel.add(btnPannel, BorderLayout.SOUTH);
 
+		//full route path display
 		currentRouteLbl.setOpaque(true);
 		currentRouteLbl.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createLineBorder(currentRouteLbl.getBackground().darker(), 3),
@@ -92,6 +97,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		currentRouteLbl.setBackground(null);
 		currentRouteLbl.setBackground(null);
 
+		//display of route characteristics
 		CardLayout cardLayout = new CardLayout();
 		routeMethodPanel = new JPanel(cardLayout);
 		JLabel noRouteSelectedLabel = new JLabel("Select an existing route or create one.");
@@ -103,7 +109,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		cardLayout.show(routeMethodPanel, NO_ROUTE_SELECTED);
 
-
+		//display of full route path and route characteristics
 		JPanel rightPanel = new JPanel(new BorderLayout());
 		rightPanel.add(currentRouteLbl, BorderLayout.NORTH);
 		rightPanel.add(routeMethodPanel, BorderLayout.CENTER);
@@ -231,11 +237,11 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		menuBar.add(routeMenu);
 
-		methodMenu = new JMenu("Method");
+		methodMenu = routeHttpMethodsManagementPanel.getMethodMenu();
 		methodMenu.setMnemonic('M');
 		methodMenu.setEnabled(false);
 
-		JMenuItem addMethodMenuItem = new JMenuItem(routeHttpMethodsManagementPanel.getAddMethodAction());
+		/*JMenuItem addMethodMenuItem = new JMenuItem(routeHttpMethodsManagementPanel.getAddMethodAction());
 		addMethodMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.SHIFT_DOWN_MASK));
 		methodMenu.add(addMethodMenuItem);
 
@@ -245,7 +251,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		JMenuItem delMethodMenuItem = new JMenuItem(routeHttpMethodsManagementPanel.getDelMethodAction());
 		delMethodMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.SHIFT_DOWN_MASK));
-		methodMenu.add(delMethodMenuItem);
+		methodMenu.add(delMethodMenuItem);*/
 
 		menuBar.add(methodMenu);
 

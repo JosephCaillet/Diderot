@@ -6,9 +6,10 @@ import model.Route;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.util.Map;
 
 /**
@@ -57,6 +58,15 @@ public class RouteHttpMethodsManagementPanel extends JPanel
 		{
 			methodsTabbedPanel.addTab(entry.getKey(), new JLabel(entry.getKey()));
 		}
+
+		if(methodsTabbedPanel.getTabCount() == 0)
+		{
+			setEnabledButton(false);
+		}
+		else
+		{
+			setEnabledButton(true);
+		}
 	}
 
 	private void buildUI()
@@ -84,11 +94,6 @@ public class RouteHttpMethodsManagementPanel extends JPanel
 		add(mainPanel);
 
 		addListeners();
-
-		if(methodsTabbedPanel.getTabCount() == 0)
-		{
-			setEnabledButton(false);
-		}
 	}
 
 	private void addListeners()
@@ -102,7 +107,7 @@ public class RouteHttpMethodsManagementPanel extends JPanel
 			}
 		};
 
-		updMethodAction = new AbstractAction("Change http method", ImageIconProxy.getIcon("rsc/edit.png"))
+		updMethodAction = new AbstractAction("Modify http method", ImageIconProxy.getIcon("rsc/edit.png"))
 		{
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)
@@ -149,6 +154,25 @@ public class RouteHttpMethodsManagementPanel extends JPanel
 		});
 	}
 
+	public JMenu getMethodMenu()
+	{
+		JMenu methodMenu = new JMenu("Method");
+
+		JMenuItem addMethodMenuItem = new JMenuItem(addMethodAction);
+		addMethodMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK + InputEvent.SHIFT_DOWN_MASK));
+		methodMenu.add(addMethodMenuItem);
+
+		JMenuItem updMethodMenuItem = new JMenuItem(updMethodAction);
+		updMethodMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK + InputEvent.SHIFT_DOWN_MASK));
+		methodMenu.add(updMethodMenuItem);
+
+		JMenuItem delMethodMenuItem = new JMenuItem(delMethodAction);
+		delMethodMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK + InputEvent.SHIFT_DOWN_MASK));
+		methodMenu.add(delMethodMenuItem);
+
+		return methodMenu;
+	}
+
 	private void setEnabledButton(boolean enabled)
 	{
 		updMethodAction.setEnabled(enabled);
@@ -179,13 +203,13 @@ public class RouteHttpMethodsManagementPanel extends JPanel
 		int currentTab = methodsTabbedPanel.getSelectedIndex();
 		String methodToRename = methodsTabbedPanel.getTitleAt(currentTab);
 
-		String methodRenamed = (String) JOptionPane.showInputDialog(this, "Enter new name for http method: " + methodToRename, "Change http method", JOptionPane.QUESTION_MESSAGE, null, null, methodToRename);
+		String methodRenamed = (String) JOptionPane.showInputDialog(this, "Enter new name for http method: " + methodToRename, "Modify http method", JOptionPane.QUESTION_MESSAGE, null, null, methodToRename);
 		if(methodRenamed != null)
 		{
 			methodRenamed = methodRenamed.toUpperCase();
 			if(route.getHttpMethods().containsKey(methodRenamed))
 			{
-				JOptionPane.showMessageDialog(this, "This method already exists.", "Cannot change http method", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(this, "This method already exists.", "Cannot modify http method", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 
