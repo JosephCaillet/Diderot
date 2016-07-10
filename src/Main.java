@@ -15,16 +15,13 @@ public class Main
 
 	static public void setSystemLookAndFeel()
 	{
-		try {
+		try
+		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		}
-		catch (UnsupportedLookAndFeelException e) {
-		}
-		catch (ClassNotFoundException e) {
-		}
-		catch (InstantiationException e) {
-		}
-		catch (IllegalAccessException e) {
-		}
+		catch(UnsupportedLookAndFeelException e){}
+		catch(ClassNotFoundException e){}
+		catch(InstantiationException e){}
+		catch(IllegalAccessException e){}
 	}
 }

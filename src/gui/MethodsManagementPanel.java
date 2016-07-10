@@ -4,6 +4,8 @@ import model.HttpMethod;
 import model.Route;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
@@ -15,7 +17,7 @@ import java.util.Map;
 /**
  * Created by joseph on 06/07/16.
  */
-public class RouteHttpMethodsManagementPanel extends JPanel
+public class MethodsManagementPanel extends JPanel
 {
 	private AbstractAction addMethodAction, updMethodAction, delMethodAction;
 
@@ -27,7 +29,7 @@ public class RouteHttpMethodsManagementPanel extends JPanel
 	private Route route;
 	private JTextArea descriptionTextArea = new JTextArea();
 
-	public RouteHttpMethodsManagementPanel()
+	public MethodsManagementPanel()
 	{
 		super(new BorderLayout());
 		buildUI();
@@ -56,7 +58,8 @@ public class RouteHttpMethodsManagementPanel extends JPanel
 		methodsTabbedPanel.removeAll();
 		for(Map.Entry<String, HttpMethod> entry: route.getHttpMethods().entrySet())
 		{
-			methodsTabbedPanel.addTab(entry.getKey(), new JLabel(entry.getKey()));
+			//methodsTabbedPanel.addTab(entry.getKey(), new JLabel(entry.getKey()));
+			methodsTabbedPanel.addTab(entry.getKey(), null);
 		}
 
 		if(methodsTabbedPanel.getTabCount() == 0)
@@ -152,6 +155,19 @@ public class RouteHttpMethodsManagementPanel extends JPanel
 				//This not the implementation you are looking for.
 			}
 		});
+
+		methodsTabbedPanel.addChangeListener(new ChangeListener()
+		{
+			@Override
+			public void stateChanged(ChangeEvent changeEvent)
+			{
+				int currentTab = methodsTabbedPanel.getSelectedIndex();
+				if(currentTab != -1)
+				{
+					//update jmenu
+				}
+			}
+		});
 	}
 
 	public JMenu getMethodMenu()
@@ -195,6 +211,12 @@ public class RouteHttpMethodsManagementPanel extends JPanel
 			methodsTabbedPanel.add(methodToAdd, new JLabel(methodToAdd));
 			setEnabledButton(true);
 			methodsTabbedPanel.setSelectedIndex(methodsTabbedPanel.getTabCount()-1);
+
+			MethodPanel methodPanel = new MethodPanel(route.getHttpMethods().get(methodToAdd));
+			JScrollPane scrollPane = new JScrollPane(methodPanel,
+					ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			scrollPane.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
+			methodsTabbedPanel.setComponentAt(methodsTabbedPanel.getSelectedIndex(), scrollPane);
 		}
 	}
 

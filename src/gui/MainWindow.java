@@ -31,7 +31,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		moveRouteBtn = new JButton();
 	private JTextField currentRouteLbl = new JTextField();
 	private JMenu methodMenu;
-	private RouteHttpMethodsManagementPanel routeHttpMethodsManagementPanel = new RouteHttpMethodsManagementPanel();
+	private MethodsManagementPanel methodsManagementPanel = new MethodsManagementPanel();
 	private JPanel routeMethodPanel;
 
 	public MainWindow()
@@ -104,8 +104,8 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		noRouteSelectedLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		routeMethodPanel.add(noRouteSelectedLabel, NO_ROUTE_SELECTED);
 
-		routeHttpMethodsManagementPanel.setBorder(BorderFactory.createEmptyBorder(7, 2, 0, 0));
-		routeMethodPanel.add(routeHttpMethodsManagementPanel, ROUTE_SELECTED);
+		methodsManagementPanel.setBorder(BorderFactory.createEmptyBorder(7, 2, 0, 0));
+		routeMethodPanel.add(methodsManagementPanel, ROUTE_SELECTED);
 
 		cardLayout.show(routeMethodPanel, NO_ROUTE_SELECTED);
 
@@ -237,21 +237,9 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		menuBar.add(routeMenu);
 
-		methodMenu = routeHttpMethodsManagementPanel.getMethodMenu();
+		methodMenu = methodsManagementPanel.getMethodMenu();
 		methodMenu.setMnemonic('M');
 		methodMenu.setEnabled(false);
-
-		/*JMenuItem addMethodMenuItem = new JMenuItem(routeHttpMethodsManagementPanel.getAddMethodAction());
-		addMethodMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.SHIFT_DOWN_MASK));
-		methodMenu.add(addMethodMenuItem);
-
-		JMenuItem updMethodMenuItem = new JMenuItem(routeHttpMethodsManagementPanel.getUpdMethodAction());
-		updMethodMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.SHIFT_DOWN_MASK));
-		methodMenu.add(updMethodMenuItem);
-
-		JMenuItem delMethodMenuItem = new JMenuItem(routeHttpMethodsManagementPanel.getDelMethodAction());
-		delMethodMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.SHIFT_DOWN_MASK));
-		methodMenu.add(delMethodMenuItem);*/
 
 		menuBar.add(methodMenu);
 
@@ -274,7 +262,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		if(routesTreePanel.getLastSelectedPathComponent() != null)
 		{
 			Route lastRoute = rootRoutes.getLastRoute(getAbsoluteNodePath(e.getPath(), true));
-			routeHttpMethodsManagementPanel.setRoute(lastRoute);
+			methodsManagementPanel.setRoute(lastRoute);
 			CardLayout cl = (CardLayout) routeMethodPanel.getLayout();
 			cl.show(routeMethodPanel, ROUTE_SELECTED);
 
