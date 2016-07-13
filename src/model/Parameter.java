@@ -5,18 +5,11 @@ package model;
  */
 public class Parameter
 {
-	private String name;
-	private boolean required;
-	private String description;
+	private boolean required = false;
+	private String description = "";
 
-	public String getName()
+	public Parameter()
 	{
-		return name;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
 	}
 
 	public boolean isRequired()

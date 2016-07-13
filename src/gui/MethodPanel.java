@@ -36,9 +36,11 @@ public class MethodPanel extends JPanel implements Scrollable
 		description.setLineWrap(true);
 		add(description);
 
-		Object[][] d = {{1,2,3},{4,5,6},{4,5,6},{4,5,6},{4,5,6}};
-		Object[] t = {"TOTO", "TITI", "TATA"};
-		JTable jTable = new JTable(d, t);
+		jLabel = new JLabel("Parameters:");
+		jLabel.setAlignmentX(LEFT_ALIGNMENT);
+		add(jLabel);
+
+		JTable jTable = new JTable(httpMethod);
 		JScrollPane comp = new JScrollPane(jTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		comp.setAlignmentX(LEFT_ALIGNMENT);
 		comp.setPreferredSize(new Dimension(50,100));
