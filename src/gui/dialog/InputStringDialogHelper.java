@@ -18,8 +18,21 @@ public class InputStringDialogHelper
 			{
 				str = str.substring(0, str.length() - 1);
 			}
+
+			if(str.isEmpty())
+			{
+				JOptionPane.showMessageDialog(parentComponent, "Your input should not be empty.", "Empty input", JOptionPane.WARNING_MESSAGE);
+				return showInputNoSpacesDialog(parentComponent, message, title, messageType, defaultInput);
+			}
+
 			return str.replaceAll("\\s","");
 		}
 		return null;
 	}
+
+	public static String showInputNoSpacesDialog(Component parentComponent, String message, String title, int messageType)
+	{
+		return showInputNoSpacesDialog(parentComponent, message, title, messageType, "");
+	}
+
 }
