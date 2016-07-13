@@ -41,6 +41,18 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		rootRoutes = new Route(projectName);
 
+		createSampleRoute();
+
+		buildUI();
+
+		setPreferredSize(new Dimension(850, 500));
+		pack();
+		setLocationRelativeTo(null);
+		setVisible(true);
+	}
+
+	private void createSampleRoute()
+	{
 		rootRoutes.addRoute("index");
 		rootRoutes.addRoute("index");
 		rootRoutes.addRoute("home");
@@ -52,13 +64,6 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		rootRoutes.addRoute("data/type2");
 		rootRoutes.addRoute("home/page2");
 		rootRoutes.addRoute("home/page2");
-
-		buildUI();
-
-		setPreferredSize(new Dimension(850, 500));
-		pack();
-		setLocationRelativeTo(null);
-		setVisible(true);
 	}
 
 	private void buildUI()

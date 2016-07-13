@@ -59,7 +59,11 @@ public class MethodsManagementPanel extends JPanel
 		for(Map.Entry<String, HttpMethod> entry: route.getHttpMethods().entrySet())
 		{
 			//methodsTabbedPanel.addTab(entry.getKey(), new JLabel(entry.getKey()));
-			methodsTabbedPanel.addTab(entry.getKey(), null);
+			MethodPanel methodPanel = new MethodPanel(entry.getValue());
+			JScrollPane scrollPane = new JScrollPane(methodPanel,
+					ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			scrollPane.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
+			methodsTabbedPanel.addTab(entry.getKey(), scrollPane);
 		}
 
 		if(methodsTabbedPanel.getTabCount() == 0)

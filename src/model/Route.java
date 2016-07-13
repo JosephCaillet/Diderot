@@ -98,6 +98,8 @@ public class Route implements TreeModel
 		httpMethods = new TreeMap<String, HttpMethod>();
 		this.name = name;
 		root = this;
+		createSampleHttpMethods();
+
 	}
 
 	public Route(String name, Route root)
@@ -106,6 +108,13 @@ public class Route implements TreeModel
 		this.root = root;
 	}
 
+
+	private void createSampleHttpMethods()
+	{
+		httpMethods.put("GET", new HttpMethod());
+		httpMethods.put("HEAD", new HttpMethod());
+		httpMethods.put("POST", new HttpMethod());
+	}
 
 	public String getName()
 	{
@@ -157,11 +166,11 @@ public class Route implements TreeModel
 		this.viewTemplate = viewTemplate;
 	}
 
-
 	public TreeMap<String, HttpMethod> getHttpMethods()
 	{
 		return httpMethods;
 	}
+
 
 	public boolean addRoute(String path)
 	{

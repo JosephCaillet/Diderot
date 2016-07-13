@@ -10,7 +10,7 @@ import java.awt.*;
 /**
  * Created by joseph on 10/07/16.
  */
-public class MethodPanel extends JPanel
+public class MethodPanel extends JPanel implements Scrollable
 {
 	private HttpMethod httpMethod;
 	private JTextArea description = new JTextArea();
@@ -25,19 +25,24 @@ public class MethodPanel extends JPanel
 
 	private void buildUI()
 	{
-		setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		gbc.gridy = gbc.gridx = 0;
-		gbc.weightx = 1;
-		gbc.insets = new Insets(0,5,0,5);
-		gbc.fill = GridBagConstraints.BOTH;
+		JLabel jLabel = new JLabel("Method description:");
+		jLabel.setAlignmentX(LEFT_ALIGNMENT);
+		add(jLabel);
 
-		add(new JLabel("Method description:"), gbc);
-		gbc.gridy++;
-
+		description.setAlignmentX(LEFT_ALIGNMENT);
 		description.setBorder(BorderFactory.createLineBorder(getBackground().darker(), 1));
-		add(description, gbc);
+		description.setLineWrap(true);
+		add(description);
+
+		Object[][] d = {{1,2,3},{4,5,6},{4,5,6},{4,5,6},{4,5,6}};
+		Object[] t = {"TOTO", "TITI", "TATA"};
+		JTable jTable = new JTable(d, t);
+		JScrollPane comp = new JScrollPane(jTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		comp.setAlignmentX(LEFT_ALIGNMENT);
+		comp.setPreferredSize(new Dimension(50,100));
+		add(comp);
 
 		addListener();
 	}
@@ -67,5 +72,36 @@ public class MethodPanel extends JPanel
 				//This not the implementation you are looking for.
 			}
 		});
+	}
+
+
+	@Override
+	public Dimension getPreferredScrollableViewportSize()
+	{
+		return null;
+	}
+
+	@Override
+	public int getScrollableUnitIncrement(Rectangle rectangle, int i, int i1)
+	{
+		return 10;
+	}
+
+	@Override
+	public int getScrollableBlockIncrement(Rectangle rectangle, int i, int i1)
+	{
+		return 10;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportWidth()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean getScrollableTracksViewportHeight()
+	{
+		return false;
 	}
 }
