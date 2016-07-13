@@ -1,5 +1,6 @@
 package gui;
 
+import gui.dialog.InputStringDialogHelper;
 import model.HttpMethod;
 import model.Route;
 
@@ -201,26 +202,25 @@ public class MethodsManagementPanel extends JPanel
 
 	private void actionAddMethod()
 	{
-		String methodToAdd = JOptionPane.showInputDialog(this, "Which HTTP method would you add?", "Add HTTP method", JOptionPane.QUESTION_MESSAGE);
+		String methodToAdd = InputStringDialogHelper.showInputNoSpacesDialog(this, "Which HTTP method would you add?", "Add HTTP method", JOptionPane.QUESTION_MESSAGE);
 		if(methodToAdd != null)
 		{
 			methodToAdd = methodToAdd.toUpperCase();
-			if(route.getHttpMethods().containsKey(methodToAdd))
+			HttpMethod httpMethod = new HttpMethod();
+
+			if(!route.addHttpMethod(methodToAdd, httpMethod))
 			{
 				JOptionPane.showMessageDialog(this, "This method already exists.", "Cannot add HTTP method", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
 
-			route.getHttpMethods().put(methodToAdd, new HttpMethod());
-			methodsTabbedPanel.add(methodToAdd, new JLabel(methodToAdd));
-			setEnabledButton(true);
-			methodsTabbedPanel.setSelectedIndex(methodsTabbedPanel.getTabCount()-1);
-
-			MethodPanel methodPanel = new MethodPanel(route.getHttpMethods().get(methodToAdd));
+			MethodPanel methodPanel = new MethodPanel(httpMethod);
 			JScrollPane scrollPane = new JScrollPane(methodPanel,
 					ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
-			methodsTabbedPanel.setComponentAt(methodsTabbedPanel.getSelectedIndex(), scrollPane);
+			methodsTabbedPanel.add(methodToAdd, scrollPane);
+			methodsTabbedPanel.setSelectedIndex(methodsTabbedPanel.getTabCount()-1);
+			setEnabledButton(true);
 		}
 	}
 
@@ -229,18 +229,15 @@ public class MethodsManagementPanel extends JPanel
 		int currentTab = methodsTabbedPanel.getSelectedIndex();
 		String methodToRename = methodsTabbedPanel.getTitleAt(currentTab);
 
-		String methodRenamed = (String) JOptionPane.showInputDialog(this, "Enter new name for http method: " + methodToRename, "Modify http method", JOptionPane.QUESTION_MESSAGE, null, null, methodToRename);
+		String methodRenamed = InputStringDialogHelper.showInputNoSpacesDialog(this, "Enter new name for http method: " + methodToRename, "Modify http method", JOptionPane.QUESTION_MESSAGE, methodToRename);
 		if(methodRenamed != null)
 		{
 			methodRenamed = methodRenamed.toUpperCase();
-			if(route.getHttpMethods().containsKey(methodRenamed))
+			if(!route.changeHttpMethod(methodToRename, methodRenamed))
 			{
 				JOptionPane.showMessageDialog(this, "This method already exists.", "Cannot modify http method", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
-
-			HttpMethod httpMethod = route.getHttpMethods().remove(methodToRename);
-			route.getHttpMethods().put(methodRenamed, httpMethod);
 
 			methodsTabbedPanel.setTitleAt(methodsTabbedPanel.getSelectedIndex(), methodRenamed);
 		}
@@ -255,7 +252,7 @@ public class MethodsManagementPanel extends JPanel
 				"Are you sure you want to remove the following HTTP method?\n" + methodToRemove,
 				"Remove HTTP Method ", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE))
 		{
-			route.getHttpMethods().remove(methodToRemove);
+			route.removeHttpMethod(methodToRemove);
 			methodsTabbedPanel.remove(currentTab);
 
 			if(methodsTabbedPanel.getTabCount() == 0)

@@ -24,6 +24,7 @@ public class Route implements TreeModel
 	private Route root;
 
 
+	//Static method
 	public static String getAbsoluteNodePath(TreePath treePath, boolean removeRoot)
 	{
 		String absPath = "";
@@ -92,6 +93,7 @@ public class Route implements TreeModel
 		return name;
 	}
 
+	//Constructor
 	public Route(String name)
 	{
 		subRoutes = new TreeMap<String, Route>();
@@ -108,7 +110,6 @@ public class Route implements TreeModel
 		this.root = root;
 	}
 
-
 	private void createSampleHttpMethods()
 	{
 		httpMethods.put("GET", new HttpMethod());
@@ -116,6 +117,7 @@ public class Route implements TreeModel
 		httpMethods.put("POST", new HttpMethod());
 	}
 
+	//Getter and setter
 	public String getName()
 	{
 		return name;
@@ -171,7 +173,7 @@ public class Route implements TreeModel
 		return httpMethods;
 	}
 
-
+	//Route management
 	public boolean addRoute(String path)
 	{
 		String name = extractRouteLastPart(path);
@@ -240,6 +242,11 @@ public class Route implements TreeModel
 
 	public boolean moveRoute(String oldPath, String newPath)
 	{
+		if(oldPath.equals(newPath))
+		{
+			return false;
+		}
+
 		Route movedRoute = getLastRoute(oldPath);
 
 		if(movedRoute == null)
@@ -302,7 +309,39 @@ public class Route implements TreeModel
 		return (Route) routePath[routePath.length-1];
 	}
 
+	//HttpMethod management
+	public boolean addHttpMethod(String methodName, HttpMethod method)
+	{
+		if(httpMethods.containsKey(methodName))
+		{
+			return false;
+		}
+		httpMethods.put(methodName, method);
+		return true;
+	}
 
+	public boolean removeHttpMethod(String methodName)
+	{
+		return null == httpMethods.remove(methodName);
+	}
+
+	public boolean changeHttpMethod(String oldName, String newName)
+	{
+		if(oldName.equals(newName))
+		{
+			return false;
+		}
+
+		if(!addHttpMethod(newName, httpMethods.get(oldName)))
+		{
+			return false;
+		}
+
+		removeHttpMethod(oldName);
+		return true;
+	}
+
+	//interface TreeModel
 	@Override
 	public Object getRoot()
 	{
@@ -367,6 +406,7 @@ public class Route implements TreeModel
 		//This not the implementation you are looking for.
 	}
 
+	//toString override
 	@Override
 	public String toString()
 	{
