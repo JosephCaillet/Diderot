@@ -6,7 +6,12 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 /**
  * Created by joseph on 10/07/16.
@@ -15,6 +20,10 @@ public class MethodPanel extends JPanel implements Scrollable
 {
 	private HttpMethod httpMethod;
 	private JTextArea description = new JTextArea();
+	private AbstractAction addParamAction, delParamAction;
+	private JButton addParamBtn = new JButton(),
+			delParamBtn = new JButton();
+	private JTable paramTable;
 
 	public MethodPanel(HttpMethod httpMethod)
 	{
@@ -42,21 +51,25 @@ public class MethodPanel extends JPanel implements Scrollable
 		description.setLineWrap(true);
 		add(description);
 
+		JPanel labelButtonPanel = new JPanel(new BorderLayout());
+		labelButtonPanel.setBorder(labelBorder);
+
 		label = new JLabel("Parameters:");
-		label.setBorder(labelBorder);
-		label.setAlignmentX(LEFT_ALIGNMENT);
-		add(label);
+		labelButtonPanel.add(label, BorderLayout.WEST);
 
-		JPanel paramOpPanel = new JPanel();
+		JPanel paramBtnPanel = new JPanel();
+		paramBtnPanel.add(addParamBtn);
+		paramBtnPanel.add(delParamBtn);
+		labelButtonPanel.add(paramBtnPanel, BorderLayout.CENTER);
 
-		JTable jTable = new JTable(httpMethod);
-		// /!\ wil have influence on row index for deletion !
-		jTable.setAutoCreateRowSorter(true);
+		paramTable = new JTable(httpMethod);
+		paramTable.setAutoCreateRowSorter(true);
 		Box p = Box.createVerticalBox();
 		p.setBorder(componentBorder);
 		p.setAlignmentX(LEFT_ALIGNMENT);
-		p.add(jTable.getTableHeader());
-		p.add(jTable);
+		p.add(labelButtonPanel);
+		p.add(paramTable.getTableHeader());
+		p.add(paramTable);
 		add(p);
 
 		add(new JLabel("test"));
@@ -89,6 +102,63 @@ public class MethodPanel extends JPanel implements Scrollable
 				//This not the implementation you are looking for.
 			}
 		});
+
+		paramTable.getSelectionModel().addListSelectionListener(new ListSelectionListener()
+		{
+			@Override
+			public void valueChanged(ListSelectionEvent listSelectionEvent)
+			{
+				if(paramTable.getSelectedRowCount() == 0)
+				{
+					delParamAction.setEnabled(false);
+				}
+				else
+				{
+					delParamAction.setEnabled(true);
+				}
+			}
+		});
+
+		addParamAction = new AbstractAction("Add parameter", ImageIconProxy.getIcon("add"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				httpMethod.addParameter(httpMethod.getUniqueParameterName());
+			}
+		};
+		addParamBtn.setAction(addParamAction);
+
+		delParamAction = new AbstractAction("Delete selected parameter(s)", ImageIconProxy.getIcon("del"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				if(JOptionPane.OK_OPTION != JOptionPane.showConfirmDialog(null,
+						"Are you sure you want to delete the selected parameter(s)?\n",
+						"Delete parameter(s)", JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE))
+				{
+					return;
+				}
+
+				int[] selectedRowsIndex = paramTable.getSelectedRows();
+				int[] correctIndex = new int[selectedRowsIndex.length];
+
+				for(int i = 0; i < selectedRowsIndex.length; i++)
+				{
+					correctIndex[i] = paramTable.getRowSorter().convertRowIndexToModel(selectedRowsIndex[i]);
+				}
+
+				Arrays.sort(correctIndex);
+
+				for(int i = selectedRowsIndex.length; i > 0; i--)
+				{
+					httpMethod.removeParameter(correctIndex[i - 1]);
+				}
+			}
+		};
+		delParamAction.setEnabled(false);
+		delParamBtn.setAction(delParamAction);
 	}
 
 

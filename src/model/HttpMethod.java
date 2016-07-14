@@ -1,5 +1,6 @@
 package model;
 
+import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.TreeMap;
 
@@ -27,13 +28,13 @@ public class HttpMethod extends AbstractTableModel
 		Parameter toto = new Parameter();
 		toto.setRequired(true);
 		toto.setDescription("Gratis silvas ducunt ad ventus.");
-		parameters.put("toto", toto);
+		parameters.put("atoto", toto);
 		Parameter tata = new Parameter();
-		parameters.put("tata", tata);
+		parameters.put("atata", tata);
 		Parameter titi = new Parameter();
 		titi.setRequired(true);
 		titi.setDescription("Sunt bursaes visum fortis, castus byssuses.");
-		parameters.put("titi", titi);
+		parameters.put("atiti", titi);
 	}
 
 	public String getDescription()
@@ -49,15 +50,42 @@ public class HttpMethod extends AbstractTableModel
 	public String getUniqueParameterName()
 	{
 		String name = "param";
-		int i = parameters.size();
+		int i = parameters.size() + 1;
 
-		while(parameters.containsKey(name))
+		do
 		{
 			name += i;
 			i++;
-		}
+		}while(parameters.containsKey(name));
 
 		return name;
+	}
+
+	public boolean addParameter(String name)
+	{
+		if(parameters.containsKey(name))
+		{
+			return false;
+		}
+		parameters.put(name, new Parameter());
+
+		Object[] keys = parameters.keySet().toArray();
+
+		int i = 0;
+		while(!name.equals(keys[i]))
+		{
+			i++;
+		}
+
+		fireTableRowsInserted(i, i);
+		return true;
+	}
+
+	public void removeParameter(int rowIndex)
+	{
+		String key = (String) parameters.keySet().toArray()[rowIndex];
+		parameters.remove(key);
+		fireTableRowsDeleted(rowIndex, rowIndex);
 	}
 
 	//AbstractTreeModel
@@ -123,6 +151,10 @@ public class HttpMethod extends AbstractTableModel
 				{
 					parameters.remove(key);
 					parameters.put((String) aValue, parameter);
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "A parameter with this name already exists.", "Cannot rename parameter", JOptionPane.ERROR_MESSAGE);
 				}
 				break;
 			case 1:

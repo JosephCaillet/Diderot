@@ -5,7 +5,7 @@ package model;
  */
 public class Parameter
 {
-	private boolean required = false;
+	private boolean required = true;
 	private String description = "";
 
 	public boolean isRequired()
