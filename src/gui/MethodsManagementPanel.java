@@ -106,7 +106,7 @@ public class MethodsManagementPanel extends JPanel
 
 	private void addListeners()
 	{
-		addMethodAction = new AbstractAction("Add new http method", ImageIconProxy.getIcon("rsc/plus.png"))
+		addMethodAction = new AbstractAction("Add new http method", ImageIconProxy.getIcon("add"))
 		{
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)
@@ -115,7 +115,7 @@ public class MethodsManagementPanel extends JPanel
 			}
 		};
 
-		updMethodAction = new AbstractAction("Modify http method", ImageIconProxy.getIcon("rsc/edit.png"))
+		updMethodAction = new AbstractAction("Modify http method", ImageIconProxy.getIcon("edit"))
 		{
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)
@@ -124,7 +124,7 @@ public class MethodsManagementPanel extends JPanel
 			}
 		};
 
-		delMethodAction = new AbstractAction("Delete http method", ImageIconProxy.getIcon("rsc/del.png"))
+		delMethodAction = new AbstractAction("Delete http method", ImageIconProxy.getIcon("del"))
 		{
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)

@@ -10,8 +10,11 @@ public class ImageIconProxy
 {
 	private static HashMap<String, ImageIcon> imageIconHashMap = new HashMap<String, ImageIcon>();
 
-	private ImageIconProxy()
+	static
 	{
+		imageIconHashMap.put("add", new ImageIcon("rsc/plus.png"));
+		imageIconHashMap.put("del", new ImageIcon("rsc/del.png"));
+		imageIconHashMap.put("edit", new ImageIcon("rsc/edit.png"));
 	}
 
 	public static ImageIcon getIcon(String path)

@@ -8,10 +8,6 @@ public class Parameter
 	private boolean required = false;
 	private String description = "";
 
-	public Parameter()
-	{
-	}
-
 	public boolean isRequired()
 	{
 		return required;

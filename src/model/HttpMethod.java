@@ -131,6 +131,9 @@ public class HttpMethod extends AbstractTableModel
 			case 2:
 				parameter.setDescription((String) aValue);
 				break;
+			default:
+				//do nothing
+				break;
 		}
 	}
 }

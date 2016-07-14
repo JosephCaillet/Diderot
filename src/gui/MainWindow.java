@@ -142,7 +142,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 			}
 		};
 
-		addRouteAction = new AbstractAction("Add new route", ImageIconProxy.getIcon("rsc/plus.png"))
+		addRouteAction = new AbstractAction("Add new route", ImageIconProxy.getIcon("add"))
 		{
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)
@@ -151,7 +151,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 			}
 		};
 
-		delRouteAction = new AbstractAction("Delete route", ImageIconProxy.getIcon("rsc/del.png"))
+		delRouteAction = new AbstractAction("Delete route", ImageIconProxy.getIcon("del"))
 		{
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)
@@ -160,7 +160,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 			}
 		};
 
-		moveRouteAction = new AbstractAction("Move route", ImageIconProxy.getIcon("rsc/edit.png"))
+		moveRouteAction = new AbstractAction("Move route", ImageIconProxy.getIcon("edit"))
 		{
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)

@@ -3,6 +3,7 @@ package gui;
 import model.HttpMethod;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
@@ -25,26 +26,40 @@ public class MethodPanel extends JPanel implements Scrollable
 
 	private void buildUI()
 	{
+		Border labelBorder = BorderFactory.createEmptyBorder(5, 2, 0, 2);
+		Border componentBorder = BorderFactory.createMatteBorder(0, 4, 0, 4, getBackground());
+		Border textAreaBorder = BorderFactory.createLineBorder(getBackground().darker(), 1);
+
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		JLabel jLabel = new JLabel("Method description:");
-		jLabel.setAlignmentX(LEFT_ALIGNMENT);
-		add(jLabel);
+		JLabel label = new JLabel("Method description:");
+		label.setBorder(labelBorder);
+		label.setAlignmentX(LEFT_ALIGNMENT);
+		add(label);
 
 		description.setAlignmentX(LEFT_ALIGNMENT);
-		description.setBorder(BorderFactory.createLineBorder(getBackground().darker(), 1));
+		description.setBorder(BorderFactory.createCompoundBorder(componentBorder, textAreaBorder));
 		description.setLineWrap(true);
 		add(description);
 
-		jLabel = new JLabel("Parameters:");
-		jLabel.setAlignmentX(LEFT_ALIGNMENT);
-		add(jLabel);
+		label = new JLabel("Parameters:");
+		label.setBorder(labelBorder);
+		label.setAlignmentX(LEFT_ALIGNMENT);
+		add(label);
+
+		JPanel paramOpPanel = new JPanel();
 
 		JTable jTable = new JTable(httpMethod);
-		JScrollPane comp = new JScrollPane(jTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		comp.setAlignmentX(LEFT_ALIGNMENT);
-		comp.setPreferredSize(new Dimension(50,100));
-		add(comp);
+		// /!\ wil have influence on row index for deletion !
+		jTable.setAutoCreateRowSorter(true);
+		Box p = Box.createVerticalBox();
+		p.setBorder(componentBorder);
+		p.setAlignmentX(LEFT_ALIGNMENT);
+		p.add(jTable.getTableHeader());
+		p.add(jTable);
+		add(p);
+
+		add(new JLabel("test"));
 
 		addListener();
 	}
