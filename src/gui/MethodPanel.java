@@ -8,9 +8,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 /**
@@ -64,6 +64,12 @@ public class MethodPanel extends JPanel implements Scrollable
 
 		paramTable = new JTable(httpMethod);
 		paramTable.setAutoCreateRowSorter(true);
+		TableColumnModel colMod = paramTable.getColumnModel();
+		colMod.getColumn(0).setPreferredWidth(100);
+		colMod.getColumn(0).setMaxWidth(400);
+		colMod.getColumn(1).setMaxWidth(100);
+		colMod.getColumn(2).setPreferredWidth(400);
+
 		Box p = Box.createVerticalBox();
 		p.setBorder(componentBorder);
 		p.setAlignmentX(LEFT_ALIGNMENT);
