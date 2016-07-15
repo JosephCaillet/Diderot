@@ -14,12 +14,14 @@ public class HttpMethod extends AbstractTableModel
 
 	private TreeMap<String, Parameter> parameters;
 	private TreeMap<Integer, Response> responses;
+	private TreeMap<String, String> userDefinedPropertiesValues;
 
 
 	public HttpMethod()
 	{
 		parameters = new TreeMap<String, Parameter>();
 		responses = new TreeMap<Integer, Response>();
+		userDefinedPropertiesValues = new TreeMap<String, String>();
 		createSampleData();
 	}
 
@@ -61,6 +63,23 @@ public class HttpMethod extends AbstractTableModel
 		return name;
 	}
 
+	//User properties management
+	public String getUserPropertyValue(String name)
+	{
+		return userDefinedPropertiesValues.get(name);
+	}
+
+	public void setUserProperty(String name, String value)
+	{
+		userDefinedPropertiesValues.put(name, value);
+	}
+
+	public void removeUserProperty(String name)
+	{
+		userDefinedPropertiesValues.remove(name);
+	}
+
+	//parameters management
 	public boolean addParameter(String name)
 	{
 		if(parameters.containsKey(name))

@@ -11,7 +11,7 @@ public class Project
 {
 	private static Project activeProject = new Project();
 
-	private TreeMap<String, PropPair> routePropertiesList;
+	private TreeMap<String, UserDefinedRouteProperty> userDefinedRouteProperties;
 
 	public static Project getActiveProject()
 	{
@@ -20,47 +20,46 @@ public class Project
 
 	public Project()
 	{
-		routePropertiesList = new TreeMap<String, PropPair>();
-		routePropertiesList.put("Controller", new PropPair(true));
-		routePropertiesList.put("View", new PropPair(true));
-		routePropertiesList.put("View template", new PropPair(false));
+		userDefinedRouteProperties = new TreeMap<String, UserDefinedRouteProperty>();
 	}
 
-	public boolean addRouteProperty(String name, boolean isValueMemorized)
+	public boolean addUserRouteProperty(String name, boolean isValueMemorized, String defaultValue)
 	{
-		if(routePropertiesList.containsKey(name))
+		if(userDefinedRouteProperties.containsKey(name))
 		{
 			return false;
 		}
-		routePropertiesList.put(name, new PropPair(isValueMemorized));
+		userDefinedRouteProperties.put(name, new UserDefinedRouteProperty(isValueMemorized, defaultValue));
 		return true;
 	}
 
-	public PropPair getRouteProperty(String name)
+	public UserDefinedRouteProperty getUserRouteProperty(String name)
 	{
-		return routePropertiesList.get(name);
+		return userDefinedRouteProperties.get(name);
 	}
 
-	public boolean removeRouteProperty(String name)
+	public boolean removeUserRouteProperty(String name)
 	{
-		return null == routePropertiesList.remove(name);
+		return null == userDefinedRouteProperties.remove(name);
 	}
 
-	public String[] getPropertiesNames()
+	public String[] getUserRoutesPropertiesNames()
 	{
-		Object[] valuesList =  routePropertiesList.keySet().toArray();
+		Object[] valuesList =  userDefinedRouteProperties.keySet().toArray();
 		return Arrays.copyOf(valuesList, valuesList.length, String[].class);
 	}
 
 
-	private class PropPair extends TreeSet<String>
+	public class UserDefinedRouteProperty extends TreeSet<String>
 	{
 		private boolean valuesMemorized;
+		private String defaultValue;
 
-		public PropPair(boolean valuesMemorized)
+		public UserDefinedRouteProperty(boolean valuesMemorized, String defaultValue)
 		{
 			super();
 			this.valuesMemorized = valuesMemorized;
+			this.defaultValue = defaultValue;
 			if(valuesMemorized)
 			{
 				add("titi");
@@ -77,6 +76,16 @@ public class Project
 		public void setValuesMemorized(boolean valuesMemorized)
 		{
 			this.valuesMemorized = valuesMemorized;
+		}
+
+		public String getDefaultValue()
+		{
+			return defaultValue;
+		}
+
+		public void setDefaultValue(String defaultValue)
+		{
+			this.defaultValue = defaultValue;
 		}
 
 		public String[] getValues()

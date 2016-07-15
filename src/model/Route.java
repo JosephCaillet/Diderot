@@ -3,6 +3,7 @@ package model;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
@@ -13,10 +14,6 @@ public class Route implements TreeModel
 {
 	private String name = "";
 	private String description = "";
-
-	private String controller = "";
-	private String view = "";
-	private String viewTemplate = "";
 
 	private TreeMap<String, Route> subRoutes;
 	private TreeMap<String, HttpMethod> httpMethods;
@@ -136,36 +133,6 @@ public class Route implements TreeModel
 	public void setDescription(String description)
 	{
 		this.description = description;
-	}
-
-	public String getController()
-	{
-		return controller;
-	}
-
-	public void setController(String controller)
-	{
-		this.controller = controller;
-	}
-
-	public String getView()
-	{
-		return view;
-	}
-
-	public void setView(String view)
-	{
-		this.view = view;
-	}
-
-	public String getViewTemplate()
-	{
-		return viewTemplate;
-	}
-
-	public void setViewTemplate(String viewTemplate)
-	{
-		this.viewTemplate = viewTemplate;
 	}
 
 	public TreeMap<String, HttpMethod> getHttpMethods()
@@ -339,6 +306,50 @@ public class Route implements TreeModel
 
 		removeHttpMethod(oldName);
 		return true;
+	}
+
+	//User defined properties management
+	public void addUserProperty(String name, String defaultValue)
+	{
+		for(Map.Entry<String, HttpMethod> entry : httpMethods.entrySet())
+		{
+			entry.getValue().setUserProperty(name, defaultValue);
+		}
+
+		for(Map.Entry<String, Route> entry : subRoutes.entrySet())
+		{
+			entry.getValue().addUserProperty(name, defaultValue);
+		}
+	}
+
+	public void removeUserProperty(String name)
+	{
+		for(Map.Entry<String, HttpMethod> entry : httpMethods.entrySet())
+		{
+			entry.getValue().removeUserProperty(name);
+		}
+
+		for(Map.Entry<String, Route> entry : subRoutes.entrySet())
+		{
+			entry.getValue().removeUserProperty(name);
+		}
+	}
+
+	public void removeUserPropertyValue(String name, String oldValue, String newValue)
+	{
+		for(Map.Entry<String, HttpMethod> entry : httpMethods.entrySet())
+		{
+			HttpMethod httpMethod = entry.getValue();
+			if(httpMethod.getUserPropertyValue(name).equals(oldValue))
+			{
+				httpMethod.setUserProperty(name, newValue);
+			}
+		}
+
+		for(Map.Entry<String, Route> entry : subRoutes.entrySet())
+		{
+			entry.getValue().removeUserProperty(name);
+		}
 	}
 
 	//interface TreeModel

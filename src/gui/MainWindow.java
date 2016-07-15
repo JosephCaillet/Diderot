@@ -1,6 +1,7 @@
 package gui;
 
 import gui.dialog.InputStringDialogHelper;
+import model.Project;
 import model.Route;
 
 import javax.swing.*;
@@ -64,6 +65,22 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		rootRoutes.addRoute("data/type2");
 		rootRoutes.addRoute("home/page2");
 		rootRoutes.addRoute("home/page2");
+
+		Project project = Project.getActiveProject();
+		project.addUserRouteProperty("Controller", true, "myController");
+		project.addUserRouteProperty("View", true, "myView");
+		project.addUserRouteProperty("View template", true, "myViewTemplate");
+		project.addUserRouteProperty("test delete", true, "test de");
+		project.addUserRouteProperty("test rename", true, "old val");
+
+		for(String prop : project.getUserRoutesPropertiesNames())
+		{
+			rootRoutes.addUserProperty(prop, project.getUserRouteProperty(prop).getDefaultValue());
+		}
+
+		rootRoutes.removeUserProperty("test delete");
+		rootRoutes.removeUserPropertyValue("test rename", "old val", "new val");
+		rootRoutes.removeUserPropertyValue("View", "old val", "new val");
 	}
 
 	private void buildUI()
