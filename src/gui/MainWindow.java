@@ -46,7 +46,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		buildUI();
 
-		setPreferredSize(new Dimension(850, 500));
+		setPreferredSize(new Dimension(850, 700));
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -68,9 +68,9 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		Project project = Project.getActiveProject();
 		project.addUserRouteProperty("Controller", true, "myController");
-		project.addUserRouteProperty("View", true, "myView");
+		project.addUserRouteProperty("View", false, "myView");
 		project.addUserRouteProperty("View template", true, "myViewTemplate");
-		project.addUserRouteProperty("test delete", true, "test de");
+		project.addUserRouteProperty("test delete", false, "test del");
 		project.addUserRouteProperty("test rename", true, "old val");
 
 		for(String prop : project.getUserRoutesPropertiesNames())
@@ -78,6 +78,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 			rootRoutes.addUserProperty(prop, project.getUserRouteProperty(prop).getDefaultValue());
 		}
 
+		project.removeUserRouteProperty("test delete");
 		rootRoutes.removeUserProperty("test delete");
 		rootRoutes.removeUserPropertyValue("test rename", "old val", "new val");
 		rootRoutes.removeUserPropertyValue("View", "old val", "new val");

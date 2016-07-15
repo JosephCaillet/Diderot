@@ -22,19 +22,24 @@ public class HttpMethod extends AbstractTableModel
 		parameters = new TreeMap<String, Parameter>();
 		responses = new TreeMap<Integer, Response>();
 		userDefinedPropertiesValues = new TreeMap<String, String>();
+
+		Project project = Project.getActiveProject();
+		for(String prop : project.getUserRoutesPropertiesNames())
+		{
+			setUserProperty(prop, project.getUserRouteProperty(prop).getDefaultValue());
+		}
 		createSampleData();
 	}
 
 	private void createSampleData()
 	{
 		Parameter toto = new Parameter();
-		toto.setRequired(true);
 		toto.setDescription("Gratis silvas ducunt ad ventus.");
 		parameters.put("atoto", toto);
 		Parameter tata = new Parameter();
 		parameters.put("atata", tata);
 		Parameter titi = new Parameter();
-		titi.setRequired(true);
+		titi.setRequired(false);
 		titi.setDescription("Sunt bursaes visum fortis, castus byssuses.");
 		parameters.put("atiti", titi);
 	}

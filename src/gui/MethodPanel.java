@@ -1,6 +1,7 @@
 package gui;
 
 import model.HttpMethod;
+import model.Project;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -70,15 +71,61 @@ public class MethodPanel extends JPanel implements Scrollable
 		colMod.getColumn(1).setMaxWidth(100);
 		colMod.getColumn(2).setPreferredWidth(400);
 
-		Box p = Box.createVerticalBox();
-		p.setBorder(componentBorder);
-		p.setAlignmentX(LEFT_ALIGNMENT);
-		p.add(labelButtonPanel);
-		p.add(paramTable.getTableHeader());
-		p.add(paramTable);
-		add(p);
+		Box box = Box.createVerticalBox();
+		box.setBorder(componentBorder);
+		box.setAlignmentX(LEFT_ALIGNMENT);
+		box.add(labelButtonPanel);
+		box.add(paramTable.getTableHeader());
+		box.add(paramTable);
+		add(box);
 
-		add(new JLabel("test"));
+		label = new JLabel("User defined properties:");
+		label.setBorder(labelBorder);
+		label.setAlignmentX(LEFT_ALIGNMENT);
+		add(label);
+
+		String[] userDefinedProperties = Project.getActiveProject().getUserRoutesPropertiesNames();
+		if(userDefinedProperties.length == 0)
+		{
+			label = new JLabel("No user defined properties created. To create one, go into project settings.");
+			JPanel panel = new JPanel(new BorderLayout());
+			panel.setAlignmentX(LEFT_ALIGNMENT);
+			label.setHorizontalAlignment(SwingConstants.CENTER);
+			panel.add(label, BorderLayout.CENTER);
+			add(panel);
+		}
+		else
+		{
+			JPanel panel = new JPanel(new GridLayout(userDefinedProperties.length, 2, 15, 5));
+			panel.setBorder(componentBorder);
+			panel.setAlignmentX(LEFT_ALIGNMENT);
+
+			for(String property : userDefinedProperties)
+			{
+				JLabel propLabel = new JLabel(property + ":");
+				propLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+				propLabel.setBackground(Color.RED);
+				panel.add(propLabel);
+
+				Project.UserDefinedRouteProperty userProperty = Project.getActiveProject().getUserRouteProperty(property);
+				if(userProperty.isValuesMemorized())
+				{
+					JComboBox<String> valuesCombo = new JComboBox<String>(userProperty.getValues());
+					valuesCombo.setEditable(true);
+					valuesCombo.setSelectedItem(httpMethod.getUserPropertyValue(property));
+					propLabel.setPreferredSize(valuesCombo.getPreferredSize());
+					panel.add(valuesCombo);
+				}
+				else
+				{
+					JTextField valueText = new JTextField(httpMethod.getUserPropertyValue(property));
+					propLabel.setPreferredSize(valueText.getPreferredSize());
+					panel.add(valueText);
+				}
+			}
+
+			add(panel);
+		}
 
 		addListener();
 	}

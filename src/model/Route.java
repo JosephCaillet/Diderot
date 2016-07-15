@@ -348,7 +348,7 @@ public class Route implements TreeModel
 
 		for(Map.Entry<String, Route> entry : subRoutes.entrySet())
 		{
-			entry.getValue().removeUserProperty(name);
+			entry.getValue().removeUserPropertyValue(name, oldValue, newValue);
 		}
 	}
 

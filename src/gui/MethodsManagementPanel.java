@@ -64,6 +64,7 @@ public class MethodsManagementPanel extends JPanel
 			JScrollPane scrollPane = new JScrollPane(methodPanel,
 					ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
+			scrollPane.getViewport().setOpaque(false);
 			methodsTabbedPanel.addTab(entry.getKey(), scrollPane);
 		}
 
@@ -218,6 +219,7 @@ public class MethodsManagementPanel extends JPanel
 			JScrollPane scrollPane = new JScrollPane(methodPanel,
 					ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
+			scrollPane.getViewport().setOpaque(false);
 			methodsTabbedPanel.add(methodToAdd, scrollPane);
 			methodsTabbedPanel.setSelectedIndex(methodsTabbedPanel.getTabCount()-1);
 			setEnabledButton(true);
