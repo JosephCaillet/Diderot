@@ -44,12 +44,16 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		createSampleRoute();
 
+		ProjectSettingsDialog projectSettingsDialog = new ProjectSettingsDialog(this, rootRoutes);
+
 		buildUI();
 
 		setPreferredSize(new Dimension(850, 700));
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
+
+		projectSettingsDialog.display();
 	}
 
 	private void createSampleRoute()
