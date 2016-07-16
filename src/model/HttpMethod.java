@@ -57,15 +57,14 @@ public class HttpMethod extends AbstractTableModel
 	public String getUniqueParameterName()
 	{
 		String name = "param";
-		int i = parameters.size() + 1;
+		int i = parameters.size();
 
 		do
 		{
-			name += i;
 			i++;
-		}while(parameters.containsKey(name));
+		}while(parameters.containsKey(name + i));
 
-		return name;
+		return name + i;
 	}
 
 	//User properties management
