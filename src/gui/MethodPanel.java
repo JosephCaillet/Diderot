@@ -111,61 +111,13 @@ public class MethodPanel extends JPanel implements Scrollable
 				final JTextField valueText = new JTextField(httpMethod.getUserPropertyValue(property));
 				panel.add(valueText);
 
-				valueText.addFocusListener(new FocusAdapter()
-				{
-					@Override
-					public void focusLost(FocusEvent e)
-					{
-						httpMethod.setUserProperty(property, valueText.getText());
-					}
-				});
+				valueText.addFocusListener(new UserDefinedPropertyEditedValueListener(property, valueText));
 
 				if(userProperty.isValuesMemorized())
 				{
-					valueText.addFocusListener(new FocusAdapter()
-					{
-						@Override
-						public void focusLost(FocusEvent e)
-						{
-							if(!valueText.getText().isEmpty())
-							{
-								userProperty.add((String) valueText.getText());
-							}
-						}
-					});
+					valueText.addFocusListener(new UserDefinedPropertyNewValueListener(userProperty, valueText));
 
-					valueText.addKeyListener(new KeyAdapter()
-					{
-						@Override
-						public void keyReleased(KeyEvent e)
-						{
-							if(e.getKeyCode() == KeyEvent.VK_CONTEXT_MENU)
-							{
-								JPopupMenu popupMenu = new JPopupMenu();
-
-								boolean empty = true;
-								for(final String s : userProperty.getValues())
-								{
-									if(s.toLowerCase().startsWith(valueText.getText().toLowerCase()))
-									{
-										empty = false;
-										popupMenu.add(new AbstractAction(s)
-										{
-											@Override
-											public void actionPerformed(ActionEvent actionEvent)
-											{
-												valueText.setText(s);
-											}
-										});
-									}
-								}
-								if(!empty)
-								{
-									popupMenu.show(valueText, 5,5);
-								}
-							}
-						}
-					});
+					valueText.addKeyListener(new UserDefinedPropertyAutocompletionListener(userProperty, valueText));
 				}
 			}
 
@@ -288,5 +240,86 @@ public class MethodPanel extends JPanel implements Scrollable
 	public boolean getScrollableTracksViewportHeight()
 	{
 		return false;
+	}
+
+	private static class UserDefinedPropertyNewValueListener extends FocusAdapter
+	{
+		private final JTextField valueText;
+		private final Project.UserDefinedRouteProperty userProperty;
+
+		public UserDefinedPropertyNewValueListener(Project.UserDefinedRouteProperty userProperty, JTextField valueText)
+		{
+			this.valueText = valueText;
+			this.userProperty = userProperty;
+		}
+
+		@Override
+		public void focusLost(FocusEvent e)
+		{
+			if(!valueText.getText().isEmpty())
+			{
+				userProperty.add((String) valueText.getText());
+			}
+		}
+	}
+
+	private static class UserDefinedPropertyAutocompletionListener extends KeyAdapter
+	{
+		private final Project.UserDefinedRouteProperty userProperty;
+		private final JTextField valueText;
+
+		public UserDefinedPropertyAutocompletionListener(Project.UserDefinedRouteProperty userProperty, JTextField valueText)
+		{
+			this.userProperty = userProperty;
+			this.valueText = valueText;
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e)
+		{
+			if(e.getKeyCode() == KeyEvent.VK_CONTEXT_MENU)
+			{
+				JPopupMenu popupMenu = new JPopupMenu();
+
+				boolean empty = true;
+				for(final String s : userProperty.getValues())
+				{
+					if(s.toLowerCase().startsWith(valueText.getText().toLowerCase()))
+					{
+						empty = false;
+						popupMenu.add(new AbstractAction(s)
+						{
+							@Override
+							public void actionPerformed(ActionEvent actionEvent)
+							{
+								valueText.setText(s);
+							}
+						});
+					}
+				}
+				if(!empty)
+				{
+					popupMenu.show(valueText, 5,5);
+				}
+			}
+		}
+	}
+
+	private class UserDefinedPropertyEditedValueListener extends FocusAdapter
+	{
+		private final String property;
+		private final JTextField valueText;
+
+		public UserDefinedPropertyEditedValueListener(String property, JTextField valueText)
+		{
+			this.property = property;
+			this.valueText = valueText;
+		}
+
+		@Override
+		public void focusLost(FocusEvent e)
+		{
+			httpMethod.setUserProperty(property, valueText.getText());
+		}
 	}
 }
