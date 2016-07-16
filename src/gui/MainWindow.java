@@ -53,7 +53,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		setLocationRelativeTo(null);
 		setVisible(true);
 
-		projectSettingsDialog.display();
+		//projectSettingsDialog.display();
 	}
 
 	private void createSampleRoute()

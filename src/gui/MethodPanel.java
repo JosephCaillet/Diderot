@@ -11,7 +11,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 import java.util.Arrays;
 
 /**
@@ -84,7 +84,7 @@ public class MethodPanel extends JPanel implements Scrollable
 		label.setAlignmentX(LEFT_ALIGNMENT);
 		add(label);
 
-		String[] userDefinedProperties = Project.getActiveProject().getUserRoutesPropertiesNames();
+		final String[] userDefinedProperties = Project.getActiveProject().getUserRoutesPropertiesNames();
 		if(userDefinedProperties.length == 0)
 		{
 			label = new JLabel("No user defined properties created. To create one, go into project settings.");
@@ -96,31 +96,76 @@ public class MethodPanel extends JPanel implements Scrollable
 		}
 		else
 		{
-			JPanel panel = new JPanel(new GridLayout(userDefinedProperties.length, 2, 15, 5));
+			final JPanel panel = new JPanel(new GridLayout(userDefinedProperties.length, 2, 15, 5));
 			panel.setBorder(componentBorder);
 			panel.setAlignmentX(LEFT_ALIGNMENT);
 
-			for(String property : userDefinedProperties)
+			for(final String property : userDefinedProperties)
 			{
 				JLabel propLabel = new JLabel(property + ":");
 				propLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 				propLabel.setBackground(Color.RED);
 				panel.add(propLabel);
 
-				Project.UserDefinedRouteProperty userProperty = Project.getActiveProject().getUserRouteProperty(property);
+				final Project.UserDefinedRouteProperty userProperty = Project.getActiveProject().getUserRouteProperty(property);
+				final JTextField valueText = new JTextField(httpMethod.getUserPropertyValue(property));
+				panel.add(valueText);
+
+				valueText.addFocusListener(new FocusAdapter()
+				{
+					@Override
+					public void focusLost(FocusEvent e)
+					{
+						httpMethod.setUserProperty(property, valueText.getText());
+					}
+				});
+
 				if(userProperty.isValuesMemorized())
 				{
-					JComboBox<String> valuesCombo = new JComboBox<String>(userProperty.getValues());
-					valuesCombo.setEditable(true);
-					valuesCombo.setSelectedItem(httpMethod.getUserPropertyValue(property));
-					propLabel.setPreferredSize(valuesCombo.getPreferredSize());
-					panel.add(valuesCombo);
-				}
-				else
-				{
-					JTextField valueText = new JTextField(httpMethod.getUserPropertyValue(property));
-					propLabel.setPreferredSize(valueText.getPreferredSize());
-					panel.add(valueText);
+					valueText.addFocusListener(new FocusAdapter()
+					{
+						@Override
+						public void focusLost(FocusEvent e)
+						{
+							if(!valueText.getText().isEmpty())
+							{
+								userProperty.add((String) valueText.getText());
+							}
+						}
+					});
+
+					valueText.addKeyListener(new KeyAdapter()
+					{
+						@Override
+						public void keyReleased(KeyEvent e)
+						{
+							if(e.getKeyCode() == KeyEvent.VK_CONTEXT_MENU)
+							{
+								JPopupMenu popupMenu = new JPopupMenu();
+
+								boolean empty = true;
+								for(final String s : userProperty.getValues())
+								{
+									if(s.toLowerCase().startsWith(valueText.getText().toLowerCase()))
+									{
+										empty = false;
+										popupMenu.add(new AbstractAction(s)
+										{
+											@Override
+											public void actionPerformed(ActionEvent actionEvent)
+											{
+												valueText.setText(s);
+											}
+										});
+									}
+								}
+								if(!empty)
+								{
+									popupMenu.show(valueText, 5,5);
+								}
+							}
+						}
+					});
 				}
 			}
 

@@ -63,8 +63,10 @@ public class Project
 			if(valuesMemorized)
 			{
 				add("titi");
-				add("toto");
+				add("Toto");
 				add("tutu");
+				add("Zozo");
+				add("zaza");
 			}
 		}
 
