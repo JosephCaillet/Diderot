@@ -23,13 +23,14 @@ public class Project
 		userDefinedRouteProperties = new TreeMap<String, UserDefinedRouteProperty>();
 	}
 
-	public boolean addUserRouteProperty(String name, boolean isValueMemorized, String defaultValue)
+	//user defined properties management
+	public boolean addUserRouteProperty(String name, String defaultValue)
 	{
 		if(userDefinedRouteProperties.containsKey(name))
 		{
 			return false;
 		}
-		userDefinedRouteProperties.put(name, new UserDefinedRouteProperty(isValueMemorized, defaultValue));
+		userDefinedRouteProperties.put(name, new UserDefinedRouteProperty(defaultValue));
 		return true;
 	}
 
@@ -52,22 +53,30 @@ public class Project
 
 	public class UserDefinedRouteProperty extends TreeSet<String>
 	{
-		private boolean valuesMemorized;
+		private boolean newValuesDisabled = false;
+		private boolean valuesMemorized = true;
 		private String defaultValue;
 
-		public UserDefinedRouteProperty(boolean valuesMemorized, String defaultValue)
+		public UserDefinedRouteProperty(String defaultValue)
 		{
 			super();
-			this.valuesMemorized = valuesMemorized;
 			this.defaultValue = defaultValue;
-			if(valuesMemorized)
-			{
-				add("titi");
-				add("Toto");
-				add("tutu");
-				add("Zozo");
-				add("zaza");
-			}
+			add(defaultValue);
+			add("titi");
+			add("Toto");
+			add("tutu");
+			add("Zozo");
+			add("zaza");
+		}
+
+		public boolean isNewValuesDisabled()
+		{
+			return newValuesDisabled;
+		}
+
+		public void setNewValuesDisabled(boolean newValuesDisabled)
+		{
+			this.newValuesDisabled = newValuesDisabled;
 		}
 
 		public boolean isValuesMemorized()

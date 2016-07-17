@@ -107,17 +107,27 @@ public class MethodPanel extends JPanel implements Scrollable
 				propLabel.setBackground(Color.RED);
 				panel.add(propLabel);
 
-				final Project.UserDefinedRouteProperty userProperty = Project.getActiveProject().getUserRouteProperty(property);
-				final JTextField valueText = new JTextField(httpMethod.getUserPropertyValue(property));
-				panel.add(valueText);
-
-				valueText.addFocusListener(new UserDefinedPropertyEditedValueListener(property, valueText));
-
-				if(userProperty.isValuesMemorized())
+				Project.UserDefinedRouteProperty userProperty = Project.getActiveProject().getUserRouteProperty(property);
+				if(userProperty.isNewValuesDisabled())
 				{
-					valueText.addFocusListener(new UserDefinedPropertyNewValueListener(userProperty, valueText));
+					JComboBox comboBox = new JComboBox<String>(userProperty.getValues());
+					panel.add(comboBox);
 
-					valueText.addKeyListener(new UserDefinedPropertyAutocompletionListener(userProperty, valueText));
+					comboBox.setSelectedItem(httpMethod.getUserPropertyValue(property));
+					comboBox.addFocusListener(new UserDefinedPropertyEditedValueListener(property));
+				}
+				else
+				{
+					JTextField valueText = new JTextField(httpMethod.getUserPropertyValue(property));
+					panel.add(valueText);
+
+					valueText.addFocusListener(new UserDefinedPropertyEditedValueListener(property));
+					valueText.addKeyListener(new UserDefinedPropertyAutocompletionListener(userProperty));
+
+					if(userProperty.isValuesMemorized())
+					{
+						valueText.addFocusListener(new UserDefinedPropertyNewValueListener(userProperty));
+					}
 				}
 			}
 
@@ -244,21 +254,20 @@ public class MethodPanel extends JPanel implements Scrollable
 
 	private static class UserDefinedPropertyNewValueListener extends FocusAdapter
 	{
-		private final JTextField valueText;
-		private final Project.UserDefinedRouteProperty userProperty;
+		private Project.UserDefinedRouteProperty userProperty;
 
-		public UserDefinedPropertyNewValueListener(Project.UserDefinedRouteProperty userProperty, JTextField valueText)
+		public UserDefinedPropertyNewValueListener(Project.UserDefinedRouteProperty userProperty)
 		{
-			this.valueText = valueText;
 			this.userProperty = userProperty;
 		}
 
 		@Override
 		public void focusLost(FocusEvent e)
 		{
-			if(!valueText.getText().isEmpty())
+			JTextField textField = (JTextField) e.getSource();
+			if(!textField.getText().isEmpty())
 			{
-				userProperty.add((String) valueText.getText());
+				userProperty.add(textField.getText());
 			}
 		}
 	}
@@ -266,17 +275,17 @@ public class MethodPanel extends JPanel implements Scrollable
 	private static class UserDefinedPropertyAutocompletionListener extends KeyAdapter
 	{
 		private final Project.UserDefinedRouteProperty userProperty;
-		private final JTextField valueText;
 
-		public UserDefinedPropertyAutocompletionListener(Project.UserDefinedRouteProperty userProperty, JTextField valueText)
+		public UserDefinedPropertyAutocompletionListener(Project.UserDefinedRouteProperty userProperty)
 		{
 			this.userProperty = userProperty;
-			this.valueText = valueText;
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e)
 		{
+			final JTextField textField = (JTextField) e.getSource();
+
 			if(e.getKeyCode() == KeyEvent.VK_CONTEXT_MENU)
 			{
 				JPopupMenu popupMenu = new JPopupMenu();
@@ -284,7 +293,7 @@ public class MethodPanel extends JPanel implements Scrollable
 				boolean empty = true;
 				for(final String s : userProperty.getValues())
 				{
-					if(s.toLowerCase().startsWith(valueText.getText().toLowerCase()))
+					if(s.toLowerCase().startsWith(textField.getText().toLowerCase()))
 					{
 						empty = false;
 						popupMenu.add(new AbstractAction(s)
@@ -292,14 +301,14 @@ public class MethodPanel extends JPanel implements Scrollable
 							@Override
 							public void actionPerformed(ActionEvent actionEvent)
 							{
-								valueText.setText(s);
+								textField.setText(s);
 							}
 						});
 					}
 				}
 				if(!empty)
 				{
-					popupMenu.show(valueText, 5,5);
+					popupMenu.show(textField, 10, textField.getSize().height - 2);
 				}
 			}
 		}
@@ -307,19 +316,27 @@ public class MethodPanel extends JPanel implements Scrollable
 
 	private class UserDefinedPropertyEditedValueListener extends FocusAdapter
 	{
-		private final String property;
-		private final JTextField valueText;
+		private String property;
 
-		public UserDefinedPropertyEditedValueListener(String property, JTextField valueText)
+		public UserDefinedPropertyEditedValueListener(String property)
 		{
 			this.property = property;
-			this.valueText = valueText;
 		}
 
 		@Override
 		public void focusLost(FocusEvent e)
 		{
-			httpMethod.setUserProperty(property, valueText.getText());
+			Object src = e.getSource();
+			if(src instanceof JTextField)
+			{
+				JTextField textField = (JTextField) src;
+				httpMethod.setUserProperty(property, textField.getText());
+			}
+			else if(src instanceof JComboBox)
+			{
+				JComboBox<String> comboBox = (JComboBox<String>) e.getSource();
+				httpMethod.setUserProperty(property, (String) comboBox.getSelectedItem());
+			}
 		}
 	}
 }

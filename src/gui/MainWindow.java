@@ -53,7 +53,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		setLocationRelativeTo(null);
 		setVisible(true);
 
-		//projectSettingsDialog.display();
+		projectSettingsDialog.display();
 	}
 
 	private void createSampleRoute()
@@ -71,11 +71,11 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		rootRoutes.addRoute("home/page2");
 
 		Project project = Project.getActiveProject();
-		project.addUserRouteProperty("Controller", true, "myController");
-		project.addUserRouteProperty("View", false, "myView");
-		project.addUserRouteProperty("View template", true, "myViewTemplate");
-		project.addUserRouteProperty("test delete", false, "test del");
-		project.addUserRouteProperty("test rename", true, "old val");
+		project.addUserRouteProperty("Controller", "myController");
+		project.addUserRouteProperty("View", "myView");
+		project.addUserRouteProperty("View template", "myViewTemplate");
+		project.addUserRouteProperty("test delete", "test del");
+		project.addUserRouteProperty("test rename", "old val");
 
 		for(String prop : project.getUserRoutesPropertiesNames())
 		{

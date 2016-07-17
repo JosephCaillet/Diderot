@@ -33,8 +33,8 @@ public class ProjectSettingsDialog extends JDialog
 		addListeners();
 
 		setMinimumSize(new Dimension(400, 150));
-		setLocationRelativeTo(parent);
 		pack();
+		setLocationRelativeTo(parent);
 	}
 
 	private void buildUI()
@@ -61,6 +61,10 @@ public class ProjectSettingsDialog extends JDialog
 		panel = new JPanel();
 		panel.add(new JLabel(settingsSections[1]));
 		settingsPanel.add(panel, settingsSections[1]);
+		panel.add(new JCheckBox("test"));
+		panel.add(new JCheckBox("test"));
+		panel.add(new JRadioButton("test"));
+		panel.add(new JRadioButton("test"));
 
 		mainPanel.add(settingsPanel, BorderLayout.CENTER);
 
@@ -100,6 +104,18 @@ public class ProjectSettingsDialog extends JDialog
 		//project settings
 
 		//user defined properties
+		/*
+		Todo:
+		*properties:
+		-list all prop
+		-delete prop
+		-create new prop (is memo? default val?)
+		-edit existing prop (is memo? default val? upd old defaullt val?)
+			*properties' values(if memo):
+			-add value
+			-rename value(upd old val?)
+			-remove value(upd old val?)
+		 */
 	}
 
 	public boolean display()
