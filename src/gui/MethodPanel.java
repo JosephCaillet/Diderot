@@ -286,7 +286,7 @@ public class MethodPanel extends JPanel implements Scrollable
 		{
 			final JTextField textField = (JTextField) e.getSource();
 
-			if(e.getKeyCode() == KeyEvent.VK_CONTEXT_MENU)
+			if(e.getKeyCode() == KeyEvent.VK_CONTEXT_MENU || e.getKeyCode() == KeyEvent.VK_SPACE || (e.getModifiers() & KeyEvent.CTRL_DOWN_MASK) != 0)
 			{
 				JPopupMenu popupMenu = new JPopupMenu();
 

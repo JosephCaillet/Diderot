@@ -283,7 +283,7 @@ public class ProjectSettingsDialog extends JDialog
 				}
 			}
 		});
-
+//Todo: def val = "" empty string
 		propList.addActionListener(new ActionListener()
 		{
 			@Override
@@ -374,6 +374,37 @@ public class ProjectSettingsDialog extends JDialog
 				else
 				{
 					Project.getActiveProject().getUserRouteProperty((String) propList.getSelectedItem()).setValuesMemorized(false);
+				}
+			}
+		});
+
+		changeDefaultPropValueBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				String propName = (String) propList.getSelectedItem();
+				Project.UserDefinedRouteProperty userDefinedRouteProperty =  Project.getActiveProject().getUserRouteProperty(propName);
+				String oldDef = userDefinedRouteProperty.getDefaultValue();
+
+				String newDef = (String) JOptionPane.showInputDialog(null, "Change default value of property: " + propName + "\nfrom: " + oldDef + "\nto:",
+						"Change default value", JOptionPane.PLAIN_MESSAGE, null, userDefinedRouteProperty.getValues(), oldDef);
+
+				if(newDef != null)
+				{
+					if(newDef.equals(oldDef))
+					{
+						JOptionPane.showMessageDialog(null, "Please choose a different value from the previous.");
+						return;
+					}
+
+					userDefinedRouteProperty.setDefaultValue(newDef);
+					defaultPropValLbl.setText(newDef);
+
+					if(JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null, "Replace the old default value with the new one in all routes?", "Update the route",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE))
+					{
+						rootRoutes.changeUserPropertyValue(propName, oldDef, newDef);
+					}
 				}
 			}
 		});
