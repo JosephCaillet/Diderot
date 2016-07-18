@@ -10,6 +10,8 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 /**
  * Created by joseph on 16/07/16.
@@ -338,6 +340,40 @@ public class ProjectSettingsDialog extends JDialog
 					valueList.setListData(new String[0]);
 
 					defaultPropValLbl.setText("Nothing to display");
+				}
+			}
+		});
+
+		checkBoxDisallowNewValues.addItemListener(new ItemListener()
+		{
+			@Override
+			public void itemStateChanged(ItemEvent itemEvent)
+			{
+				if(checkBoxDisallowNewValues.isSelected())
+				{
+					checkBoxMemorizeNewValue.setEnabled(false);
+					Project.getActiveProject().getUserRouteProperty((String) propList.getSelectedItem()).setNewValuesDisabled(true);
+				}
+				else
+				{
+					checkBoxMemorizeNewValue.setEnabled(true);
+					Project.getActiveProject().getUserRouteProperty((String) propList.getSelectedItem()).setNewValuesDisabled(false);
+				}
+			}
+		});
+
+		checkBoxMemorizeNewValue.addItemListener(new ItemListener()
+		{
+			@Override
+			public void itemStateChanged(ItemEvent itemEvent)
+			{
+				if(checkBoxMemorizeNewValue.isSelected())
+				{
+					Project.getActiveProject().getUserRouteProperty((String) propList.getSelectedItem()).setValuesMemorized(true);
+				}
+				else
+				{
+					Project.getActiveProject().getUserRouteProperty((String) propList.getSelectedItem()).setValuesMemorized(false);
 				}
 			}
 		});
