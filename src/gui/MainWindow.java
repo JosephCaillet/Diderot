@@ -1,6 +1,7 @@
 package gui;
 
 import gui.dialog.InputStringDialogHelper;
+import gui.dialog.ProjectSettingsDialog;
 import model.Project;
 import model.Route;
 
@@ -44,8 +45,6 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		createSampleRoute();
 
-		ProjectSettingsDialog projectSettingsDialog = new ProjectSettingsDialog(this, rootRoutes);
-
 		buildUI();
 
 		setPreferredSize(new Dimension(850, 700));
@@ -53,7 +52,6 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		setLocationRelativeTo(null);
 		setVisible(true);
 
-		projectSettingsDialog.display();
 	}
 
 	private void createSampleRoute()
@@ -84,18 +82,19 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		project.removeUserRouteProperty("test delete");
 		rootRoutes.removeUserProperty("test delete");
-		rootRoutes.removeUserPropertyValue("test rename", "old val", "new val");
-		rootRoutes.removeUserPropertyValue("View", "old val", "new val");
+		rootRoutes.changeUserPropertyValue("test rename", "old val", "new val");
+		rootRoutes.changeUserPropertyValue("View", "old val", "new val");
 	}
 
 	private void buildUI()
 	{
 		//button for route management
-		Box btnPannel = Box.createVerticalBox();
-		btnPannel.add(addRouteBtn);
-		btnPannel.add(moveRouteBtn);
-		btnPannel.add(delRouteBtn);
-		btnPannel.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
+		Box btnPanel = Box.createVerticalBox();
+
+		btnPanel.add(addRouteBtn);
+		btnPanel.add(moveRouteBtn);
+		btnPanel.add(delRouteBtn);
+		btnPanel.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
 
 		addRouteBtn.setAlignmentX(CENTER_ALIGNMENT);
 		delRouteBtn.setAlignmentX(CENTER_ALIGNMENT);
@@ -104,6 +103,25 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		delRouteBtn.setMaximumSize(new Dimension(208,34));
 		moveRouteBtn.setMaximumSize(new Dimension(208,34));
 
+		///////////////////////
+		final JFrame parent = this;
+		JButton confBtn = new JButton(new AbstractAction("Project settings", ImageIconProxy.getIcon("conf"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				ProjectSettingsDialog projectSettingsDialog = new ProjectSettingsDialog(parent, rootRoutes);
+				projectSettingsDialog.display();
+			}
+		});
+		confBtn.setAlignmentX(CENTER_ALIGNMENT);
+		confBtn.setMaximumSize(new Dimension(208,34));
+		btnPanel.add(confBtn);
+		confBtn.doClick();
+		System.exit(0);
+		///////////////////////
+
+
 		//route tree
 		routesTreePanel = new RoutesTreePanel(rootRoutes);
 
@@ -111,7 +129,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		JPanel leftPanel = new JPanel(new BorderLayout());
 		leftPanel.add(new JScrollPane(routesTreePanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
-		leftPanel.add(btnPannel, BorderLayout.SOUTH);
+		leftPanel.add(btnPanel, BorderLayout.SOUTH);
 
 		//full route path display
 		currentRouteLbl.setOpaque(true);
