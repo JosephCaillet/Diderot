@@ -335,6 +335,21 @@ public class Route implements TreeModel
 		}
 	}
 
+	public void renameUserProperty(String oldName, String newName)
+	{
+		for(Map.Entry<String, HttpMethod> entry : httpMethods.entrySet())
+		{
+			HttpMethod value = entry.getValue();
+			value.setUserProperty(newName, value.getUserPropertyValue(oldName));
+			value.removeUserProperty(oldName);
+		}
+
+		for(Map.Entry<String, Route> entry : subRoutes.entrySet())
+		{
+			entry.getValue().renameUserProperty(oldName, newName);
+		}
+	}
+
 	public void changeUserPropertyValue(String name, String oldValue, String newValue)
 	{
 		for(Map.Entry<String, HttpMethod> entry : httpMethods.entrySet())

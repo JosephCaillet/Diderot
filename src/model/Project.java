@@ -39,9 +39,9 @@ public class Project
 		return userDefinedRouteProperties.get(name);
 	}
 
-	public boolean removeUserRouteProperty(String name)
+	public UserDefinedRouteProperty removeUserRouteProperty(String name)
 	{
-		return null == userDefinedRouteProperties.remove(name);
+		return userDefinedRouteProperties.remove(name);
 	}
 
 	public String[] getUserRoutesPropertiesNames()

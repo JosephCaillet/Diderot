@@ -118,7 +118,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		confBtn.setMaximumSize(new Dimension(208,34));
 		btnPanel.add(confBtn);
 		confBtn.doClick();
-		System.exit(0);
+		//System.exit(0);
 		///////////////////////
 
 

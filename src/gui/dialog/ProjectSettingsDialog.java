@@ -9,6 +9,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by joseph on 16/07/16.
@@ -31,9 +32,11 @@ public class ProjectSettingsDialog extends JDialog
 	private JComboBox<String> propList;
 	private JCheckBox checkBoxDisallowNewValues = new JCheckBox("Disallow new values");
 	private JCheckBox checkBoxMemorizeNewValue = new JCheckBox("Memorize new values");
-	private JLabel defaultPropValLbl = new JLabel("Cliniass observare!");
-	private JButton editDefaultPropValueBtn = new JButton("Set default value", ImageIconProxy.getIcon("edit"));
-	private JButton delDefaultPropValueBtn = new JButton("Delete default value", ImageIconProxy.getIcon("del"));
+	private JLabel defaultPropValLbl = new JLabel("Nothing to display");
+	private JButton changeDefaultPropValueBtn = new JButton("Change default value", ImageIconProxy.getIcon("edit"));
+	private JButton addValueBtn = new JButton("Add value", ImageIconProxy.getIcon("add"));
+	private JButton renameValueBtn = new JButton("Rename value", ImageIconProxy.getIcon("edit"));
+	private JButton deleteValueBtn = new JButton("Delete", ImageIconProxy.getIcon("del"));
 
 	public ProjectSettingsDialog(Frame owner, Route rootRoutes)
 	{
@@ -42,11 +45,10 @@ public class ProjectSettingsDialog extends JDialog
 
 		parent = owner;
 		buildUI();
-		addListeners();
 
 		pack();
 		setMinimumSize(getSize());
-		setLocationRelativeTo(parent);
+		//setLocationRelativeTo(parent);
 	}
 
 	private void buildUI()
@@ -82,6 +84,12 @@ public class ProjectSettingsDialog extends JDialog
 		settingsSectionList.setSelectedIndex(1);
 		cardLayout.show(settingsPanel, settingsSections[1]);
 		setContentPane(mainPanel);
+
+		addListeners();
+		if(Project.getActiveProject().getUserRoutesPropertiesNames().length != 0)
+		{
+			propList.setSelectedIndex(0);
+		}
 	}
 
 	private Box buildUserDefinedPropertiesPanel()
@@ -121,13 +129,10 @@ public class ProjectSettingsDialog extends JDialog
 
 		vBox = Box.createVerticalBox();
 		vBox.setAlignmentX(CENTER_ALIGNMENT);
-		editDefaultPropValueBtn.setAlignmentX(CENTER_ALIGNMENT);
-		editDefaultPropValueBtn.setMaximumSize(new Dimension(208,34));
-		delDefaultPropValueBtn.setAlignmentX(CENTER_ALIGNMENT);
-		delDefaultPropValueBtn.setMaximumSize(new Dimension(208,34));
+		changeDefaultPropValueBtn.setAlignmentX(CENTER_ALIGNMENT);
+		changeDefaultPropValueBtn.setMaximumSize(new Dimension(208,34));
 
-		vBox.add(editDefaultPropValueBtn);
-		vBox.add(delDefaultPropValueBtn);
+		vBox.add(changeDefaultPropValueBtn);
 
 		mainPanel.add(vBox);
 
@@ -135,8 +140,7 @@ public class ProjectSettingsDialog extends JDialog
 		delPropBtn.setEnabled(false);
 		checkBoxDisallowNewValues.setEnabled(false);
 		checkBoxMemorizeNewValue.setEnabled(false);
-		editDefaultPropValueBtn.setEnabled(false);
-		delDefaultPropValueBtn.setEnabled(false);
+		changeDefaultPropValueBtn.setEnabled(false);
 
 		return mainPanel;
 	}
@@ -149,10 +153,6 @@ public class ProjectSettingsDialog extends JDialog
 
 		mainPanel.add(headLabel);
 		mainPanel.add(new JScrollPane(valueList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED));
-
-		JButton addValueBtn = new JButton("Add value", ImageIconProxy.getIcon("add"));
-		JButton renameValueBtn = new JButton("Rename value", ImageIconProxy.getIcon("edit"));
-		JButton deleteValueBtn = new JButton("Delete", ImageIconProxy.getIcon("del"));
 
 		addValueBtn.setAlignmentX(CENTER_ALIGNMENT);
 		addValueBtn.setMaximumSize(new Dimension(208,34));
@@ -200,6 +200,7 @@ public class ProjectSettingsDialog extends JDialog
 
 		//project settings
 
+		//user defined properties
 		addPropBtn.addActionListener(new AbstractAction()
 		{
 			@Override
@@ -220,7 +221,123 @@ public class ProjectSettingsDialog extends JDialog
 					{
 						return;
 					}
-					System.out.println(newProp + " - "  +defaultValue);
+
+					project.addUserRouteProperty(newProp, defaultValue);
+					rootRoutes.addUserProperty(newProp, defaultValue);
+					propList.setModel(new DefaultComboBoxModel<String>(project.getUserRoutesPropertiesNames()));
+					propList.setSelectedItem(newProp);
+				}
+			}
+		});
+
+		editPropBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				String oldName = (String) propList.getSelectedItem();
+				String newName = (String) JOptionPane.showInputDialog(null, "Enter new name for " + oldName + " property:"
+						, "Rename property", JOptionPane.PLAIN_MESSAGE, null, null, oldName);
+				if(newName != null);
+				{
+					Project project = Project.getActiveProject();
+					if(project.getUserRouteProperty(newName) != null)
+					{
+						JOptionPane.showMessageDialog(null, "A property with this name already exists.", "Cannot rename property", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+
+					String defaultValue = project.getUserRouteProperty(oldName).getDefaultValue();
+					project.removeUserRouteProperty(oldName);
+					project.addUserRouteProperty(newName, defaultValue);
+
+					rootRoutes.renameUserProperty(oldName, newName);
+					propList.setModel(new DefaultComboBoxModel<String>(project.getUserRoutesPropertiesNames()));
+					propList.setSelectedItem(newName);
+				}
+			}
+		});
+
+		delPropBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				String propName = (String) propList.getSelectedItem();
+				if(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(null,
+						"Are you sure you want to delete the following property?\n" + propName,
+						"Delete property", JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE))
+				{
+					Project project = Project.getActiveProject();
+					project.removeUserRouteProperty(propName);
+
+					rootRoutes.removeUserProperty(propName);
+					propList.setModel(new DefaultComboBoxModel<String>(project.getUserRoutesPropertiesNames()));
+
+					if(project.getUserRoutesPropertiesNames().length == 0)
+					{
+						propList.setSelectedIndex(-1);
+					}
+				}
+			}
+		});
+
+		propList.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				if(propList.getSelectedIndex() != -1)
+				{
+					editPropBtn.setEnabled(true);
+					delPropBtn.setEnabled(true);
+					checkBoxDisallowNewValues.setEnabled(true);
+
+
+					Project.UserDefinedRouteProperty userDefinedRouteProperty
+							= Project.getActiveProject().getUserRouteProperty((String) propList.getSelectedItem());
+					defaultPropValLbl.setText(userDefinedRouteProperty.getDefaultValue());
+					changeDefaultPropValueBtn.setEnabled(true);
+
+					if(userDefinedRouteProperty.isNewValuesDisabled())
+					{
+						checkBoxDisallowNewValues.setSelected(true);
+						checkBoxMemorizeNewValue.setSelected(false);
+						checkBoxMemorizeNewValue.setEnabled(false);
+					}
+					else
+					{
+						checkBoxDisallowNewValues.setSelected(false);
+						checkBoxMemorizeNewValue.setEnabled(true);
+						if(userDefinedRouteProperty.isValuesMemorized())
+						{
+							checkBoxMemorizeNewValue.setSelected(true);
+						}
+						else
+						{
+							checkBoxMemorizeNewValue.setEnabled(false);
+						}
+					}
+
+					valueList.setListData(userDefinedRouteProperty.getValues());
+				}
+				else
+				{
+					editPropBtn.setEnabled(false);
+					delPropBtn.setEnabled(false);
+					checkBoxDisallowNewValues.setEnabled(false);
+					checkBoxMemorizeNewValue.setEnabled(false);
+					changeDefaultPropValueBtn.setEnabled(false);
+					valueList.setEnabled(false);
+					addValueBtn.setEnabled(false);
+					renameValueBtn.setEnabled(false);
+					deleteValueBtn.setEnabled(false);
+
+					checkBoxDisallowNewValues.setSelected(false);
+					checkBoxMemorizeNewValue.setSelected(false);
+					valueList.setListData(new String[0]);
+
+					defaultPropValLbl.setText("Nothing to display");
 				}
 			}
 		});
