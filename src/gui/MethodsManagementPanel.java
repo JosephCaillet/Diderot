@@ -203,7 +203,7 @@ public class MethodsManagementPanel extends JPanel
 
 	private void actionAddMethod()
 	{
-		String methodToAdd = InputStringDialogHelper.showInputNoSpacesDialog(this, "Which HTTP method would you add?", "Add HTTP method", JOptionPane.QUESTION_MESSAGE);
+		String methodToAdd = InputStringDialogHelper.showInputNoSpacesDialog(this, "Which HTTP method would you add?", "Add HTTP method", JOptionPane.PLAIN_MESSAGE);
 		if(methodToAdd != null)
 		{
 			methodToAdd = methodToAdd.toUpperCase();
@@ -231,7 +231,7 @@ public class MethodsManagementPanel extends JPanel
 		int currentTab = methodsTabbedPanel.getSelectedIndex();
 		String methodToRename = methodsTabbedPanel.getTitleAt(currentTab);
 
-		String methodRenamed = InputStringDialogHelper.showInputNoSpacesDialog(this, "Enter new name for http method: " + methodToRename, "Modify http method", JOptionPane.QUESTION_MESSAGE, methodToRename);
+		String methodRenamed = InputStringDialogHelper.showInputNoSpacesDialog(this, "Enter new name for http method: " + methodToRename, "Modify http method", JOptionPane.PLAIN_MESSAGE, methodToRename);
 		if(methodRenamed != null)
 		{
 			methodRenamed = methodRenamed.toUpperCase();
