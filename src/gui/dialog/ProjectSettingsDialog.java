@@ -240,7 +240,7 @@ public class ProjectSettingsDialog extends JDialog
 				String oldName = (String) propList.getSelectedItem();
 				String newName = (String) JOptionPane.showInputDialog(null, "Enter new name for " + oldName + " property:"
 						, "Rename property", JOptionPane.PLAIN_MESSAGE, null, null, oldName);
-				if(newName != null);
+				if(newName != null)
 				{
 					Project project = Project.getActiveProject();
 					if(project.getUserRouteProperty(newName) != null)
