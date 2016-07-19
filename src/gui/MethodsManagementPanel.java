@@ -252,7 +252,7 @@ public class MethodsManagementPanel extends JPanel
 
 		if(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(this,
 				"Are you sure you want to remove the following HTTP method?\n" + methodToRemove,
-				"Remove HTTP Method ", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE))
+				"Remove HTTP Method ", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE))
 		{
 			route.removeHttpMethod(methodToRemove);
 			methodsTabbedPanel.remove(currentTab);

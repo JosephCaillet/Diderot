@@ -196,7 +196,7 @@ public class MethodPanel extends JPanel implements Scrollable
 			{
 				if(JOptionPane.OK_OPTION != JOptionPane.showConfirmDialog(null,
 						"Are you sure you want to delete the selected parameter(s)?\n",
-						"Delete parameter(s)", JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE))
+						"Delete parameter(s)", JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE))
 				{
 					return;
 				}

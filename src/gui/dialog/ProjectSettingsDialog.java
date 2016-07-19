@@ -27,7 +27,7 @@ public class ProjectSettingsDialog extends JDialog
 	private JList<String> settingsSectionList;
 	private CardLayout cardLayout;
 	private JPanel settingsPanel;
-	private JButton exitButton = new JButton("Close project settings window");
+	private JButton exitButton = new JButton("Close project settings window", ImageIconProxy.getIcon("exit"));
 	private JButton addPropBtn = new JButton("Add property", ImageIconProxy.getIcon("add"));
 	private JButton editPropBtn = new JButton("Rename property", ImageIconProxy.getIcon("edit"));
 	private JButton delPropBtn = new JButton("Delete property", ImageIconProxy.getIcon("del"));
@@ -125,7 +125,16 @@ public class ProjectSettingsDialog extends JDialog
 		vBox.add(checkBoxDisallowNewValues);
 		vBox.add(checkBoxMemorizeNewValue);
 		vBox.add(new JLabel("Default value:"));
-		vBox.add(defaultPropValLbl);
+		defaultPropValLbl.setOpaque(true);
+		defaultPropValLbl.setBackground(defaultPropValLbl.getBackground().brighter());
+		defaultPropValLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		defaultPropValLbl.setBorder(BorderFactory.createLineBorder(getBackground().darker(), 3));
+		JPanel panTemp = new JPanel(new BorderLayout());
+		panTemp.add(defaultPropValLbl, BorderLayout.CENTER);
+		panTemp.setAlignmentX(LEFT_ALIGNMENT);
+		panTemp.setMaximumSize(new Dimension(999999999, 30));
+
+		vBox.add(panTemp);
 
 		mainPanel.add(vBox);
 
@@ -211,6 +220,12 @@ public class ProjectSettingsDialog extends JDialog
 				String newProp = JOptionPane.showInputDialog(null, "Enter new property name:", "Add new property", JOptionPane.PLAIN_MESSAGE);
 				if(newProp != null)
 				{
+					if(newProp.isEmpty())
+					{
+						JOptionPane.showMessageDialog(null, "A property cannot have an empty name.", "Cannot add property", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+
 					Project project = Project.getActiveProject();
 					if(project.getUserRouteProperty(newProp) != null)
 					{
@@ -268,22 +283,25 @@ public class ProjectSettingsDialog extends JDialog
 				String propName = (String) propList.getSelectedItem();
 				if(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(null,
 						"Are you sure you want to delete the following property?\n" + propName,
-						"Delete property", JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE))
+						"Delete property", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE))
 				{
 					Project project = Project.getActiveProject();
 					project.removeUserRouteProperty(propName);
 
+					int lastIndex = propList.getSelectedIndex();
+
 					rootRoutes.removeUserProperty(propName);
 					propList.setModel(new DefaultComboBoxModel<String>(project.getUserRoutesPropertiesNames()));
 
-					if(project.getUserRoutesPropertiesNames().length == 0)
+					if(lastIndex == 0 && project.getUserRoutesPropertiesNames().length !=0)
 					{
-						propList.setSelectedIndex(-1);
+						lastIndex++;
 					}
+					propList.setSelectedIndex(lastIndex - 1);
 				}
 			}
 		});
-//Todo: def val = "" empty string
+
 		propList.addActionListener(new ActionListener()
 		{
 			@Override
@@ -306,6 +324,8 @@ public class ProjectSettingsDialog extends JDialog
 					checkBoxMemorizeNewValue.setEnabled(!userDefinedRouteProperty.isNewValuesDisabled());
 
 					valueList.setListData(userDefinedRouteProperty.getValues());
+					valueList.setEnabled(true);
+					valueList.setSelectedIndex(0);
 				}
 				else
 				{
@@ -319,8 +339,6 @@ public class ProjectSettingsDialog extends JDialog
 					renameValueBtn.setEnabled(false);
 					deleteValueBtn.setEnabled(false);
 
-					checkBoxDisallowNewValues.setSelected(false);
-					checkBoxMemorizeNewValue.setSelected(false);
 					valueList.setListData(new String[0]);
 
 					defaultPropValLbl.setText("Nothing to display");
@@ -335,6 +353,7 @@ public class ProjectSettingsDialog extends JDialog
 			{
 				if(checkBoxDisallowNewValues.isSelected())
 				{
+					//Todo: check fo unauthorized value in routes
 					checkBoxMemorizeNewValue.setEnabled(false);
 					Project.getActiveProject().getUserRouteProperty((String) propList.getSelectedItem()).setNewValuesDisabled(true);
 				}
@@ -389,6 +408,119 @@ public class ProjectSettingsDialog extends JDialog
 					{
 						rootRoutes.changeUserPropertyValue(propName, oldDef, newDef);
 					}
+				}
+			}
+		});
+
+		valueList.addListSelectionListener(new ListSelectionListener()
+		{
+			@Override
+			public void valueChanged(ListSelectionEvent listSelectionEvent)
+			{
+				if(valueList.getSelectedIndex() == -1)
+				{
+					addValueBtn.setEnabled(false);
+					renameValueBtn.setEnabled(false);
+					deleteValueBtn.setEnabled(false);
+				}
+				else
+				{
+					addValueBtn.setEnabled(true);
+					renameValueBtn.setEnabled(true);
+					deleteValueBtn.setEnabled(true);
+				}
+			}
+		});
+
+		addValueBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				String newVal = JOptionPane.showInputDialog(null, "Enter new value name:", "Add new value", JOptionPane.PLAIN_MESSAGE);
+				if(newVal != null)
+				{
+					Project.UserDefinedRouteProperty userDefinedRouteProperty = Project.getActiveProject().getUserRouteProperty((String) propList.getSelectedItem());
+					if(userDefinedRouteProperty.contains(newVal))
+					{
+						JOptionPane.showMessageDialog(null, "This value already exists.", "Cannot add value", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+
+					userDefinedRouteProperty.add(newVal);
+					valueList.setModel(new DefaultComboBoxModel<String>(userDefinedRouteProperty.getValues()));
+					valueList.setSelectedValue(newVal, true);
+				}
+			}
+		});
+
+		renameValueBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				Project.UserDefinedRouteProperty userDefinedRouteProperty = Project.getActiveProject().getUserRouteProperty((String) propList.getSelectedItem());
+				String prop = (String) propList.getSelectedItem();
+				String oldVal = valueList.getSelectedValue();
+				boolean defValRenamed = false;
+
+				if(userDefinedRouteProperty.getDefaultValue().equals(oldVal))
+				{
+					JOptionPane.showMessageDialog(null, "You are about to rename the default value for the property " + prop +".\nBy doing so you will change the current default value, and all routes\nusing the default value will also be affected.",
+							"Rename default property", JOptionPane.WARNING_MESSAGE);
+					defValRenamed = true;
+
+				}
+
+				String newVal = JOptionPane.showInputDialog(null, "Replace value " + oldVal + " of property " + prop + " with:"
+						, "Rename value", JOptionPane.PLAIN_MESSAGE);
+				if(newVal != null)
+				{
+
+					if(userDefinedRouteProperty.contains(newVal))
+					{
+						JOptionPane.showMessageDialog(null, "This value already exists.", "Cannot add value", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+
+					if(defValRenamed)
+					{
+						userDefinedRouteProperty.setDefaultValue(newVal);
+						defaultPropValLbl.setText(newVal);
+					}
+
+					userDefinedRouteProperty.remove(oldVal);
+					userDefinedRouteProperty.add(newVal);
+					valueList.setModel(new DefaultComboBoxModel<String>(userDefinedRouteProperty.getValues()));
+					valueList.setSelectedValue(newVal, true);
+					rootRoutes.changeUserPropertyValue(prop, oldVal, newVal);
+				}
+			}
+		});
+
+		deleteValueBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				Project.UserDefinedRouteProperty userDefinedRouteProperty = Project.getActiveProject().getUserRouteProperty((String) propList.getSelectedItem());
+				String prop = (String) propList.getSelectedItem();
+				String oldVal = valueList.getSelectedValue();
+
+				if(userDefinedRouteProperty.getDefaultValue().equals(oldVal))
+				{
+					JOptionPane.showMessageDialog(null, "You cannot remove the default property.\nIf you really want to remove this value, you should\nswitch to an other default value before.",
+							"Cannot remove property", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				if(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(null, "Are you sure you want to remove " + oldVal + " from property " + prop + " ?\nAll route using this value will use default value instead.",
+						"Remove value", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE))
+				{
+					userDefinedRouteProperty.remove(oldVal);
+					valueList.setModel(new DefaultComboBoxModel<String>(userDefinedRouteProperty.getValues()));
+					valueList.setSelectedIndex(0);
+					rootRoutes.changeUserPropertyValue(prop, oldVal, userDefinedRouteProperty.getDefaultValue());
 				}
 			}
 		});

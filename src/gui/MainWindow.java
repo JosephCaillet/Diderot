@@ -359,7 +359,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		if(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(this,
 				"Are you sure you want to delete the following route and its sub-routes?\n" + routeToDelete,
-				"Delete route", JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE))
+				"Delete route", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE))
 		{
 			if(!rootRoutes.deleteRoute(routeToDelete))
 			{
