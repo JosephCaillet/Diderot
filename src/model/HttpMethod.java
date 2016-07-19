@@ -3,6 +3,7 @@ package model;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.TreeMap;
+import java.util.Vector;
 
 /**
  * Created by joseph on 13/05/16.
@@ -81,6 +82,16 @@ public class HttpMethod extends AbstractTableModel
 	public void removeUserProperty(String name)
 	{
 		userDefinedPropertiesValues.remove(name);
+	}
+
+	public void removeUnauthorizedValues(String propName)
+	{
+		Vector<String> allowedValues = new Vector<String>(Project.getActiveProject().getUserRouteProperty(propName).descendingSet());
+		String val = userDefinedPropertiesValues.get(propName);
+		if(!allowedValues.contains(val))
+		{
+			userDefinedPropertiesValues.put(propName, Project.getActiveProject().getUserRouteProperty(propName).getDefaultValue());
+		}
 	}
 
 	//parameters management

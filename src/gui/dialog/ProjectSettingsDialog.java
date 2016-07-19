@@ -50,7 +50,7 @@ public class ProjectSettingsDialog extends JDialog
 
 		pack();
 		setMinimumSize(getSize());
-		//setLocationRelativeTo(parent);
+		setLocationRelativeTo(parent);
 	}
 
 	private void buildUI()
@@ -346,16 +346,26 @@ public class ProjectSettingsDialog extends JDialog
 			}
 		});
 
-		checkBoxDisallowNewValues.addItemListener(new ItemListener()
+		checkBoxDisallowNewValues.addActionListener(new ActionListener()
 		{
+
 			@Override
-			public void itemStateChanged(ItemEvent itemEvent)
+			public void actionPerformed(ActionEvent actionEvent)
 			{
 				if(checkBoxDisallowNewValues.isSelected())
 				{
-					//Todo: check fo unauthorized value in routes
-					checkBoxMemorizeNewValue.setEnabled(false);
-					Project.getActiveProject().getUserRouteProperty((String) propList.getSelectedItem()).setNewValuesDisabled(true);
+					if(JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null,
+							"Doing this will replace every non memorized values by the default value in all routes.\nAre you sure this is what you want?",
+							"Update the route", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE))
+					{
+						rootRoutes.removeForbiddenValues((String) propList.getSelectedItem());
+						checkBoxMemorizeNewValue.setEnabled(false);
+						Project.getActiveProject().getUserRouteProperty((String) propList.getSelectedItem()).setNewValuesDisabled(true);
+					}
+					else
+					{
+						checkBoxDisallowNewValues.setSelected(false);
+					}
 				}
 				else
 				{
@@ -364,7 +374,7 @@ public class ProjectSettingsDialog extends JDialog
 				}
 			}
 		});
-
+//TODO: disable listener when the program itself act on componant to set teir state (typicaly jcheckbox)
 		checkBoxMemorizeNewValue.addItemListener(new ItemListener()
 		{
 			@Override

@@ -367,6 +367,20 @@ public class Route implements TreeModel
 		}
 	}
 
+	public void removeForbiddenValues(String propName)
+	{
+		for(Map.Entry<String, HttpMethod> entry : httpMethods.entrySet())
+		{
+			HttpMethod httpMethod = entry.getValue();
+			httpMethod.removeUnauthorizedValues(propName);
+		}
+
+		for(Map.Entry<String, Route> entry : subRoutes.entrySet())
+		{
+			entry.getValue().removeForbiddenValues(propName);
+		}
+	}
+
 	//interface TreeModel
 	@Override
 	public Object getRoot()
