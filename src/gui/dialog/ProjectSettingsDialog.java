@@ -301,25 +301,9 @@ public class ProjectSettingsDialog extends JDialog
 					defaultPropValLbl.setText(userDefinedRouteProperty.getDefaultValue());
 					changeDefaultPropValueBtn.setEnabled(true);
 
-					if(userDefinedRouteProperty.isNewValuesDisabled())
-					{
-						checkBoxDisallowNewValues.setSelected(true);
-						checkBoxMemorizeNewValue.setSelected(false);
-						checkBoxMemorizeNewValue.setEnabled(false);
-					}
-					else
-					{
-						checkBoxDisallowNewValues.setSelected(false);
-						checkBoxMemorizeNewValue.setEnabled(true);
-						if(userDefinedRouteProperty.isValuesMemorized())
-						{
-							checkBoxMemorizeNewValue.setSelected(true);
-						}
-						else
-						{
-							checkBoxMemorizeNewValue.setEnabled(false);
-						}
-					}
+					checkBoxMemorizeNewValue.setSelected(userDefinedRouteProperty.isValuesMemorized());
+					checkBoxDisallowNewValues.setSelected(userDefinedRouteProperty.isNewValuesDisabled());
+					checkBoxMemorizeNewValue.setEnabled(!userDefinedRouteProperty.isNewValuesDisabled());
 
 					valueList.setListData(userDefinedRouteProperty.getValues());
 				}
