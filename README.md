@@ -7,8 +7,8 @@ A tool to help designing web routes. This project is still under active developm
 
 The main application window
 
-![The main application window]()
+![The main application window](https://raw.githubusercontent.com/JosephCaillet/Diderot/master/rsc/mainWindow.png)
 
 The project settings dialog
 
-![The project settings dialog]()
+![The project settings dialog](https://raw.githubusercontent.com/JosephCaillet/Diderot/master/rsc/projectSettingsdialog.png)
