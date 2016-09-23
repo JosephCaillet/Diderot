@@ -141,6 +141,19 @@ public class HttpMethod extends AbstractTableModel
 		return responses.get(name);
 	}
 
+	public boolean renameResponse(String oldName, String newName)
+	{
+		if(responses.containsKey(newName) || !responses.containsKey(oldName))
+		{
+			return false;
+		}
+
+		Response response = responses.get(oldName);
+		responses.remove(oldName);
+		responses.put(newName, response);
+		return true;
+	}
+
 	public String[] getResponsesNames()
 	{
 		return responses.keySet().toArray(new String[responses.size()]);

@@ -2,6 +2,7 @@ package gui;
 
 import model.HttpMethod;
 import model.Project;
+import model.Response;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -30,9 +31,10 @@ public class MethodPanel extends JPanel implements Scrollable
 			delRespBtn = new JButton(),
 			editWiderRespBtn = new JButton();
 	private JTable paramTable;
-	private JComboBox<String> responseType;
-	private JTextArea responseDescription;
-	private JTextArea responseSchema;
+	private JComboBox<String> responseType = new JComboBox<>();
+	private JTextArea responseDescription = new JTextArea(),
+			responseSchema = new JTextArea();
+	private JList<String> responseList;
 
 	public MethodPanel(HttpMethod httpMethod)
 	{
@@ -113,20 +115,16 @@ public class MethodPanel extends JPanel implements Scrollable
 
 
 		JSplitPane respPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
+		responseList = new JList<String>(httpMethod.getResponsesNames());
+		responseList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
-		JPanel respEditPanel = new JPanel(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
-
-
-		JList<String> responseList = new JList<String>(httpMethod.getResponsesNames());
-		c.gridx = 0;
-		c.gridy = 0;
-		c.gridwidth = 2;
-		c.gridheight = 10;
 		respPanel.add(new JScrollPane(responseList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), JSplitPane.LEFT);
 
+		JPanel respEditPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+
+		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 0;
 		c.weightx = 1;
 		c.gridwidth = 5;
@@ -138,8 +136,8 @@ public class MethodPanel extends JPanel implements Scrollable
 		c.weighty = 0.2;
 		c.gridheight = 2;
 		c.gridy = 1;
-		responseDescription = new JTextArea();
 		responseDescription.setLineWrap(true);
+		responseDescription.setTabSize(2);
 		respEditPanel.add(new JScrollPane(responseDescription), c);
 
 		c.weighty = 0;
@@ -149,7 +147,6 @@ public class MethodPanel extends JPanel implements Scrollable
 
 		c.gridheight = 1;
 		c.gridy = 4;
-		responseType = new JComboBox<>(new String[]{"JSON", "HTML", "Plain text"});
 		respEditPanel.add(responseType, c);
 
 		c.gridheight = 1;
@@ -159,13 +156,14 @@ public class MethodPanel extends JPanel implements Scrollable
 		c.weighty = 1;
 		c.gridheight = 4;
 		c.gridy = 6;
-		responseSchema = new JTextArea();
+		responseSchema.setTabSize(2);
 		responseSchema.setFont(new Font(Font.MONOSPACED, Font.PLAIN, responseSchema.getFont().getSize()- 2));
 		responseSchema.setOpaque(true);
 		Color color = responseSchema.getBackground();
 		responseSchema.setOpaque(true);
 		responseSchema.setBackground(description.getForeground().darker());
 		responseSchema.setForeground(color);
+		responseSchema.setCaretColor(color);
 		respEditPanel.add(new JScrollPane(responseSchema), c);
 		//respEditPanel.add(responseSchema, c);
 
@@ -175,15 +173,9 @@ public class MethodPanel extends JPanel implements Scrollable
 		p.add(respPanel, BorderLayout.CENTER);
 		box.add(p);
 
-		/*
-		description.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
-		Color c = description.getBackground();
-		description.setOpaque(true);
-		description.setBackground(description.getForeground().darker());
-		description.setForeground(c);
-		 */
 		add(box);
 		add(new JLabel(" "));//spacer
+
 
 		//USer defined properties
 		label = new JLabel("User defined properties:");
@@ -239,9 +231,15 @@ public class MethodPanel extends JPanel implements Scrollable
 			}
 
 			add(panel);
+			add(new JLabel(" "));//spacer
 		}
 
 		addListener();
+
+		if(httpMethod.getResponsesNames().length != 0)
+		{
+			responseList.setSelectedIndex(0);
+		}
 	}
 
 	private void addListener()
@@ -286,11 +284,85 @@ public class MethodPanel extends JPanel implements Scrollable
 			}
 		});
 
+		responseList.addListSelectionListener(new ListSelectionListener()
+		{
+			@Override
+			public void valueChanged(ListSelectionEvent e)
+			{
+				String responseName = responseList.getSelectedValue();
+				if(responseName == null)
+				{
+					return;
+				}
+
+				Response response = httpMethod.getResponse(responseName);
+				responseDescription.setText(response.getDescription());
+				responseType.setModel(new DefaultComboBoxModel<String>(new String[]{"Titi", "Toto"}));
+				responseType.setSelectedItem(response.getOutputType());
+				responseSchema.setText(response.getSchema());
+				enableResponseEditingButtons(true);
+			}
+		});
+
+		responseDescription.addKeyListener(new KeyAdapter()
+		{
+			@Override
+			public void keyTyped(KeyEvent e)
+			{
+				httpMethod.getResponse(responseList.getSelectedValue()).setDescription(responseDescription.getText());
+			}
+		});
+
+		responseType.addItemListener(new ItemListener()
+		{
+			@Override
+			public void itemStateChanged(ItemEvent e)
+			{
+				if(e.getStateChange() == ItemEvent.DESELECTED)
+				{
+					return;
+				}
+
+				httpMethod.getResponse(responseList.getSelectedValue()).setOutputType((String) responseType.getSelectedItem());
+			}
+		});
+
+		responseSchema.addKeyListener(new KeyAdapter()
+		{
+			@Override
+			public void keyTyped(KeyEvent e)
+			{
+				httpMethod.getResponse(responseList.getSelectedValue()).setSchema(responseSchema.getText());
+			}
+		});
+
+		final JPanel that = this;
+
 		addRespAction = new AbstractAction("Add response", ImageIconProxy.getIcon("add"))
 		{
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)
 			{
+				String responseToAdd = (String) JOptionPane.showInputDialog(that.getParent().getParent().getParent().getParent().getParent().getParent(),
+						"Which response would you add?", "Add response", JOptionPane.PLAIN_MESSAGE);
+				if(responseToAdd != null)
+				{
+					if(responseToAdd.isEmpty())
+					{
+						JOptionPane.showMessageDialog(that.getParent().getParent().getParent().getParent().getParent().getParent(),
+								"Your input should not be empty.", "Empty input", JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+
+					if(!httpMethod.addResponse(responseToAdd))
+					{
+						JOptionPane.showMessageDialog(that.getParent().getParent().getParent().getParent().getParent().getParent(),
+								"This response already exists.", "Cannot add response", JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+					responseList.setModel(new DefaultComboBoxModel<String>(httpMethod.getResponsesNames()));
+					responseList.setSelectedValue(responseToAdd, true);
+				}
 			}
 		};
 		addRespBtn.setAction(addRespAction);
@@ -300,6 +372,27 @@ public class MethodPanel extends JPanel implements Scrollable
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)
 			{
+				String responseToRename = responseList.getSelectedValue();
+				String responseRenamed = (String) JOptionPane.showInputDialog(that.getParent().getParent().getParent().getParent().getParent().getParent(),
+						"Rename response:\n" + responseToRename + "\nto:", "Rename response", JOptionPane.PLAIN_MESSAGE, null, null, responseToRename);
+				if(responseRenamed != null)
+				{
+					if(responseRenamed.isEmpty())
+					{
+						JOptionPane.showMessageDialog(that.getParent().getParent().getParent().getParent().getParent().getParent(),
+								"Your input should not be empty.", "Empty input", JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+
+					if(!httpMethod.renameResponse(responseToRename, responseRenamed))
+					{
+						JOptionPane.showMessageDialog(that.getParent().getParent().getParent().getParent().getParent().getParent(),
+								"This response already exists.", "Cannot rename response", JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+					responseList.setModel(new DefaultComboBoxModel<String>(httpMethod.getResponsesNames()));
+					responseList.setSelectedValue(responseRenamed, true);
+				}
 			}
 		};
 		editRespBtn.setAction(editRespAction);
@@ -318,6 +411,24 @@ public class MethodPanel extends JPanel implements Scrollable
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)
 			{
+				String responseToDelete = responseList.getSelectedValue();
+				if(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(that.getParent().getParent().getParent().getParent().getParent().getParent(),
+						"Are you sure you want to remove the following response?\n" + responseToDelete,
+						"Remove response ", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE))
+				{
+					httpMethod.delResponse(responseToDelete);
+					String[] responsesNames = httpMethod.getResponsesNames();
+					responseList.setModel(new DefaultComboBoxModel<String>(responsesNames));
+
+					if(responsesNames.length == 0)
+					{
+						enableResponseEditingButtons(false);
+					}
+					else
+					{
+						responseList.setSelectedIndex(0);
+					}
+				}
 			}
 		};
 		delRespBtn.setAction(delRespAction);
@@ -360,10 +471,28 @@ public class MethodPanel extends JPanel implements Scrollable
 				}
 			}
 		};
-		delParamAction.setEnabled(false);
 		delParamBtn.setAction(delParamAction);
+
+		delParamAction.setEnabled(false);
+		enableResponseEditingButtons(false);
 	}
 
+	private void enableResponseEditingButtons(boolean enabled)
+	{
+		editRespAction.setEnabled(enabled);
+		editWiderAction.setEnabled(enabled);
+		delRespAction.setEnabled(enabled);
+		responseDescription.setEnabled(enabled);
+		responseType.setEnabled(enabled);
+		responseSchema.setEnabled(enabled);
+
+		if(!enabled)
+		{
+			responseDescription.setText("");
+			responseType.removeAllItems();
+			responseSchema.setText("");
+		}
+	}
 
 	@Override
 	public Dimension getPreferredScrollableViewportSize()
