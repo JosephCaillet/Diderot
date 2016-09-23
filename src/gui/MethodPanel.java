@@ -21,9 +21,14 @@ public class MethodPanel extends JPanel implements Scrollable
 {
 	private HttpMethod httpMethod;
 	private JTextArea description = new JTextArea();
-	private AbstractAction addParamAction, delParamAction;
+	private AbstractAction addParamAction, delParamAction,
+			addRespAction, editRespAction, delRespAction, editWiderAction;
 	private JButton addParamBtn = new JButton(),
-			delParamBtn = new JButton();
+			delParamBtn = new JButton(),
+			addRespBtn = new JButton(),
+			editRespBtn = new JButton(),
+			delRespBtn = new JButton(),
+			editWiderRespBtn = new JButton();
 	private JTable paramTable;
 
 	public MethodPanel(HttpMethod httpMethod)
@@ -36,24 +41,27 @@ public class MethodPanel extends JPanel implements Scrollable
 
 	private void buildUI()
 	{
-		Border labelBorder = BorderFactory.createEmptyBorder(5, 2, 0, 2);
+		Border labelBorder = BorderFactory.createEmptyBorder(5, 5, 0, 2);
 		Border componentBorder = BorderFactory.createMatteBorder(0, 4, 0, 4, getBackground());
 		Border textAreaBorder = BorderFactory.createLineBorder(getBackground().darker(), 1);
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+		//Method description
 		JLabel label = new JLabel("Method description:");
 		label.setBorder(labelBorder);
 		label.setAlignmentX(LEFT_ALIGNMENT);
 		add(label);
 
 		description.setAlignmentX(LEFT_ALIGNMENT);
+		description.setTabSize(2);
 		description.setBorder(BorderFactory.createCompoundBorder(componentBorder, textAreaBorder));
 		description.setLineWrap(true);
 		add(description);
+		add(new JLabel(" "));//spacer
 
+		//Parameters
 		JPanel labelButtonPanel = new JPanel(new BorderLayout());
-		labelButtonPanel.setBorder(labelBorder);
 
 		label = new JLabel("Parameters:");
 		labelButtonPanel.add(label, BorderLayout.WEST);
@@ -78,7 +86,109 @@ public class MethodPanel extends JPanel implements Scrollable
 		box.add(paramTable.getTableHeader());
 		box.add(paramTable);
 		add(box);
+		add(new JLabel(" "));//spacer
 
+		labelButtonPanel = new JPanel(new BorderLayout());
+		//labelButtonPanel.setBorder(labelBorder);
+
+		//Responses
+		//TODO use jsplit pane to separate jlist from edit fields
+		label = new JLabel("Responses:");
+		labelButtonPanel.add(label, BorderLayout.WEST);
+		label.setAlignmentX(LEFT_ALIGNMENT);
+
+		JPanel respBtnPanel = new JPanel();
+		respBtnPanel.add(addRespBtn);
+		respBtnPanel.add(editRespBtn);
+		respBtnPanel.add(editWiderRespBtn);
+		respBtnPanel.add(delRespBtn);
+		labelButtonPanel.add(respBtnPanel, BorderLayout.CENTER);
+
+		box = Box.createVerticalBox();
+		box.setBorder(componentBorder);
+		box.setAlignmentX(LEFT_ALIGNMENT);
+		box.add(labelButtonPanel);
+
+		/*JPanel respPanel = new JPanel(new BorderLayout());
+		JList<String> responseList = new JList<String>(httpMethod.getResponsesNames());
+
+		respPanel.add(new JScrollPane(responseList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.WEST);
+
+		Box respEditPanel = Box.createVerticalBox();
+		respEditPanel.add(new JLabel("Response description:"));
+		respEditPanel.add(new JScrollPane(new JTextArea()));
+		respEditPanel.add(new JLabel("Type:"));
+		respEditPanel.add(new JComboBox<String>(new String[]{"JSON", "HTML"}));
+		respEditPanel.add(new JLabel("Schema:"));
+		respEditPanel.add(new JScrollPane(new JTextArea()));
+		respPanel.add(respEditPanel, BorderLayout.CENTER);*/
+		JPanel respPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1.0/7.0;
+		c.weighty = 1;
+
+		JList<String> responseList = new JList<String>(httpMethod.getResponsesNames());
+		c.gridx = 0;
+		c.gridy = 0;
+		c.gridwidth = 2;
+		c.gridheight = 10;
+		respPanel.add(new JScrollPane(responseList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), c);
+
+		c.weighty = 0;
+		c.weightx = 6.0/7.0;
+		c.gridwidth = 5;
+		c.gridheight = 1;
+		c.gridx = 2;
+		c.gridy = 0;
+		respPanel.add(new JLabel("Response description:"), c);
+
+		c.weighty = 0.2;
+		c.gridwidth = 5;
+		c.gridheight = 2;
+		c.gridy = 1;
+		JTextArea textArea = new JTextArea(" ");
+		textArea.setLineWrap(true);
+		respPanel.add(new JScrollPane(textArea), c);
+
+		c.weighty = 0;
+		c.gridwidth = 5;
+		c.gridheight = 1;
+		c.gridy = 3;
+		respPanel.add(new JLabel("Output format:"), c);
+
+		c.gridwidth = 5;
+		c.gridheight = 1;
+		c.gridy = 4;
+		respPanel.add(new JComboBox<String>(new String[]{"JSON", "HTML", "Plain text"}), c);
+
+		c.gridwidth = 5;
+		c.gridheight = 1;
+		c.gridy = 5;
+		respPanel.add(new JLabel("Output schema:"), c);
+
+		c.weighty = 1;
+		c.gridwidth = 5;
+		c.gridheight = 4;
+		c.gridy = 6;
+		respPanel.add(new JScrollPane(new JTextArea(" ")), c);
+		//respPanel.add(new JTextArea(" "), c);
+
+		box.add(respPanel);
+
+		/*
+		description.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+		Color c = description.getBackground();
+		description.setOpaque(true);
+		description.setBackground(description.getForeground().darker());
+		description.setForeground(c);
+		 */
+		add(box);
+		add(new JLabel(" "));//spacer
+
+		//USer defined properties
 		label = new JLabel("User defined properties:");
 		label.setBorder(labelBorder);
 		label.setAlignmentX(LEFT_ALIGNMENT);
@@ -110,7 +220,7 @@ public class MethodPanel extends JPanel implements Scrollable
 				Project.UserDefinedRouteProperty userProperty = Project.getActiveProject().getUserRouteProperty(property);
 				if(userProperty.isNewValuesDisabled())
 				{
-					JComboBox comboBox = new JComboBox<String>(userProperty.getValues());
+					JComboBox<String> comboBox = new JComboBox<String>(userProperty.getValues());
 					panel.add(comboBox);
 
 					comboBox.setSelectedItem(httpMethod.getUserPropertyValue(property));
@@ -178,6 +288,42 @@ public class MethodPanel extends JPanel implements Scrollable
 				}
 			}
 		});
+
+		addRespAction = new AbstractAction("Add response", ImageIconProxy.getIcon("add"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+			}
+		};
+		addRespBtn.setAction(addRespAction);
+
+		editRespAction = new AbstractAction("Rename response", ImageIconProxy.getIcon("edit"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+			}
+		};
+		editRespBtn.setAction(editRespAction);
+
+		editWiderAction = new AbstractAction("Edit in wider window", ImageIconProxy.getIcon("editwide"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+			}
+		};
+		editWiderRespBtn.setAction(editWiderAction);
+
+		delRespAction = new AbstractAction("Delete response", ImageIconProxy.getIcon("del"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+			}
+		};
+		delRespBtn.setAction(delRespAction);
 
 		addParamAction = new AbstractAction("Add parameter", ImageIconProxy.getIcon("add"))
 		{

@@ -17,6 +17,8 @@ public class ImageIconProxy
 		imageIconHashMap.put("edit", new ImageIcon("rsc/edit.png"));
 		imageIconHashMap.put("conf", new ImageIcon("rsc/conf.png"));
 		imageIconHashMap.put("exit", new ImageIcon("rsc/exit.png"));
+		imageIconHashMap.put("sort", new ImageIcon("rsc/sort.png"));
+		imageIconHashMap.put("editwide", new ImageIcon("rsc/editwide.png"));
 	}
 
 	public static ImageIcon getIcon(String path)

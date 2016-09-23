@@ -20,11 +20,12 @@ import java.util.Map;
  */
 public class MethodsManagementPanel extends JPanel
 {
-	private AbstractAction addMethodAction, updMethodAction, delMethodAction;
+	private AbstractAction addMethodAction, updMethodAction, delMethodAction, sortMethodAction;
 
 	private JButton addMethodBtn = new JButton(),
 			updMethodBtn = new JButton(),
-			delMethodBtn = new JButton();
+			delMethodBtn = new JButton(),
+			sortMethodBtn = new JButton();
 
 	private JTabbedPane methodsTabbedPanel = new JTabbedPane();
 	private Route route;
@@ -56,17 +57,7 @@ public class MethodsManagementPanel extends JPanel
 		this.route = route;
 		descriptionTextArea.setText(route.getDescription());
 
-		methodsTabbedPanel.removeAll();
-		for(Map.Entry<String, HttpMethod> entry: route.getHttpMethods().entrySet())
-		{
-			//methodsTabbedPanel.addTab(entry.getKey(), new JLabel(entry.getKey()));
-			MethodPanel methodPanel = new MethodPanel(entry.getValue());
-			JScrollPane scrollPane = new JScrollPane(methodPanel,
-					ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-			scrollPane.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
-			scrollPane.getViewport().setOpaque(false);
-			methodsTabbedPanel.addTab(entry.getKey(), scrollPane);
-		}
+		rebuildTabbedPane();
 
 		if(methodsTabbedPanel.getTabCount() == 0)
 		{
@@ -78,11 +69,28 @@ public class MethodsManagementPanel extends JPanel
 		}
 	}
 
+	private void rebuildTabbedPane()
+	{
+		methodsTabbedPanel.removeAll();
+
+		for(Map.Entry<String, HttpMethod> entry: route.getHttpMethods().entrySet())
+		{
+			//methodsTabbedPanel.addTab(entry.getKey(), new JLabel(entry.getKey()));
+			MethodPanel methodPanel = new MethodPanel(entry.getValue());
+			JScrollPane scrollPane = new JScrollPane(methodPanel,
+					ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			scrollPane.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
+			scrollPane.getViewport().setOpaque(false);
+			methodsTabbedPanel.addTab(entry.getKey(), scrollPane);
+		}
+	}
+
 	private void buildUI()
 	{
 		JPanel topPanel = new JPanel(new BorderLayout());
 
 		descriptionTextArea = new JTextArea();
+		descriptionTextArea.setTabSize(2);
 		JScrollPane scrollPanel = new JScrollPane(descriptionTextArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 		topPanel.add(new JLabel("Global route description:"), BorderLayout.NORTH);
@@ -95,6 +103,8 @@ public class MethodsManagementPanel extends JPanel
 		btnPanel.add(addMethodBtn);
 		btnPanel.add(updMethodBtn);
 		btnPanel.add(delMethodBtn);
+		btnPanel.add(new JLabel(" "));
+		btnPanel.add(sortMethodBtn);
 
 		bottomPanel.add(btnPanel, BorderLayout.NORTH);
 		bottomPanel.add(methodsTabbedPanel, BorderLayout.CENTER);
@@ -134,9 +144,19 @@ public class MethodsManagementPanel extends JPanel
 			}
 		};
 
+		sortMethodAction = new AbstractAction("Sort methods", ImageIconProxy.getIcon("sort"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				rebuildTabbedPane();
+			}
+		};
+
 		addMethodBtn.setAction(addMethodAction);
 		updMethodBtn.setAction(updMethodAction);
 		delMethodBtn.setAction(delMethodAction);
+		sortMethodBtn.setAction(sortMethodAction);
 
 		descriptionTextArea.getDocument().addDocumentListener(new DocumentListener()
 		{
@@ -199,6 +219,7 @@ public class MethodsManagementPanel extends JPanel
 	{
 		updMethodAction.setEnabled(enabled);
 		delMethodAction.setEnabled(enabled);
+		sortMethodBtn.setEnabled(enabled);
 	}
 
 	private void actionAddMethod()

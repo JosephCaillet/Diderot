@@ -47,7 +47,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		buildUI();
 
-		setPreferredSize(new Dimension(850, 700));
+		setPreferredSize(new Dimension(900, 800));
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -117,7 +117,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		confBtn.setAlignmentX(CENTER_ALIGNMENT);
 		confBtn.setMaximumSize(new Dimension(208,34));
 		btnPanel.add(confBtn);
-		confBtn.doClick();
+		//confBtn.doClick();
 		//System.exit(0);
 		///////////////////////
 

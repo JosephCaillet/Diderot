@@ -38,7 +38,7 @@ public class ProjectSettingsDialog extends JDialog
 	private JButton changeDefaultPropValueBtn = new JButton("Change default value", ImageIconProxy.getIcon("edit"));
 	private JButton addValueBtn = new JButton("Add value", ImageIconProxy.getIcon("add"));
 	private JButton renameValueBtn = new JButton("Rename value", ImageIconProxy.getIcon("edit"));
-	private JButton deleteValueBtn = new JButton("Delete", ImageIconProxy.getIcon("del"));
+	private JButton deleteValueBtn = new JButton("Delete value", ImageIconProxy.getIcon("del"));
 
 	public ProjectSettingsDialog(Frame owner, Route rootRoutes)
 	{

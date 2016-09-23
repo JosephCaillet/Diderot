@@ -7,7 +7,7 @@ public class Response
 {
 	private String description;
 	private String outputType;
-	private String outputFormatDescription;
+	private String schema;
 
 	public String getDescription()
 	{
@@ -29,13 +29,13 @@ public class Response
 		this.outputType = outputType;
 	}
 
-	public String getOutputFormatDescription()
+	public String getSchema()
 	{
-		return outputFormatDescription;
+		return schema;
 	}
 
-	public void setOutputFormatDescription(String outputFormatDescription)
+	public void setSchema(String schema)
 	{
-		this.outputFormatDescription = outputFormatDescription;
+		this.schema = schema;
 	}
 }

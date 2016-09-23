@@ -14,14 +14,14 @@ public class HttpMethod extends AbstractTableModel
 	private String description;
 
 	private TreeMap<String, Parameter> parameters;
-	private TreeMap<Integer, Response> responses;
+	private TreeMap<String, Response> responses;
 	private TreeMap<String, String> userDefinedPropertiesValues;
 
 
 	public HttpMethod()
 	{
 		parameters = new TreeMap<String, Parameter>();
-		responses = new TreeMap<Integer, Response>();
+		responses = new TreeMap<String, Response>();
 		userDefinedPropertiesValues = new TreeMap<String, String>();
 
 		Project project = Project.getActiveProject();
@@ -43,6 +43,31 @@ public class HttpMethod extends AbstractTableModel
 		titi.setRequired(false);
 		titi.setDescription("Sunt bursaes visum fortis, castus byssuses.");
 		parameters.put("atiti", titi);
+
+		Response r = new Response();
+		r.setDescription("Assimilatios sunt nutrixs de flavum clinias.");
+		r.setOutputType("JSON");
+		r.setSchema("{\n\tnum : 42,\n\tstring : \"The answer\"\n}");
+		responses.put("200", r);
+		r = new Response();
+		r.setDescription("Cursus, stella, et humani generis.");
+		r.setOutputType("CSS");
+		r.setSchema("p\n{\n\tcolor : red;\n}");
+		responses.put("300", r);
+		r = new Response();
+		r.setDescription("page not found");
+		r.setOutputType("XML");
+		r.setSchema("<error>\n\tNever gonna give you up\n</error>");
+		responses.put("404", r);
+		responses.put("500", r);
+		responses.put("506", r);
+		responses.put("506", r);
+		responses.put("507", r);
+		responses.put("508", r);
+		responses.put("509", r);
+		responses.put("510", r);
+		responses.put("511", r);
+		responses.put("512", r);
 	}
 
 	public String getDescription()
@@ -92,6 +117,33 @@ public class HttpMethod extends AbstractTableModel
 		{
 			userDefinedPropertiesValues.put(propName, Project.getActiveProject().getUserRouteProperty(propName).getDefaultValue());
 		}
+	}
+
+	//Response management
+	public boolean addResponse(String name)
+	{
+		if(responses.containsKey(name))
+		{
+			return false;
+		}
+
+		responses.put(name, new Response());
+		return true;
+	}
+
+	public void delResponse(String name)
+	{
+		responses.remove(name);
+	}
+
+	public Response getResponse(String name)
+	{
+		return responses.get(name);
+	}
+
+	public String[] getResponsesNames()
+	{
+		return responses.keySet().toArray(new String[responses.size()]);
 	}
 
 	//parameters management
