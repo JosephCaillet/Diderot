@@ -30,6 +30,9 @@ public class MethodPanel extends JPanel implements Scrollable
 			delRespBtn = new JButton(),
 			editWiderRespBtn = new JButton();
 	private JTable paramTable;
+	private JComboBox<String> responseType;
+	private JTextArea responseDescription;
+	private JTextArea responseSchema;
 
 	public MethodPanel(HttpMethod httpMethod)
 	{
@@ -92,7 +95,6 @@ public class MethodPanel extends JPanel implements Scrollable
 		//labelButtonPanel.setBorder(labelBorder);
 
 		//Responses
-		//TODO use jsplit pane to separate jlist from edit fields
 		label = new JLabel("Responses:");
 		labelButtonPanel.add(label, BorderLayout.WEST);
 		label.setAlignmentX(LEFT_ALIGNMENT);
@@ -109,25 +111,13 @@ public class MethodPanel extends JPanel implements Scrollable
 		box.setAlignmentX(LEFT_ALIGNMENT);
 		box.add(labelButtonPanel);
 
-		/*JPanel respPanel = new JPanel(new BorderLayout());
-		JList<String> responseList = new JList<String>(httpMethod.getResponsesNames());
 
-		respPanel.add(new JScrollPane(responseList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.WEST);
+		JSplitPane respPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
 
-		Box respEditPanel = Box.createVerticalBox();
-		respEditPanel.add(new JLabel("Response description:"));
-		respEditPanel.add(new JScrollPane(new JTextArea()));
-		respEditPanel.add(new JLabel("Type:"));
-		respEditPanel.add(new JComboBox<String>(new String[]{"JSON", "HTML"}));
-		respEditPanel.add(new JLabel("Schema:"));
-		respEditPanel.add(new JScrollPane(new JTextArea()));
-		respPanel.add(respEditPanel, BorderLayout.CENTER);*/
-		JPanel respPanel = new JPanel(new GridBagLayout());
+		JPanel respEditPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1.0/7.0;
-		c.weighty = 1;
+
 
 		JList<String> responseList = new JList<String>(httpMethod.getResponsesNames());
 		c.gridx = 0;
@@ -135,48 +125,55 @@ public class MethodPanel extends JPanel implements Scrollable
 		c.gridwidth = 2;
 		c.gridheight = 10;
 		respPanel.add(new JScrollPane(responseList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), c);
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), JSplitPane.LEFT);
 
 		c.weighty = 0;
-		c.weightx = 6.0/7.0;
+		c.weightx = 1;
 		c.gridwidth = 5;
 		c.gridheight = 1;
-		c.gridx = 2;
+		c.gridx = 0;
 		c.gridy = 0;
-		respPanel.add(new JLabel("Response description:"), c);
+		respEditPanel.add(new JLabel("Response description:"), c);
 
 		c.weighty = 0.2;
-		c.gridwidth = 5;
 		c.gridheight = 2;
 		c.gridy = 1;
-		JTextArea textArea = new JTextArea(" ");
-		textArea.setLineWrap(true);
-		respPanel.add(new JScrollPane(textArea), c);
+		responseDescription = new JTextArea();
+		responseDescription.setLineWrap(true);
+		respEditPanel.add(new JScrollPane(responseDescription), c);
 
 		c.weighty = 0;
-		c.gridwidth = 5;
 		c.gridheight = 1;
 		c.gridy = 3;
-		respPanel.add(new JLabel("Output format:"), c);
+		respEditPanel.add(new JLabel("Output format:"), c);
 
-		c.gridwidth = 5;
 		c.gridheight = 1;
 		c.gridy = 4;
-		respPanel.add(new JComboBox<String>(new String[]{"JSON", "HTML", "Plain text"}), c);
+		responseType = new JComboBox<>(new String[]{"JSON", "HTML", "Plain text"});
+		respEditPanel.add(responseType, c);
 
-		c.gridwidth = 5;
 		c.gridheight = 1;
 		c.gridy = 5;
-		respPanel.add(new JLabel("Output schema:"), c);
+		respEditPanel.add(new JLabel("Output schema:"), c);
 
 		c.weighty = 1;
-		c.gridwidth = 5;
 		c.gridheight = 4;
 		c.gridy = 6;
-		respPanel.add(new JScrollPane(new JTextArea(" ")), c);
-		//respPanel.add(new JTextArea(" "), c);
+		responseSchema = new JTextArea();
+		responseSchema.setFont(new Font(Font.MONOSPACED, Font.PLAIN, responseSchema.getFont().getSize()- 2));
+		responseSchema.setOpaque(true);
+		Color color = responseSchema.getBackground();
+		responseSchema.setOpaque(true);
+		responseSchema.setBackground(description.getForeground().darker());
+		responseSchema.setForeground(color);
+		respEditPanel.add(new JScrollPane(responseSchema), c);
+		//respEditPanel.add(responseSchema, c);
 
-		box.add(respPanel);
+		respPanel.add(respEditPanel, JSplitPane.RIGHT);
+
+		JPanel p = new JPanel(new BorderLayout());
+		p.add(respPanel, BorderLayout.CENTER);
+		box.add(p);
 
 		/*
 		description.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
