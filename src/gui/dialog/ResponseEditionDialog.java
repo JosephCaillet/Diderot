@@ -12,10 +12,10 @@ import java.awt.event.ActionListener;
  */
 public class ResponseEditionDialog extends JDialog
 {
-	Response response;
-	Boolean editMade = false;
-	JTextArea description = new JTextArea(), schema = new JTextArea();
-	JButton okBtn = new JButton("OK"), cancelBtn = new JButton("Cancel");
+	private Response response;
+	private Boolean editMade = false;
+	private JTextArea description = new JTextArea(), schema = new JTextArea();
+	private JButton okBtn = new JButton("OK"), cancelBtn = new JButton("Cancel");
 
 	public ResponseEditionDialog(Container owner, String responseName, Response response)
 	{
