@@ -1,5 +1,6 @@
 package gui;
 
+import gui.dialog.ResponseEditionDialog;
 import model.HttpMethod;
 import model.Project;
 import model.Response;
@@ -402,6 +403,14 @@ public class MethodPanel extends JPanel implements Scrollable
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				String responseName = responseList.getSelectedValue();
+				ResponseEditionDialog responseEditionDialog = new ResponseEditionDialog(that.getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent(),
+						responseName, httpMethod.getResponse(responseName));
+				if(responseEditionDialog.display())
+				{
+					responseList.clearSelection();
+					responseList.setSelectedValue(responseName, true);
+				}
 			}
 		};
 		editWiderRespBtn.setAction(editWiderAction);

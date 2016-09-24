@@ -59,15 +59,6 @@ public class HttpMethod extends AbstractTableModel
 		r.setOutputType("XML");
 		r.setSchema("<error>\n\tNever gonna give you up\n</error>");
 		responses.put("404", r);
-		responses.put("500", r);
-		responses.put("506", r);
-		responses.put("506", r);
-		responses.put("507", r);
-		responses.put("508", r);
-		responses.put("509", r);
-		responses.put("510", r);
-		responses.put("511", r);
-		responses.put("512", r);
 	}
 
 	public String getDescription()
