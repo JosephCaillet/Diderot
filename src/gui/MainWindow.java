@@ -1,7 +1,7 @@
 package gui;
 
 import gui.dialog.InputStringDialogHelper;
-import gui.dialog.ProjectSettingsDialog;
+import gui.dialog.settings.ProjectSettingsDialog;
 import model.Project;
 import model.Route;
 

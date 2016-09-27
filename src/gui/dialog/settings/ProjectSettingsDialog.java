@@ -1,4 +1,4 @@
-package gui.dialog;
+package gui.dialog.settings;
 
 import gui.ImageIconProxy;
 import model.Route;

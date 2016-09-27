@@ -1,4 +1,4 @@
-package gui.dialog;
+package gui.dialog.settings;
 
 import gui.ImageIconProxy;
 import model.Project;
@@ -152,23 +152,23 @@ public class UserDefinedPropertiesPanel extends JSplitPane
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)
 			{
-				String newProp = JOptionPane.showInputDialog(null, "Enter new property name:", "Add new property", JOptionPane.PLAIN_MESSAGE);
+				String newProp = JOptionPane.showInputDialog(parent, "Enter new property name:", "Add new property", JOptionPane.PLAIN_MESSAGE);
 				if(newProp != null)
 				{
 					if(newProp.isEmpty())
 					{
-						JOptionPane.showMessageDialog(null, "A property cannot have an empty name.", "Cannot add property", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(parent, "A property cannot have an empty name.", "Cannot add property", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
 
 					Project project = Project.getActiveProject();
 					if(project.getUserRouteProperty(newProp) != null)
 					{
-						JOptionPane.showMessageDialog(null, "This property already exists.", "Cannot add property", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(parent, "This property already exists.", "Cannot add property", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
 
-					String defaultValue = JOptionPane.showInputDialog(null, "Enter default value for property " + newProp + " :", "Add new property", JOptionPane.PLAIN_MESSAGE);
+					String defaultValue = JOptionPane.showInputDialog(parent, "Enter default value for property " + newProp + " :", "Add new property", JOptionPane.PLAIN_MESSAGE);
 					if(defaultValue == null)
 					{
 						return;
@@ -188,14 +188,14 @@ public class UserDefinedPropertiesPanel extends JSplitPane
 			public void actionPerformed(ActionEvent actionEvent)
 			{
 				String oldName = (String) propList.getSelectedItem();
-				String newName = (String) JOptionPane.showInputDialog(null, "Enter new name for " + oldName + " property:"
+				String newName = (String) JOptionPane.showInputDialog(parent, "Enter new name for " + oldName + " property:"
 						, "Rename property", JOptionPane.PLAIN_MESSAGE, null, null, oldName);
 				if(newName != null)
 				{
 					Project project = Project.getActiveProject();
 					if(project.getUserRouteProperty(newName) != null)
 					{
-						JOptionPane.showMessageDialog(null, "A property with this name already exists.", "Cannot rename property", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(parent, "A property with this name already exists.", "Cannot rename property", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
 
@@ -216,7 +216,7 @@ public class UserDefinedPropertiesPanel extends JSplitPane
 			public void actionPerformed(ActionEvent actionEvent)
 			{
 				String propName = (String) propList.getSelectedItem();
-				if(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(null,
+				if(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(parent,
 						"Are you sure you want to delete the following property?\n" + propName,
 						"Delete property", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE))
 				{
@@ -289,7 +289,7 @@ public class UserDefinedPropertiesPanel extends JSplitPane
 			{
 				if(checkBoxDisallowNewValues.isSelected())
 				{
-					if(JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null,
+					if(JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(parent,
 							"Doing this will replace every non memorized values by the default value in all routes.\nAre you sure this is what you want?",
 							"Update the route", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE))
 					{
@@ -335,21 +335,21 @@ public class UserDefinedPropertiesPanel extends JSplitPane
 				Project.UserDefinedRouteProperty userDefinedRouteProperty =  Project.getActiveProject().getUserRouteProperty(propName);
 				String oldDef = userDefinedRouteProperty.getDefaultValue();
 
-				String newDef = (String) JOptionPane.showInputDialog(null, "Change default value of property: " + propName + "\nfrom: " + oldDef + "\nto:",
+				String newDef = (String) JOptionPane.showInputDialog(parent, "Change default value of property: " + propName + "\nfrom: " + oldDef + "\nto:",
 						"Change default value", JOptionPane.PLAIN_MESSAGE, null, userDefinedRouteProperty.getValues(), oldDef);
 
 				if(newDef != null)
 				{
 					if(newDef.equals(oldDef))
 					{
-						JOptionPane.showMessageDialog(null, "Please choose a different value from the previous.");
+						JOptionPane.showMessageDialog(parent, "Please choose a different value from the previous.");
 						return;
 					}
 
 					userDefinedRouteProperty.setDefaultValue(newDef);
 					defaultPropValLbl.setText(newDef);
 
-					if(JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null, "Replace the old default value with the new one in all routes?", "Update the route",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE))
+					if(JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(parent, "Replace the old default value with the new one in all routes?", "Update the route",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE))
 					{
 						rootRoutes.changeUserPropertyValue(propName, oldDef, newDef);
 					}
@@ -382,13 +382,13 @@ public class UserDefinedPropertiesPanel extends JSplitPane
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)
 			{
-				String newVal = JOptionPane.showInputDialog(null, "Enter new value name:", "Add new value", JOptionPane.PLAIN_MESSAGE);
+				String newVal = JOptionPane.showInputDialog(parent, "Enter new value name:", "Add new value", JOptionPane.PLAIN_MESSAGE);
 				if(newVal != null)
 				{
 					Project.UserDefinedRouteProperty userDefinedRouteProperty = Project.getActiveProject().getUserRouteProperty((String) propList.getSelectedItem());
 					if(userDefinedRouteProperty.contains(newVal))
 					{
-						JOptionPane.showMessageDialog(null, "This value already exists.", "Cannot add value", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(parent, "This value already exists.", "Cannot add value", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
 
@@ -411,20 +411,20 @@ public class UserDefinedPropertiesPanel extends JSplitPane
 
 				if(userDefinedRouteProperty.getDefaultValue().equals(oldVal))
 				{
-					JOptionPane.showMessageDialog(null, "You are about to rename the default value for the property " + prop +".\nBy doing so you will change the current default value, and all routes\nusing the default value will also be affected.",
+					JOptionPane.showMessageDialog(parent, "You are about to rename the default value for the property " + prop +".\nBy doing so you will change the current default value, and all routes\nusing the default value will also be affected.",
 							"Rename default property", JOptionPane.WARNING_MESSAGE);
 					defValRenamed = true;
 
 				}
 
-				String newVal = JOptionPane.showInputDialog(null, "Replace value " + oldVal + " of property " + prop + " with:"
+				String newVal = JOptionPane.showInputDialog(parent, "Replace value " + oldVal + " of property " + prop + " with:"
 						, "Rename value", JOptionPane.PLAIN_MESSAGE);
 				if(newVal != null)
 				{
 
 					if(userDefinedRouteProperty.contains(newVal))
 					{
-						JOptionPane.showMessageDialog(null, "This value already exists.", "Cannot add value", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(parent, "This value already exists.", "Cannot add value", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
 
@@ -454,12 +454,12 @@ public class UserDefinedPropertiesPanel extends JSplitPane
 
 				if(userDefinedRouteProperty.getDefaultValue().equals(oldVal))
 				{
-					JOptionPane.showMessageDialog(null, "You cannot remove the default property.\nIf you really want to remove this value, you should\nswitch to an other default value before.",
+					JOptionPane.showMessageDialog(parent, "You cannot remove the default property.\nIf you really want to remove this value, you should\nswitch to an other default value before.",
 							"Cannot remove property", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 
-				if(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(null, "Are you sure you want to remove " + oldVal + " from property " + prop + " ?\nAll route using this value will use default value instead.",
+				if(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(parent, "Are you sure you want to remove " + oldVal + " from property " + prop + " ?\nAll route using this value will use default value instead.",
 						"Remove value", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE))
 				{
 					userDefinedRouteProperty.remove(oldVal);
