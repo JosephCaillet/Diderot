@@ -51,6 +51,7 @@ public class ProjectSettingsDialog extends JDialog
 		//settings themselves
 		cardLayout = new CardLayout();
 		settingsPanel = new JPanel(cardLayout);
+		settingsPanel.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
 
 		//Project settings
 		JPanel panel = new JPanel();
@@ -61,9 +62,7 @@ public class ProjectSettingsDialog extends JDialog
 		settingsPanel.add(new UserDefinedPropertiesPanel(parent, rootRoutes), settingsSections[1]);
 
 		//response output format
-		panel = new JPanel();
-		panel.add(new JLabel(settingsSections[2]));
-		settingsPanel.add(panel, settingsSections[2]);
+		settingsPanel.add(new ResponsePanel(parent, rootRoutes), settingsSections[2]);
 
 		mainPanel.add(settingsPanel, BorderLayout.CENTER);
 
@@ -72,11 +71,11 @@ public class ProjectSettingsDialog extends JDialog
 		mainPanel.add(panel, BorderLayout.SOUTH);
 
 
-		settingsSectionList.setSelectedIndex(1);
-		cardLayout.show(settingsPanel, settingsSections[1]);
 		setContentPane(mainPanel);
 
 		addListeners();
+
+		settingsSectionList.setSelectedIndex(2);
 	}
 
 	private void addListeners()
