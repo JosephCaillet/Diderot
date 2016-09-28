@@ -9,6 +9,13 @@ public class Response
 	private String outputType;
 	private String schema;
 
+	public Response()
+	{
+		this.description = "";
+		this.outputType = Project.getActiveProject().getDefaultResponseFormat();
+		this.schema = "";
+	}
+
 	public String getDescription()
 	{
 		return description;

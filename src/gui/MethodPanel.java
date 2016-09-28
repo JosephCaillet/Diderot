@@ -298,7 +298,7 @@ public class MethodPanel extends JPanel implements Scrollable
 
 				Response response = httpMethod.getResponse(responseName);
 				responseDescription.setText(response.getDescription());
-				responseType.setModel(new DefaultComboBoxModel<String>(new String[]{"Titi", "Toto"}));
+				responseType.setModel(new DefaultComboBoxModel<String>(Project.getActiveProject().getResponsesFormat()));
 				responseType.setSelectedItem(response.getOutputType());
 				responseSchema.setText(response.getSchema());
 				enableResponseEditingButtons(true);

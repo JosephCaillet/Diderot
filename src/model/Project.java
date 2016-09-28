@@ -12,15 +12,25 @@ public class Project
 	private static Project activeProject = new Project();
 
 	private TreeMap<String, UserDefinedRouteProperty> userDefinedRouteProperties;
+	private TreeSet<String> responseFormatList = new TreeSet<>();
+	private String defaultResponseFormat;
 
 	public static Project getActiveProject()
 	{
 		return activeProject;
 	}
 
+
 	public Project()
 	{
 		userDefinedRouteProperties = new TreeMap<String, UserDefinedRouteProperty>();
+		responseFormatList.add("HTML");
+		responseFormatList.add("JSON");
+		responseFormatList.add("XML");
+		responseFormatList.add("CSS");
+		responseFormatList.add("CSV");
+		responseFormatList.add("Plain text");
+		defaultResponseFormat = "JSON";
 	}
 
 	//user defined properties management
@@ -48,6 +58,54 @@ public class Project
 	{
 		Object[] valuesList =  userDefinedRouteProperties.keySet().toArray();
 		return Arrays.copyOf(valuesList, valuesList.length, String[].class);
+	}
+
+	//response format management
+	public boolean addResponseFormat(String responseFormat)
+	{
+		return responseFormatList.add(responseFormat);
+	}
+
+	public boolean removeResponseFormat(String responseFormat)
+	{
+		return responseFormatList.remove(responseFormat);
+	}
+
+	public boolean renameResponseFormat(String oldName, String newName)
+	{
+		if(addResponseFormat(newName))
+		{
+			if(removeResponseFormat(oldName))
+			{
+				return true;
+			}
+			else
+			{
+				removeResponseFormat(newName);
+				return false;
+			}
+		}
+		return false;
+	}
+
+	public String getDefaultResponseFormat()
+	{
+		return defaultResponseFormat;
+	}
+
+	public void setDefaultResponseFormat(String newDefaultResponseFormat)
+	{
+		if(!responseFormatList.contains(newDefaultResponseFormat))
+		{
+			responseFormatList.add(newDefaultResponseFormat);
+		}
+
+		defaultResponseFormat = newDefaultResponseFormat;
+	}
+
+	public String[] getResponsesFormat()
+	{
+		return responseFormatList.toArray(new String[responseFormatList.size()]);
 	}
 
 

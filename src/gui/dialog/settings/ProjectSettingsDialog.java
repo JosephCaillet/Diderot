@@ -14,7 +14,7 @@ import java.awt.event.ActionEvent;
  */
 public class ProjectSettingsDialog extends JDialog
 {
-	private static final String[] settingsSections = {"Project", "User defined properties"};
+	private static final String[] settingsSections = {"Project", "User defined properties", "Response output format"};
 
 	private Route rootRoutes;
 	private Frame parent;
@@ -60,6 +60,10 @@ public class ProjectSettingsDialog extends JDialog
 		//user defined properties
 		settingsPanel.add(new UserDefinedPropertiesPanel(parent, rootRoutes), settingsSections[1]);
 
+		//response output format
+		panel = new JPanel();
+		panel.add(new JLabel(settingsSections[2]));
+		settingsPanel.add(panel, settingsSections[2]);
 
 		mainPanel.add(settingsPanel, BorderLayout.CENTER);
 

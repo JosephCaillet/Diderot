@@ -15,7 +15,7 @@ public class ResponseEditionDialog extends JDialog
 	private Response response;
 	private Boolean editMade = false;
 	private JTextArea description = new JTextArea(), schema = new JTextArea();
-	private JButton okBtn = new JButton("OK"), cancelBtn = new JButton("Cancel");
+	private JButton okBtn = new JButton("Save"), cancelBtn = new JButton("Cancel");
 
 	public ResponseEditionDialog(Container owner, String responseName, Response response)
 	{
