@@ -6,6 +6,8 @@ import model.Route;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by joseph on 28/09/16.
@@ -65,7 +67,6 @@ public class ResponsePanel extends JPanel
 
 	private void enableButton(boolean enabled)
 	{
-		addRespFormatBtn.setEnabled(enabled);
 		editRespFormatBtn.setEnabled(enabled);
 		delRespFormatBtn.setEnabled(enabled);
 		defaultRespFormat.setEnabled(enabled);
@@ -78,6 +79,25 @@ public class ResponsePanel extends JPanel
 
 	private void addListeners()
 	{
+		addRespFormatBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				String newRespFormat = JOptionPane.showInputDialog(parent, "Enter new response format:", "Add new response format", JOptionPane.PLAIN_MESSAGE);
+				if(newRespFormat != null)
+				{
+					if(!Project.getActiveProject().addResponseFormat(newRespFormat))
+					{
+						JOptionPane.showMessageDialog(parent, "This response format already exists.", "Cannot add response format", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 
+					respFormatList.setModel(new DefaultComboBoxModel(Project.getActiveProject().getResponsesFormat()));
+					respFormatList.setSelectedValue(newRespFormat, true);
+				}
+			}
+
+		});
 	}
 }

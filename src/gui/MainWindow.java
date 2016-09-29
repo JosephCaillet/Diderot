@@ -117,13 +117,14 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		confBtn.setAlignmentX(CENTER_ALIGNMENT);
 		confBtn.setMaximumSize(new Dimension(208,34));
 		btnPanel.add(confBtn);
-		//confBtn.doClick();
+		confBtn.doClick();
 		//System.exit(0);
 		///////////////////////
 
 
 		//route tree
 		routesTreePanel = new RoutesTreePanel(rootRoutes);
+
 
 		//panel containing routes tree and associated buttons
 		JPanel leftPanel = new JPanel(new BorderLayout());
