@@ -293,7 +293,7 @@ public class UserDefinedPropertiesPanel extends JSplitPane
 							"Doing this will replace every non memorized values by the default value in all routes.\nAre you sure this is what you want?",
 							"Update the route", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE))
 					{
-						rootRoutes.removeForbiddenValues((String) propList.getSelectedItem());
+						rootRoutes.removeForbiddenUserPropertyValues((String) propList.getSelectedItem());
 						checkBoxMemorizeNewValue.setEnabled(false);
 						Project.getActiveProject().getUserRouteProperty((String) propList.getSelectedItem()).setNewValuesDisabled(true);
 					}

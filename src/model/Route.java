@@ -367,7 +367,7 @@ public class Route implements TreeModel
 		}
 	}
 
-	public void removeForbiddenValues(String propName)
+	public void removeForbiddenUserPropertyValues(String propName)
 	{
 		for(Map.Entry<String, HttpMethod> entry : httpMethods.entrySet())
 		{
@@ -377,7 +377,46 @@ public class Route implements TreeModel
 
 		for(Map.Entry<String, Route> entry : subRoutes.entrySet())
 		{
-			entry.getValue().removeForbiddenValues(propName);
+			entry.getValue().removeForbiddenUserPropertyValues(propName);
+		}
+	}
+
+	//Response format management
+	public void removeResponseFormatValue()
+	{
+		for(Map.Entry<String, HttpMethod> entry : httpMethods.entrySet())
+		{
+			HttpMethod httpMethod = entry.getValue();
+			for(String response : httpMethod.getResponsesNames())
+			{
+				httpMethod.getResponse(response).setOutputType(Project.getActiveProject().getDefaultResponseFormat());
+			}
+		}
+
+		for(Map.Entry<String, Route> entry : subRoutes.entrySet())
+		{
+			entry.getValue().removeResponseFormatValue();
+		}
+	}
+
+	public void renameResponseFormatValue(String oldName, String newName)
+	{
+		for(Map.Entry<String, HttpMethod> entry : httpMethods.entrySet())
+		{
+			HttpMethod httpMethod = entry.getValue();
+			for(String responseName : httpMethod.getResponsesNames())
+			{
+				Response response = httpMethod.getResponse(responseName);
+				if(response.getOutputType().equals(oldName))
+				{
+					response.setOutputType(newName);
+				}
+			}
+		}
+
+		for(Map.Entry<String, Route> entry : subRoutes.entrySet())
+		{
+			entry.getValue().renameUserProperty(oldName, newName);
 		}
 	}
 

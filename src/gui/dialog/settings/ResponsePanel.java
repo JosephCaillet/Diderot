@@ -99,5 +99,7 @@ public class ResponsePanel extends JPanel
 			}
 
 		});
+
+
 	}
 }
