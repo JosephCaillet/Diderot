@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 /**
  * Created by joseph on 28/09/16.
@@ -20,9 +22,9 @@ public class ResponsePanel extends JPanel
 	private JButton addRespFormatBtn = new JButton("Add response format", ImageIconProxy.getIcon("add")),
 			editRespFormatBtn = new JButton("Rename response format", ImageIconProxy.getIcon("edit")),
 			delRespFormatBtn = new JButton("Delete response format", ImageIconProxy.getIcon("del"));
-	private JList respFormatList = new JList(Project.getActiveProject().getResponsesFormat());
-	private JComboBox defaultRespFormat = new JComboBox(new DefaultComboBoxModel(Project.getActiveProject().getResponsesFormat()));
-
+	private JList<String> respFormatList = new JList<String>(Project.getActiveProject().getResponsesFormat());
+	private JComboBox<String> defaultRespFormat = new JComboBox<String>(new DefaultComboBoxModel<String>(Project.getActiveProject().getResponsesFormat()));
+	private Boolean enableComboListener = false;
 
 	public ResponsePanel(Frame parent, Route rootRoute)
 	{
@@ -61,20 +63,7 @@ public class ResponsePanel extends JPanel
 		delRespFormatBtn.setMaximumSize(new Dimension(208,34));
 		add(delRespFormatBtn);
 
-		enableButton(false);
 		addListeners();
-	}
-
-	private void enableButton(boolean enabled)
-	{
-		editRespFormatBtn.setEnabled(enabled);
-		delRespFormatBtn.setEnabled(enabled);
-		defaultRespFormat.setEnabled(enabled);
-
-		if(!enabled)
-		{
-			defaultRespFormat.removeAllItems();
-		}
 	}
 
 	private void addListeners()
@@ -93,13 +82,112 @@ public class ResponsePanel extends JPanel
 						return;
 					}
 
-					respFormatList.setModel(new DefaultComboBoxModel(Project.getActiveProject().getResponsesFormat()));
+					String[] responsesFormat = Project.getActiveProject().getResponsesFormat();
+					respFormatList.setModel(new DefaultComboBoxModel<String>(responsesFormat));
 					respFormatList.setSelectedValue(newRespFormat, true);
+
+					enableComboListener = false;
+					defaultRespFormat.addItem(newRespFormat);
+					defaultRespFormat.setSelectedItem(Project.getActiveProject().getDefaultResponseFormat());
+					enableComboListener = true;
 				}
 			}
 
 		});
 
+		editRespFormatBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				String oldRespFormat = respFormatList.getSelectedValue();
+				String newRespFormat = JOptionPane.showInputDialog(parent, "Rename response format:\nfrom: " + oldRespFormat +"\nto:", "Rename response format", JOptionPane.PLAIN_MESSAGE);
 
+				if(newRespFormat != null)
+				{
+					if(!Project.getActiveProject().renameResponseFormat(oldRespFormat, newRespFormat))
+					{
+						JOptionPane.showMessageDialog(parent, "This response format already exists.", "Cannot rename response format", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+
+					rootRoute.renameResponseFormatValue(oldRespFormat, newRespFormat);
+
+					respFormatList.setModel(new DefaultComboBoxModel<String>(Project.getActiveProject().getResponsesFormat()));
+					respFormatList.setSelectedValue(newRespFormat, true);
+
+					enableComboListener = false;
+					defaultRespFormat.addItem(newRespFormat);
+					defaultRespFormat.removeItem(oldRespFormat);
+					defaultRespFormat.setSelectedItem(Project.getActiveProject().getDefaultResponseFormat());
+					enableComboListener = true;
+				}
+			}
+
+		});
+
+		delRespFormatBtn.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				String responseFormat = respFormatList.getSelectedValue();
+				Project activeProject = Project.getActiveProject();
+
+				if(responseFormat.equals(activeProject.getDefaultResponseFormat()))
+				{
+					JOptionPane.showMessageDialog(parent, "You cannot delete the default value.", "Cannot delete response format", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				if(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(parent,
+						"Are you sure you want to delete the following response format?\n" + responseFormat + "\nDoing so will replace the deleted response format with the default value.",
+						"Delete response format", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE))
+				{
+					rootRoute.renameResponseFormatValue(responseFormat, activeProject.getDefaultResponseFormat());
+					activeProject.removeResponseFormat(responseFormat);
+
+					respFormatList.setModel(new DefaultComboBoxModel<String>(activeProject.getResponsesFormat()));
+
+					respFormatList.setSelectedIndex(0);
+
+					enableComboListener = false;
+					defaultRespFormat.removeItem(responseFormat);
+					defaultRespFormat.setSelectedItem(Project.getActiveProject().getDefaultResponseFormat());
+					enableComboListener = true;
+				}
+			}
+		});
+
+		defaultRespFormat.addItemListener(new ItemListener()
+		{
+			@Override
+			public void itemStateChanged(ItemEvent e)
+			{
+				if(!enableComboListener || e.getStateChange() != ItemEvent.SELECTED)
+				{
+					return;
+				}
+
+				defaultRespFormat.setEnabled(false);
+
+				if(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(parent,
+						"Replace the old default value with the new one in all routes?",
+						"Rename default value", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE))
+				{
+					rootRoute.renameResponseFormatValue(Project.getActiveProject().getDefaultResponseFormat(), (String) e.getItem());
+				}
+
+				Project.getActiveProject().setDefaultResponseFormat((String) e.getItem());
+
+				defaultRespFormat.setEnabled(true);
+			}
+		});
+
+		enableComboListener = false;
+		defaultRespFormat.setModel(new DefaultComboBoxModel<String>(Project.getActiveProject().getResponsesFormat()));
+		defaultRespFormat.setSelectedItem(Project.getActiveProject().getDefaultResponseFormat());
+		respFormatList.setSelectedIndex(0);
+		enableComboListener = true;
 	}
 }

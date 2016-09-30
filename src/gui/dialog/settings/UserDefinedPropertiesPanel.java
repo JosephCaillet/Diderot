@@ -217,7 +217,7 @@ public class UserDefinedPropertiesPanel extends JSplitPane
 			{
 				String propName = (String) propList.getSelectedItem();
 				if(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(parent,
-						"Are you sure you want to delete the following property?\n" + propName,
+						"Are you sure you want to delete the f  ollowing property?\n" + propName,
 						"Delete property", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE))
 				{
 					Project project = Project.getActiveProject();

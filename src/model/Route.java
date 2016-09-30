@@ -399,7 +399,7 @@ public class Route implements TreeModel
 
 		for(Map.Entry<String, Route> entry : subRoutes.entrySet())
 		{
-			entry.getValue().renameUserProperty(oldName, newName);
+			entry.getValue().renameResponseFormatValue(oldName, newName);
 		}
 	}
 
