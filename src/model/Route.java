@@ -382,23 +382,6 @@ public class Route implements TreeModel
 	}
 
 	//Response format management
-	public void removeResponseFormatValue()
-	{
-		for(Map.Entry<String, HttpMethod> entry : httpMethods.entrySet())
-		{
-			HttpMethod httpMethod = entry.getValue();
-			for(String response : httpMethod.getResponsesNames())
-			{
-				httpMethod.getResponse(response).setOutputType(Project.getActiveProject().getDefaultResponseFormat());
-			}
-		}
-
-		for(Map.Entry<String, Route> entry : subRoutes.entrySet())
-		{
-			entry.getValue().removeResponseFormatValue();
-		}
-	}
-
 	public void renameResponseFormatValue(String oldName, String newName)
 	{
 		for(Map.Entry<String, HttpMethod> entry : httpMethods.entrySet())
