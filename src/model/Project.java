@@ -15,6 +15,13 @@ public class Project
 	private TreeSet<String> responseFormatList = new TreeSet<>();
 	private String defaultResponseFormat;
 
+	private String name = "Test Project";
+	private String company = "A.C.M.E";
+	private String description = "test description";
+	private String domain = "domain.com";
+	private String authors = "jojo";
+	private String contact = "contact@acme.wb";
+
 	public static Project getActiveProject()
 	{
 		return activeProject;
@@ -31,6 +38,68 @@ public class Project
 		responseFormatList.add("CSV");
 		responseFormatList.add("Plain text");
 		defaultResponseFormat = "JSON";
+	}
+
+	//project properties
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public String getCompany()
+	{
+		return company;
+	}
+
+	public void setCompany(String company)
+	{
+		this.company = company;
+	}
+
+	public String getDescription()
+	{
+		return description;
+	}
+
+	public void setDescription(String description)
+	{
+		this.description = description;
+	}
+
+	public String getDomain()
+	{
+		return domain;
+	}
+
+	public void setDomain(String domain)
+	{
+		this.domain = domain;
+	}
+
+	public String getAuthors()
+	{
+		return authors;
+	}
+
+	public void setAuthors(String authors)
+	{
+		this.authors = authors;
+	}
+
+	public String getContact()
+	{
+		return contact;
+	}
+
+	public void setContact(String contact)
+	{
+		this.contact = contact;
 	}
 
 	//user defined properties management
