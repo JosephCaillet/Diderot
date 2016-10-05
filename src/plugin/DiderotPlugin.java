@@ -13,8 +13,11 @@ public interface DiderotPlugin
 	public String getPluginContactInformation();
 	public String getPluginVersion();
 
-	public void openConfigDialog();
-	public boolean isConfigurable();
+	public default void openConfigDialog(){}
+	public default boolean isConfigurable()
+	{
+		return false;
+	}
 
 	public void setDiderotData(Route rootRoute, Project project);
 }

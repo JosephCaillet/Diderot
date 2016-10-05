@@ -21,10 +21,10 @@ import java.util.HashMap;
  */
 public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 {
-	Route rootRoute;
-	Project project;
+	private Route rootRoute;
+	private Project project;
 
-	static HashMap<String, String> availableOperations = new HashMap<>();
+	static private HashMap<String, String> availableOperations = new HashMap<>();
 
 	static
 	{
@@ -59,17 +59,6 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 	public String getPluginVersion()
 	{
 		return "0.1";
-	}
-
-	@Override
-	public void openConfigDialog()
-	{
-	}
-
-	@Override
-	public boolean isConfigurable()
-	{
-		return false;
 	}
 
 	@Override
