@@ -4,6 +4,7 @@ import gui.dialog.InputStringDialogHelper;
 import gui.dialog.settings.ProjectSettingsDialog;
 import model.Project;
 import model.Route;
+import plugin.exporter.DefaultDiderotProjectExporter;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -22,8 +23,6 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 	private final static String NO_ROUTE_SELECTED = "nrs";
 	private final static String ROUTE_SELECTED = "rs";
 
-	private String projectName = "domain.com";
-
 	private Route rootRoutes;
 	private RoutesTreePanel routesTreePanel;
 
@@ -41,7 +40,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		super("Diderot");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		rootRoutes = new Route(projectName);
+		rootRoutes = new Route(Project.getActiveProject().getDomain());
 
 		createSampleRoute();
 
@@ -117,7 +116,10 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		confBtn.setAlignmentX(CENTER_ALIGNMENT);
 		confBtn.setMaximumSize(new Dimension(208,34));
 		btnPanel.add(confBtn);
-		confBtn.doClick();
+		//confBtn.doClick();
+		DefaultDiderotProjectExporter diderotProjectExporter = new DefaultDiderotProjectExporter();
+		diderotProjectExporter.setDiderotData(rootRoutes, Project.getActiveProject());
+		diderotProjectExporter.export();
 		//System.exit(0);
 		///////////////////////
 
