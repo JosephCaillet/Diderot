@@ -151,6 +151,16 @@ public class HttpMethod extends AbstractTableModel
 	}
 
 	//parameters management
+	public String[] getParametersNames()
+	{
+		return parameters.keySet().toArray(new String[parameters.size()]);
+	}
+
+	public Parameter getParameter(String name)
+	{
+		return parameters.get(name);
+	}
+
 	public boolean addParameter(String name)
 	{
 		if(parameters.containsKey(name))

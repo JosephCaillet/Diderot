@@ -135,12 +135,23 @@ public class Route implements TreeModel
 		this.description = description;
 	}
 
+	//TODO : replace this method usage by getHttpMethodNames() and getHttpMethod()
 	public TreeMap<String, HttpMethod> getHttpMethods()
 	{
 		return httpMethods;
 	}
 
 	//Route management
+	public String[] getRoutesNames()
+	{
+		return subRoutes.keySet().toArray(new String[subRoutes.size()]);
+	}
+
+	public Route getRoute(String name)
+	{
+		return subRoutes.get(name);
+	}
+
 	public boolean addRoute(String path)
 	{
 		String name = extractRouteLastPart(path);
@@ -277,6 +288,16 @@ public class Route implements TreeModel
 	}
 
 	//HttpMethod management
+	public String[] getHttpMethodNames()
+	{
+		return httpMethods.keySet().toArray(new String[httpMethods.size()]);
+	}
+
+	public HttpMethod getHttpMethod(String name)
+	{
+		return httpMethods.get(name);
+	}
+
 	public boolean addHttpMethod(String methodName, HttpMethod method)
 	{
 		if(httpMethods.containsKey(methodName))
