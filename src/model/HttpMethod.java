@@ -29,7 +29,7 @@ public class HttpMethod extends AbstractTableModel
 		{
 			setUserProperty(prop, project.getUserRouteProperty(prop).getDefaultValue());
 		}
-		createSampleData();
+		//createSampleData();
 	}
 
 	private void createSampleData()
@@ -53,7 +53,7 @@ public class HttpMethod extends AbstractTableModel
 		r.setDescription("Cursus, stella, et humani generis.");
 		r.setOutputType("CSS");
 		r.setSchema("p\n{\n\tcolor : red;\n}");
-		responses.put("300", r);
+		//responses.put("300", r);
 		r = new Response();
 		r.setDescription("page not found");
 		r.setOutputType("XML");
@@ -113,12 +113,17 @@ public class HttpMethod extends AbstractTableModel
 	//Response management
 	public boolean addResponse(String name)
 	{
+		return addResponse(name, new Response());
+	}
+
+	public boolean addResponse(String name, Response response)
+	{
 		if(responses.containsKey(name))
 		{
 			return false;
 		}
 
-		responses.put(name, new Response());
+		responses.put(name, response);
 		return true;
 	}
 
@@ -163,11 +168,16 @@ public class HttpMethod extends AbstractTableModel
 
 	public boolean addParameter(String name)
 	{
+		return addParameter(name, new Parameter());
+	}
+
+	public boolean addParameter(String name, Parameter parameter)
+	{
 		if(parameters.containsKey(name))
 		{
 			return false;
 		}
-		parameters.put(name, new Parameter());
+		parameters.put(name, parameter);
 
 		Object[] keys = parameters.keySet().toArray();
 

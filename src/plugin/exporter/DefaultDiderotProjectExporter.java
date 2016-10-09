@@ -27,7 +27,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 
 	static
 	{
-		availableOperations.put("export", "Save project");
+		availableOperations.put("exportProject", "Save project");
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 	@Override
 	public String getPluginVersion()
 	{
-		return "0.1";
+		return "1.0";
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		this.project = project;
 	}
 
-	public void export()
+	public void exportProject()
 	{
 		try
 		{
@@ -159,6 +159,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 
 	private void buildRouteXml(Document rootXml, Route route, Element routeXml)
 	{
+		//TODO: replace new line with &#xA;
 		Element description = rootXml.createElement("description");
 		description.appendChild(rootXml.createTextNode(route.getDescription()));
 		routeXml.appendChild(description);
@@ -213,7 +214,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 
 						responses.appendChild(response);
 					}
-					methods.appendChild(responses);
+					newHttpMethod.appendChild(responses);
 				}
 
 				methods.appendChild(newHttpMethod);

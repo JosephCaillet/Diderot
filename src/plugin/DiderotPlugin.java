@@ -12,8 +12,12 @@ public interface DiderotPlugin
 	public String getPluginAuthor();
 	public String getPluginContactInformation();
 	public String getPluginVersion();
+	//TODO add getDescriptionMethod
 
-	public default void openConfigDialog(){}
+	public default void openConfigDialog()
+	{
+		//nothing done by default
+	}
 	public default boolean isConfigurable()
 	{
 		return false;

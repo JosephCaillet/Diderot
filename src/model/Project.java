@@ -31,6 +31,11 @@ public class Project
 	public Project()
 	{
 		userDefinedRouteProperties = new TreeMap<String, UserDefinedRouteProperty>();
+		createDefaultData();
+	}
+
+	public void createDefaultData()
+	{
 		responseFormatList.add("HTML");
 		responseFormatList.add("JSON");
 		responseFormatList.add("XML");
@@ -41,7 +46,6 @@ public class Project
 	}
 
 	//project properties
-
 	public String getName()
 	{
 		return name;
@@ -189,6 +193,11 @@ public class Project
 			super();
 			this.defaultValue = defaultValue;
 			add(defaultValue);
+			createSampleData();
+		}
+
+		private void createSampleData()
+		{
 			add("titi");
 			add("Toto");
 			add("tutu");

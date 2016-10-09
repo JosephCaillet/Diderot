@@ -363,6 +363,8 @@ public class MethodPanel extends JPanel implements Scrollable
 					}
 					responseList.setModel(new DefaultComboBoxModel<String>(httpMethod.getResponsesNames()));
 					responseList.setSelectedValue(responseToAdd, true);
+					revalidate();
+					repaint();
 				}
 			}
 		};

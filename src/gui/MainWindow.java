@@ -5,6 +5,7 @@ import gui.dialog.settings.ProjectSettingsDialog;
 import model.Project;
 import model.Route;
 import plugin.exporter.DefaultDiderotProjectExporter;
+import plugin.exporter.DefaultDiderotProjectImporter;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -42,7 +43,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		rootRoutes = new Route(Project.getActiveProject().getDomain());
 
-		createSampleRoute();
+		//createSampleRoute();
 
 		buildUI();
 
@@ -55,17 +56,17 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 	private void createSampleRoute()
 	{
-		rootRoutes.addRoute("index");
-		rootRoutes.addRoute("index");
+		//rootRoutes.addRoute("index");
+		//rootRoutes.addRoute("index");
 		rootRoutes.addRoute("home");
 		rootRoutes.addRoute("home/page1");
-		rootRoutes.addRoute("home/page2");
+		/*rootRoutes.addRoute("home/page2");
 		rootRoutes.addRoute("data/type/subtype1");
 		rootRoutes.addRoute("data/type/subtype2");
 		rootRoutes.addRoute("bidule/truc");
 		rootRoutes.addRoute("data/type2");
 		rootRoutes.addRoute("home/page2");
-		rootRoutes.addRoute("home/page2");
+		rootRoutes.addRoute("home/page2");*/
 
 		Project project = Project.getActiveProject();
 		project.addUserRouteProperty("Controller", "myController");
@@ -119,7 +120,10 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		//confBtn.doClick();
 		DefaultDiderotProjectExporter diderotProjectExporter = new DefaultDiderotProjectExporter();
 		diderotProjectExporter.setDiderotData(rootRoutes, Project.getActiveProject());
-		diderotProjectExporter.export();
+		//diderotProjectExporter.exportProject();
+		DefaultDiderotProjectImporter defaultDiderotProjectImporter = new DefaultDiderotProjectImporter();
+		defaultDiderotProjectImporter.setDiderotData(rootRoutes, Project.getActiveProject());
+		defaultDiderotProjectImporter.importProject();
 		//System.exit(0);
 		///////////////////////
 

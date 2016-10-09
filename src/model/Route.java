@@ -97,8 +97,7 @@ public class Route implements TreeModel
 		httpMethods = new TreeMap<String, HttpMethod>();
 		this.name = name;
 		root = this;
-		createSampleHttpMethods();
-
+		//createSampleHttpMethods();
 	}
 
 	public Route(String name, Route root)

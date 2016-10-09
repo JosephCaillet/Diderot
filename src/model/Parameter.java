@@ -8,6 +8,14 @@ public class Parameter
 	private boolean required = true;
 	private String description = "";
 
+	public Parameter(){}
+
+	public Parameter(boolean required, String description)
+	{
+		this.required = required;
+		this.description = description;
+	}
+
 	public boolean isRequired()
 	{
 		return required;
