@@ -137,6 +137,7 @@ public class MethodPanel extends JPanel implements Scrollable
 		c.weighty = 0.2;
 		c.gridheight = 2;
 		c.gridy = 1;
+		responseDescription.setRows(3);
 		responseDescription.setLineWrap(true);
 		responseDescription.setTabSize(2);
 		respEditPanel.add(new JScrollPane(responseDescription), c);
@@ -157,6 +158,7 @@ public class MethodPanel extends JPanel implements Scrollable
 		c.weighty = 1;
 		c.gridheight = 4;
 		c.gridy = 6;
+		responseSchema.setRows(14);
 		responseSchema.setTabSize(2);
 		responseSchema.setFont(new Font(Font.MONOSPACED, Font.PLAIN, responseSchema.getFont().getSize()- 2));
 		responseSchema.setOpaque(true);
@@ -166,7 +168,6 @@ public class MethodPanel extends JPanel implements Scrollable
 		responseSchema.setForeground(color);
 		responseSchema.setCaretColor(color);
 		respEditPanel.add(new JScrollPane(responseSchema), c);
-		//respEditPanel.add(responseSchema, c);
 
 		respPanel.add(respEditPanel, JSplitPane.RIGHT);
 
@@ -302,6 +303,9 @@ public class MethodPanel extends JPanel implements Scrollable
 				responseType.setSelectedItem(response.getOutputType());
 				responseSchema.setText(response.getSchema());
 				enableResponseEditingButtons(true);
+
+				revalidate();
+				repaint();
 			}
 		});
 
