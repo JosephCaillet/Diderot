@@ -10,4 +10,8 @@ import java.util.HashMap;
 public interface DiderotProjectExporter extends DiderotPlugin
 {
 	public HashMap<String, String> getAvailableExportingOperations();
+	public default boolean callConfigBeforeExport()
+	{
+		return false;
+	}
 }

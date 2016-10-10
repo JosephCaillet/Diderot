@@ -11,7 +11,7 @@ import java.util.Vector;
 public class HttpMethod extends AbstractTableModel
 {
 	public final static String[] columnsNames = {"Name", "Required", "Description"};
-	private String description;
+	private String description = "";
 
 	private TreeMap<String, Parameter> parameters;
 	private TreeMap<String, Response> responses;

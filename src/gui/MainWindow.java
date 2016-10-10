@@ -5,7 +5,7 @@ import gui.dialog.settings.ProjectSettingsDialog;
 import model.Project;
 import model.Route;
 import plugin.exporter.DefaultDiderotProjectExporter;
-import plugin.exporter.DefaultDiderotProjectImporter;
+import plugin.importer.DefaultDiderotProjectImporter;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -39,7 +39,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 	public MainWindow()
 	{
 		super("Diderot");
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
 		rootRoutes = new Route(Project.getActiveProject().getDomain());
 
@@ -118,9 +118,6 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		confBtn.setMaximumSize(new Dimension(208,34));
 		btnPanel.add(confBtn);
 		//confBtn.doClick();
-		DefaultDiderotProjectExporter diderotProjectExporter = new DefaultDiderotProjectExporter();
-		diderotProjectExporter.setDiderotData(rootRoutes, Project.getActiveProject());
-		//diderotProjectExporter.exportProject();
 		DefaultDiderotProjectImporter defaultDiderotProjectImporter = new DefaultDiderotProjectImporter();
 		defaultDiderotProjectImporter.setDiderotData(rootRoutes, Project.getActiveProject());
 		defaultDiderotProjectImporter.importProject();
@@ -180,6 +177,19 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 	private void addListeners()
 	{
+		JFrame that = this;
+		this.addWindowListener(new WindowAdapter()
+		{
+			@Override
+			public void windowClosing(WindowEvent e)
+			{
+				DefaultDiderotProjectExporter diderotProjectExporter = new DefaultDiderotProjectExporter();
+				diderotProjectExporter.setDiderotData(rootRoutes, Project.getActiveProject());
+				diderotProjectExporter.exportProject();
+				that.dispose();
+			}
+		});
+
 		focusOnRouteAction = new AbstractAction("Set focus on route panel")
 		{
 			@Override

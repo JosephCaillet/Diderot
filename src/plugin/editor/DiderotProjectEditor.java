@@ -10,4 +10,8 @@ import java.util.HashMap;
 public interface DiderotProjectEditor extends DiderotPlugin
 {
 	public HashMap<String, String> getAvailableEditingOperations();
+	public default boolean callConfigBeforeEdit()
+	{
+		return false;
+	}
 }

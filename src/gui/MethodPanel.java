@@ -308,7 +308,7 @@ public class MethodPanel extends JPanel implements Scrollable
 		responseDescription.addKeyListener(new KeyAdapter()
 		{
 			@Override
-			public void keyTyped(KeyEvent e)
+			public void keyReleased(KeyEvent e)
 			{
 				httpMethod.getResponse(responseList.getSelectedValue()).setDescription(responseDescription.getText());
 			}
@@ -331,7 +331,7 @@ public class MethodPanel extends JPanel implements Scrollable
 		responseSchema.addKeyListener(new KeyAdapter()
 		{
 			@Override
-			public void keyTyped(KeyEvent e)
+			public void keyReleased(KeyEvent e)
 			{
 				httpMethod.getResponse(responseList.getSelectedValue()).setSchema(responseSchema.getText());
 			}

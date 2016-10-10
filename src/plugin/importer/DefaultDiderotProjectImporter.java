@@ -1,4 +1,4 @@
-package plugin.exporter;
+package plugin.importer;
 
 import model.*;
 import org.w3c.dom.Element;
@@ -7,7 +7,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-import plugin.importer.DiderotProjectImporter;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,14 +22,17 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 {
 	private Route rootRoute;
 	private Project project;
-	private static enum Section {DIDEROT_PROJECT, ROUTES};
-	private Section section = Section.DIDEROT_PROJECT;
 
 	static private HashMap<String, String> availableOperations = new HashMap<>();
 
 	static
 	{
 		availableOperations.put("importProject", "Open project");
+	}
+
+	static private String decodeString(String str)
+	{
+		return str.replace("&#xA;", "\n");
 	}
 
 	@Override
@@ -60,7 +62,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 	@Override
 	public String getPluginVersion()
 	{
-		return "0.1";
+		return "1.0";
 	}
 
 	@Override
@@ -74,12 +76,9 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 	{
 		try
 		{
-			String str = "titit\n\ttotot\n\tiopo";
-			System.out.println(str.replaceAll("\\t",""));
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-			documentBuilderFactory.setIgnoringElementContentWhitespace(true);
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-			Element diderotProject = documentBuilder.parse("testOpen.xml").getDocumentElement();
+			Element diderotProject = documentBuilder.parse("save.xml").getDocumentElement();
 			loadProject(diderotProject);
 			loadResponsesOutputFormat(diderotProject);
 			loadUserDefinedProperties(diderotProject);
@@ -105,7 +104,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		project.setCompany(projectElement.getAttribute("company"));
 		project.setAuthors(projectElement.getAttribute("authors"));
 		project.setContact(projectElement.getAttribute("contact"));
-		project.setDescription(projectElement.getElementsByTagName("description").item(0).getFirstChild().getTextContent());
+		project.setDescription(decodeString(projectElement.getElementsByTagName("description").item(0).getFirstChild().getTextContent()));
 	}
 
 	private void loadResponsesOutputFormat(Element projectElement)
@@ -182,11 +181,11 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 			}
 
 			String nodeName = routeChildren.item(i).getNodeName();
-			if(nodeName.equals("description"))
+			if("description".equals(nodeName))
 			{
-				route.setDescription(routeChildren.item(i).getTextContent());
+				route.setDescription(decodeString(routeChildren.item(i).getTextContent()));
 			}
-			else if(nodeName.equals("methods"))
+			else if("methods".equals(nodeName))
 			{
 				NodeList methods = routeChildren.item(i).getChildNodes();
 				for(int j = 0; j < methods.getLength(); j++)
@@ -209,7 +208,11 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 						}
 
 						nodeName = methodsChildren.item(k).getNodeName();
-						if(nodeName.equals("parameters"))
+						if("description".equals(nodeName))
+						{
+							newHttpMethod.setDescription(decodeString(methodsChildren.item(k).getTextContent()));
+						}
+						else if("parameters".equals(nodeName))
 						{
 							NodeList params = methodsChildren.item(k).getChildNodes();
 							for(int l = 0; l < params.getLength(); l++)
@@ -225,7 +228,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 								newHttpMethod.addParameter(attributes.getNamedItem("name").getTextContent(), newParam);
 							}
 						}
-						else if(nodeName.equals("responses"))
+						else if("responses".equals(nodeName))
 						{
 							NodeList responses = methodsChildren.item(k).getChildNodes();
 							for(int l = 0; l < responses.getLength(); l++)
@@ -235,7 +238,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 									continue;
 								}
 
-								nodeName = responses.item(k).getNodeName();
+								nodeName = responses.item(l).getNodeName();
 								for(int m = 0; m < responses.getLength(); m++)
 								{
 									if(responses.item(m).getNodeType() == Node.TEXT_NODE)
@@ -257,13 +260,13 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 										}
 
 										nodeName = responseChildren.item(n).getNodeName();
-										if(nodeName.equals("description"))
+										if("description".equals(nodeName))
 										{
-											response.setDescription(responseChildren.item(n).getTextContent());
+											response.setDescription(decodeString(responseChildren.item(n).getTextContent()));
 										}
-										else if(nodeName.equals("outputSchema"))
+										else if("outputSchema".equals(nodeName))
 										{
-											response.setSchema(responseChildren.item(n).getTextContent());
+											response.setSchema(decodeString(responseChildren.item(n).getTextContent()));
 										}
 									}
 									newHttpMethod.addResponse(attributes.getNamedItem("name").getTextContent(), response);
@@ -273,7 +276,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 					}
 				}
 			}
-			else if(nodeName.equals("routes"))
+			else if("routes".equals(nodeName))
 			{
 				NodeList childRoutes = routeChildren.item(i).getChildNodes();
 				for(int j = 0; j < childRoutes.getLength(); j++)

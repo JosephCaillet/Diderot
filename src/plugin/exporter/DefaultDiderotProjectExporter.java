@@ -6,10 +6,7 @@ import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
@@ -28,6 +25,11 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 	static
 	{
 		availableOperations.put("exportProject", "Save project");
+	}
+
+	static private String encodeString(String str)
+	{
+		return str.replace("\n", "&#xA;");
 	}
 
 	@Override
@@ -81,7 +83,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 			xmlSaveDocument.appendChild(diderotProject);
 
 			Element projectDescription = xmlSaveDocument.createElement("description");
-			projectDescription.appendChild(xmlSaveDocument.createTextNode(project.getDescription()));
+			projectDescription.appendChild(xmlSaveDocument.createTextNode(encodeString(project.getDescription())));
 			diderotProject.appendChild(projectDescription);
 			diderotProject.appendChild(buildResponseOutputFormatXml(xmlSaveDocument));
 			diderotProject.appendChild(buildUserDefinedPropertiesXml(xmlSaveDocument));
@@ -92,7 +94,10 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 			diderotProject.appendChild(routeXml);
 
 			Transformer xmlTransformer = TransformerFactory.newInstance().newTransformer();
-			xmlTransformer.transform(new DOMSource(xmlSaveDocument), new StreamResult(new File("testSave.xml")));
+			xmlTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			xmlTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
+			xmlTransformer.transform(new DOMSource(xmlSaveDocument), new StreamResult(new File("save.xml")));
 		}
 		catch(TransformerConfigurationException e)
 		{
@@ -159,9 +164,8 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 
 	private void buildRouteXml(Document rootXml, Route route, Element routeXml)
 	{
-		//TODO: replace new line with &#xA;
 		Element description = rootXml.createElement("description");
-		description.appendChild(rootXml.createTextNode(route.getDescription()));
+		description.appendChild(rootXml.createTextNode(encodeString(route.getDescription())));
 		routeXml.appendChild(description);
 
 		//generate http methods
@@ -171,11 +175,16 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 			Element methods = rootXml.createElement("methods");
 			for(String methodName : httpMethodsNames)
 			{
+				HttpMethod httpMethod = route.getHttpMethod(methodName);
 				Element newHttpMethod = rootXml.createElement("method");
+
+				//generate method description
 				newHttpMethod.setAttribute("name", methodName);
+				Element methodDescription = rootXml.createElement("description");
+				methodDescription.appendChild(rootXml.createTextNode(encodeString(httpMethod.getDescription())));
+				newHttpMethod.appendChild(methodDescription);
 
 				//generate parameters
-				HttpMethod httpMethod = route.getHttpMethod(methodName);
 				String[] paramsNames = httpMethod.getParametersNames();
 				if(paramsNames.length != 0)
 				{
@@ -205,11 +214,11 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 						response.setAttribute("outputFormat", resp.getOutputType());
 
 						Element desc = rootXml.createElement("description");
-						desc.appendChild(rootXml.createTextNode(resp.getDescription()));
+						desc.appendChild(rootXml.createTextNode(encodeString(resp.getDescription())));
 						response.appendChild(desc);
 
 						Element outputSchema = rootXml.createElement("outputSchema");
-						outputSchema.appendChild(rootXml.createTextNode(resp.getSchema()));
+						outputSchema.appendChild(rootXml.createTextNode(encodeString(resp.getSchema())));
 						response.appendChild(outputSchema);
 
 						responses.appendChild(response);
