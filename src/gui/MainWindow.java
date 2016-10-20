@@ -4,6 +4,7 @@ import gui.dialog.InputStringDialogHelper;
 import gui.dialog.settings.ProjectSettingsDialog;
 import model.Project;
 import model.Route;
+import plugin.exporter.DefaultDiderotDocumentationExporter;
 import plugin.exporter.DefaultDiderotProjectExporter;
 import plugin.importer.DefaultDiderotProjectImporter;
 
@@ -51,7 +52,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
-
+		//getWindowListeners()[0].windowClosing(null);
 	}
 
 	private void createSampleRoute()
@@ -186,6 +187,11 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 				DefaultDiderotProjectExporter diderotProjectExporter = new DefaultDiderotProjectExporter();
 				diderotProjectExporter.setDiderotData(rootRoutes, Project.getActiveProject());
 				diderotProjectExporter.exportProject();
+
+				DefaultDiderotDocumentationExporter defaultDiderotDocumentationExporter = new DefaultDiderotDocumentationExporter();
+				defaultDiderotDocumentationExporter.setDiderotData(rootRoutes, Project.getActiveProject());
+				defaultDiderotDocumentationExporter.generateHtmlDocumentation();
+
 				that.dispose();
 			}
 		});

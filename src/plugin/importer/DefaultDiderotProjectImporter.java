@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Vector;
 
+import static plugin.importer.DiderotProjectImporter.decodeNewLine;
+
 /**
  * Created by joseph on 09/10/16.
  */
@@ -30,11 +32,6 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		availableOperations.put("importProject", "Open project");
 	}
 
-	static private String decodeString(String str)
-	{
-		return str.replace("&#xA;", "\n");
-	}
-
 	@Override
 	public HashMap<String, String> getAvailableImportingOperations()
 	{
@@ -44,7 +41,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 	@Override
 	public String getPluginName()
 	{
-		return "Diderot default project exporter";
+		return "Diderot default project importer";
 	}
 
 	@Override
@@ -63,6 +60,12 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 	public String getPluginVersion()
 	{
 		return "1.0";
+	}
+
+	@Override
+	public String getPluginDescription()
+	{
+		return "Diderot project file importer";
 	}
 
 	@Override
@@ -104,7 +107,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		project.setCompany(projectElement.getAttribute("company"));
 		project.setAuthors(projectElement.getAttribute("authors"));
 		project.setContact(projectElement.getAttribute("contact"));
-		project.setDescription(decodeString(projectElement.getElementsByTagName("description").item(0).getFirstChild().getTextContent()));
+		project.setDescription(decodeNewLine(projectElement.getElementsByTagName("description").item(0).getFirstChild().getTextContent()));
 	}
 
 	private void loadResponsesOutputFormat(Element projectElement)
@@ -183,7 +186,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 			String nodeName = routeChildren.item(i).getNodeName();
 			if("description".equals(nodeName))
 			{
-				route.setDescription(decodeString(routeChildren.item(i).getTextContent()));
+				route.setDescription(decodeNewLine(routeChildren.item(i).getTextContent()));
 			}
 			else if("methods".equals(nodeName))
 			{
@@ -210,7 +213,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 						nodeName = methodsChildren.item(k).getNodeName();
 						if("description".equals(nodeName))
 						{
-							newHttpMethod.setDescription(decodeString(methodsChildren.item(k).getTextContent()));
+							newHttpMethod.setDescription(decodeNewLine(methodsChildren.item(k).getTextContent()));
 						}
 						else if("parameters".equals(nodeName))
 						{
@@ -262,11 +265,11 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 										nodeName = responseChildren.item(n).getNodeName();
 										if("description".equals(nodeName))
 										{
-											response.setDescription(decodeString(responseChildren.item(n).getTextContent()));
+											response.setDescription(decodeNewLine(responseChildren.item(n).getTextContent()));
 										}
 										else if("outputSchema".equals(nodeName))
 										{
-											response.setSchema(decodeString(responseChildren.item(n).getTextContent()));
+											response.setSchema(decodeNewLine(responseChildren.item(n).getTextContent()));
 										}
 									}
 									newHttpMethod.addResponse(attributes.getNamedItem("name").getTextContent(), response);

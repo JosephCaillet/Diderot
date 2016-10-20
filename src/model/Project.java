@@ -17,6 +17,7 @@ public class Project
 
 	private String name = "Test Project";
 	private String company = "A.C.M.E";
+	private String companyLogo = "rsc/edit.png";
 	private String description = "test description";
 	private String domain = "domain.com";
 	private String authors = "jojo";
@@ -64,6 +65,16 @@ public class Project
 	public void setCompany(String company)
 	{
 		this.company = company;
+	}
+
+	public String getCompanyLogo()
+	{
+		return companyLogo;
+	}
+
+	public void setCompanyLogo(String companyLogo)
+	{
+		this.companyLogo = companyLogo;
 	}
 
 	public String getDescription()

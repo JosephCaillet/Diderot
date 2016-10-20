@@ -9,6 +9,11 @@ import java.util.HashMap;
  */
 public interface DiderotProjectImporter extends DiderotPlugin
 {
+	static public String decodeNewLine(String str)
+	{
+		return str.replace("&#xA;", "\n");
+	}
+
 	public HashMap<String, String> getAvailableImportingOperations();
 	public default boolean callConfigBeforeImport()
 	{

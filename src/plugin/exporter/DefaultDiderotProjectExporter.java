@@ -12,24 +12,21 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.util.HashMap;
 
+import static plugin.exporter.DiderotProjectExporter.encodeNewLine;
+
 /**
  * Created by joseph on 05/10/16.
  */
 public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 {
-	private Route rootRoute;
-	private Project project;
+	protected Route rootRoute;
+	protected Project project;
 
-	static private HashMap<String, String> availableOperations = new HashMap<>();
+	static protected HashMap<String, String> availableOperations = new HashMap<>();
 
 	static
 	{
 		availableOperations.put("exportProject", "Save project");
-	}
-
-	static private String encodeString(String str)
-	{
-		return str.replace("\n", "&#xA;");
 	}
 
 	@Override
@@ -63,6 +60,12 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 	}
 
 	@Override
+	public String getPluginDescription()
+	{
+		return "Diderot project file saver.";
+	}
+
+	@Override
 	public void setDiderotData(Route rootRoute, Project project)
 	{
 		this.rootRoute = rootRoute;
@@ -73,25 +76,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 	{
 		try
 		{
-			Document xmlSaveDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-
-			Element diderotProject = xmlSaveDocument.createElement("diderotProject");
-			diderotProject.setAttribute("name", project.getName());
-			diderotProject.setAttribute("company", project.getCompany());
-			diderotProject.setAttribute("authors", project.getAuthors());
-			diderotProject.setAttribute("contact", project.getContact());
-			xmlSaveDocument.appendChild(diderotProject);
-
-			Element projectDescription = xmlSaveDocument.createElement("description");
-			projectDescription.appendChild(xmlSaveDocument.createTextNode(encodeString(project.getDescription())));
-			diderotProject.appendChild(projectDescription);
-			diderotProject.appendChild(buildResponseOutputFormatXml(xmlSaveDocument));
-			diderotProject.appendChild(buildUserDefinedPropertiesXml(xmlSaveDocument));
-
-			Element routeXml = xmlSaveDocument.createElement("route");
-			routeXml.setAttribute("name", project.getDomain());
-			buildRouteXml(xmlSaveDocument, rootRoute, routeXml);
-			diderotProject.appendChild(routeXml);
+			Document xmlSaveDocument = createDocument();
 
 			Transformer xmlTransformer = TransformerFactory.newInstance().newTransformer();
 			xmlTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -99,21 +84,36 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 
 			xmlTransformer.transform(new DOMSource(xmlSaveDocument), new StreamResult(new File("save.xml")));
 		}
-		catch(TransformerConfigurationException e)
+		catch(ParserConfigurationException | TransformerException e)
 		{
 			e.printStackTrace();
 			return;
 		}
-		catch(TransformerException e)
-		{
-			e.printStackTrace();
-			return;
-		}
-		catch(ParserConfigurationException e)
-		{
-			e.printStackTrace();
-			return;
-		}
+	}
+
+	protected Document createDocument() throws ParserConfigurationException
+	{
+		Document xmlSaveDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+		Element diderotProject = xmlSaveDocument.createElement("diderotProject");
+
+		diderotProject.setAttribute("name", project.getName());
+		diderotProject.setAttribute("company", project.getCompany());
+		diderotProject.setAttribute("authors", project.getAuthors());
+		diderotProject.setAttribute("contact", project.getContact());
+		xmlSaveDocument.appendChild(diderotProject);
+
+		Element projectDescription = xmlSaveDocument.createElement("description");
+		projectDescription.appendChild(xmlSaveDocument.createTextNode(encodeNewLine(project.getDescription())));
+		diderotProject.appendChild(projectDescription);
+		diderotProject.appendChild(buildResponseOutputFormatXml(xmlSaveDocument));
+		diderotProject.appendChild(buildUserDefinedPropertiesXml(xmlSaveDocument));
+
+		Element routeXml = xmlSaveDocument.createElement("route");
+		routeXml.setAttribute("name", project.getDomain());
+		buildRouteXml(xmlSaveDocument, rootRoute, routeXml);
+		diderotProject.appendChild(routeXml);
+
+		return xmlSaveDocument;
 	}
 
 	private Element buildResponseOutputFormatXml(Document rootXml)
@@ -165,7 +165,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 	private void buildRouteXml(Document rootXml, Route route, Element routeXml)
 	{
 		Element description = rootXml.createElement("description");
-		description.appendChild(rootXml.createTextNode(encodeString(route.getDescription())));
+		description.appendChild(rootXml.createTextNode(encodeNewLine(route.getDescription())));
 		routeXml.appendChild(description);
 
 		//generate http methods
@@ -181,7 +181,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 				//generate method description
 				newHttpMethod.setAttribute("name", methodName);
 				Element methodDescription = rootXml.createElement("description");
-				methodDescription.appendChild(rootXml.createTextNode(encodeString(httpMethod.getDescription())));
+				methodDescription.appendChild(rootXml.createTextNode(encodeNewLine(httpMethod.getDescription())));
 				newHttpMethod.appendChild(methodDescription);
 
 				//generate parameters
@@ -214,11 +214,11 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 						response.setAttribute("outputFormat", resp.getOutputType());
 
 						Element desc = rootXml.createElement("description");
-						desc.appendChild(rootXml.createTextNode(encodeString(resp.getDescription())));
+						desc.appendChild(rootXml.createTextNode(encodeNewLine(resp.getDescription())));
 						response.appendChild(desc);
 
 						Element outputSchema = rootXml.createElement("outputSchema");
-						outputSchema.appendChild(rootXml.createTextNode(encodeString(resp.getSchema())));
+						outputSchema.appendChild(rootXml.createTextNode(encodeNewLine(resp.getSchema())));
 						response.appendChild(outputSchema);
 
 						responses.appendChild(response);

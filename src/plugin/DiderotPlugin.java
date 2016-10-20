@@ -12,7 +12,7 @@ public interface DiderotPlugin
 	public String getPluginAuthor();
 	public String getPluginContactInformation();
 	public String getPluginVersion();
-	//TODO add getDescriptionMethod
+	public String getPluginDescription();
 
 	public default void openConfigDialog()
 	{
