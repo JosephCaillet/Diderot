@@ -1,0 +1,24 @@
+.routeDetails, .routeSummary
+{
+	display: block;
+}
+
+.routeSummary
+{
+	padding-left: 20px;
+}
+
+.routeDetails
+{
+	border: black 1px solid;
+}
+
+.method
+{
+	border: red 1px solid;
+}
+
+pre
+{
+	tab-size: 4;
+}

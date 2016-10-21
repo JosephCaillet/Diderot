@@ -10,7 +10,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -72,12 +74,18 @@ public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectEx
 			xmlTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			xmlTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
-			xmlTransformer.transform(new DOMSource(xmlSaveDocument), new StreamResult(new File("doc/index.xml")));
+			File f = new File("doc/index.html");
+			xmlTransformer.transform(new DOMSource(xmlSaveDocument), new StreamResult(f));
+
+			Desktop.getDesktop().browse(f.toURI());
 		}
 		catch(ParserConfigurationException | TransformerException e)
 		{
 			e.printStackTrace();
-			return;
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
 		}
 	}
 }
