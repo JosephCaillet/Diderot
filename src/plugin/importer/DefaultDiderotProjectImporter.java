@@ -276,6 +276,22 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 								}
 							}
 						}
+						else if("userDefinedProperties".equals(nodeName))
+						{
+							NodeList values = methodsChildren.item(k).getChildNodes();
+							for(int l = 0; l < values.getLength(); l++)
+							{
+								if(values.item(l).getNodeType() == Node.TEXT_NODE)
+								{
+									continue;
+								}
+
+								String property = values.item(l).getAttributes().getNamedItem("property").getTextContent();
+								String value = values.item(l).getTextContent();
+
+								newHttpMethod.setUserProperty(property, value);
+							}
+						}
 					}
 				}
 			}

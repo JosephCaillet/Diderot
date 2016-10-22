@@ -226,6 +226,23 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 					newHttpMethod.appendChild(responses);
 				}
 
+				//generate userProp values
+				String[] userDefPropNames = Project.getActiveProject().getUserRoutesPropertiesNames();
+				if(userDefPropNames.length != 0)
+				{
+					Element userDefVal = rootXml.createElement("userDefinedProperties");
+					for(String propName : userDefPropNames)
+					{
+						Element value = rootXml.createElement("value");
+						value.setAttribute("property", propName);
+						value.appendChild(rootXml.createTextNode(httpMethod.getUserPropertyValue(propName)));
+
+						userDefVal.appendChild(value);
+					}
+
+					newHttpMethod.appendChild(userDefVal);
+				}
+
 				methods.appendChild(newHttpMethod);
 			}
 			routeXml.appendChild(methods);

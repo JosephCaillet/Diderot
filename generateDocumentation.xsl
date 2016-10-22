@@ -40,16 +40,18 @@
 	</xsl:template>
 
 	<xsl:template match="userDefinedProperties">
-		<p>
-			The following routes' properties as been defined:
-			<ul>
-				<xsl:for-each select="property">
-					<li>
-						<xsl:value-of select="@name"/>
-					</li>
-				</xsl:for-each>
-			</ul>
-		</p>
+		<xsl:if test="property">
+			<p>
+				The following routes' properties as been defined:
+				<ul>
+					<xsl:for-each select="property">
+						<li>
+							<xsl:value-of select="@name"/>
+						</li>
+					</xsl:for-each>
+				</ul>
+			</p>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="/diderotProject/route">
@@ -172,16 +174,30 @@
 									<span>
 										<xsl:value-of select="@outputFormat"/>
 									</span>
-									<p>
+									<pre>
 										<xsl:call-template name="decodeNewLine">
 											<xsl:with-param name="text" select="description"/>
 										</xsl:call-template>
-									</p>
-									<p>
+									</pre>
+									<pre>
 										<xsl:call-template name="decodeNewLine">
 											<xsl:with-param name="text" select="outputSchema"/>
 										</xsl:call-template>
-									</p>
+									</pre>
+								</div>
+							</xsl:for-each>
+						</div>
+					</xsl:if>
+
+					<xsl:if test="userDefinedProperties/value">
+						<div>
+							<h5>Property</h5>
+							<xsl:for-each select="userDefinedProperties/value">
+								<div>
+									<b>
+										<xsl:value-of select="@property"/>:
+									</b>
+									<xsl:value-of select="."/>
 								</div>
 							</xsl:for-each>
 						</div>
@@ -193,8 +209,6 @@
 
 	<xsl:template name="decodeNewLine">
 		<xsl:param name="text"/>
-		<pre>
-			<xsl:value-of select="translate($text, '&amp;#xA;', '&#xA;')"/>
-		</pre>
+		<xsl:value-of  disable-output-escaping="yes" select="translate($text, '&amp;#xA;', '&lt;br&gt;')"/>
 	</xsl:template>
 </xsl:stylesheet>
