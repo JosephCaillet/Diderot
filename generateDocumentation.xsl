@@ -12,7 +12,11 @@
 				<link rel="stylesheet" href="style.css"/>
 				<link rel="stylesheet" href="highlight_js/monokai-sublime.css"/>
 				<script src="highlight_js/highlight.min.js"/>
-				<script>hljs.initHighlightingOnLoad();</script>
+				<script src="folding.js"/>
+				<script>
+					hljs.initHighlightingOnLoad();
+					folder.setUpFoldingOnLoad();
+				</script>
 			</head>
 			<body>
 				<xsl:comment>
@@ -256,6 +260,6 @@
 
 	<xsl:template name="decodeNewLine">
 		<xsl:param name="text"/>
-		<xsl:value-of  disable-output-escaping="yes" select="translate($text, '&amp;#xA;', '&#xA;')"/>
+		<xsl:value-of  disable-output-escaping="yes" select="translate($text, '&amp;#xA;', '&lt;br&gt;')"/>
 	</xsl:template>
 </xsl:stylesheet>
