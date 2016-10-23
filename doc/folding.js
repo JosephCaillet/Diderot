@@ -15,7 +15,7 @@ var folder = {
 		for(let i=0; i<methodsNames.length; i++)
 		{
 			methodsNames[i].classList.add(folder.foldedClassValue);
-			methodsNames[i].nextSibling.nextSibling.classList.add('folded');
+			methodsNames[i].nextSibling.nextSibling.classList.add(folder.foldedClassValue);
 		}
 
 		methodsNames = document.querySelectorAll(".routeDetails > div");
@@ -25,7 +25,7 @@ var folder = {
 		}
 	},
 
-	foldEvent1(e){
+	foldEvent1(event){
 		var source = event.target || event.srcElement;
 		if(source.classList.contains(folder.foldedClassValue))
 		{
@@ -39,7 +39,7 @@ var folder = {
 		}
 	},
 
-	foldEvent2(e){
+	foldEvent2(event){
 		var source = event.target || event.srcElement;
 		if(source.nextSibling.nextSibling.nextSibling.nextSibling.classList.contains(folder.foldedClassValue))
 		{
@@ -48,12 +48,12 @@ var folder = {
 		}
 		else
 		{
-			source.classList.add('folded');
+			source.classList.add(folder.foldedClassValue);
 			source.nextSibling.nextSibling.nextSibling.nextSibling.classList.add(folder.foldedClassValue);
 		}
 	},
 
-	setUpFoldingOnLoad : function(){
+	setUpFoldingOnLoad(){
 		window.addEventListener("load", function(){
 			folder.foldAll();
 
