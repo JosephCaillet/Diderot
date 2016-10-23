@@ -83,6 +83,14 @@ var folder = {
 			folder.doOn(".responseContainer > h6", function(node){
 				node.addEventListener("click", folder.foldEventMethodResponse);
 			});
+
+			document.querySelector("footer span:nth-child(1)").addEventListener("click", function(){
+				folder.foldAll(false);
+			});
+
+			document.querySelector("footer span:nth-child(2)").addEventListener("click", function(){
+				folder.foldAll(true);
+			});
 		});
 	}
 };

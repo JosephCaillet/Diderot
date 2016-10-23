@@ -25,10 +25,16 @@
 				<xsl:comment>
 					Syntax highlighting provided by https://github.com/isagalaev/highlight.js
 				</xsl:comment>
-				<h1><xsl:value-of select="diderotProject/@name"/></h1>
+				<header>
+					<h1><xsl:value-of select="diderotProject/@name"/></h1>
+				</header>
 				<h2>Project description</h2>
 				<p>Made by <xsl:value-of select="diderotProject/@authors"/>, for <xsl:value-of select="diderotProject/@company"/>.</p>
 				<xsl:apply-templates/>
+				<footer>
+					<span>&#8609; Expand all</span>
+					<span>&#8607; Collapse all</span>
+				</footer>
 			</body>
 		</html>
 	</xsl:template>
