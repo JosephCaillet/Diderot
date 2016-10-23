@@ -3,44 +3,45 @@
  */
 var folder = {
 	foldedClassValue : "folded",
-	foldAll(){
-		var methodsNames = document.querySelectorAll(".methodContainer > h4");
-		for(let i=0; i<methodsNames.length; i++)
-		{
-			methodsNames[i].classList.add(folder.foldedClassValue);
-			methodsNames[i].nextSibling.nextSibling.classList.add(folder.foldedClassValue);
-		}
 
-		methodsNames = document.querySelectorAll(".responseContainer > h6");
-		for(let i=0; i<methodsNames.length; i++)
+	doOn(selector, action){
+		let selectedNode = document.querySelectorAll(selector);
+		for(let node of selectedNode)
 		{
-			methodsNames[i].classList.add(folder.foldedClassValue);
-			methodsNames[i].nextSibling.nextSibling.classList.add(folder.foldedClassValue);
-		}
-
-		methodsNames = document.querySelectorAll(".routeDetails > div");
-		for(let i=0; i<methodsNames.length; i++)
-		{
-			methodsNames[i].classList.add(folder.foldedClassValue);
+			action(node);
 		}
 	},
 
-	foldEvent1(event){
-		var source = event.target || event.srcElement;
-		if(source.classList.contains(folder.foldedClassValue))
-		{
-			source.classList.remove(folder.foldedClassValue);
-			source.nextSibling.nextSibling.classList.remove(folder.foldedClassValue);
+	foldAll(bool){
+		let action;
+		if(bool){
+			action = function(classList){
+				classList.add(folder.foldedClassValue)
+			}
 		}
-		else
-		{
-			source.classList.add(folder.foldedClassValue);
-			source.nextSibling.nextSibling.classList.add(folder.foldedClassValue);
+		else{
+			action = function(classList){
+				classList.remove(folder.foldedClassValue)
+			}
 		}
+
+		this.doOn(".routeDetails > div", function(node){
+			action(node.classList);
+		});
+
+		this.doOn(".methodContainer > h4", function(node) {
+			action(node.classList);
+			action(node.nextSibling.nextSibling.classList);
+		});
+
+		this.doOn(".responseContainer > h6", function(node){
+			action(node.classList);
+			action(node.nextSibling.nextSibling.classList);
+		});
 	},
 
-	foldEvent2(event){
-		var source = event.target || event.srcElement;
+	foldEventRoute(event){
+		let source = event.target || event.srcElement;
 		if(source.nextSibling.nextSibling.nextSibling.nextSibling.classList.contains(folder.foldedClassValue))
 		{
 			source.classList.remove(folder.foldedClassValue);
@@ -53,27 +54,35 @@ var folder = {
 		}
 	},
 
+	foldEventMethodResponse(event){
+		let source = event.target || event.srcElement;
+		if(source.classList.contains(folder.foldedClassValue))
+		{
+			source.classList.remove(folder.foldedClassValue);
+			source.nextSibling.nextSibling.classList.remove(folder.foldedClassValue);
+		}
+		else
+		{
+			source.classList.add(folder.foldedClassValue);
+			source.nextSibling.nextSibling.classList.add(folder.foldedClassValue);
+		}
+	},
+
 	setUpFoldingOnLoad(){
 		window.addEventListener("load", function(){
-			folder.foldAll();
+			folder.foldAll(true);
 
-			var methodsNames = document.querySelectorAll(".methodContainer > h4");
-			for(let i=0; i<methodsNames.length; i++)
-			{
-				methodsNames[i].addEventListener("click", folder.foldEvent1);
-			}
+			folder.doOn(".routeDetails h3", function(node){
+				node.addEventListener("click", folder.foldEventRoute);
+			});
 
-			methodsNames = document.querySelectorAll(".responseContainer > h6");
-			for(let i=0; i<methodsNames.length; i++)
-			{
-				methodsNames[i].addEventListener("click", folder.foldEvent1);
-			}
+			folder.doOn(".methodContainer > h4", function(node){
+				node.addEventListener("click", folder.foldEventMethodResponse);
+			});
 
-			methodsNames = document.querySelectorAll(".routeDetails h3");
-			for(let i=0; i<methodsNames.length; i++)
-			{
-				methodsNames[i].addEventListener("click", folder.foldEvent2);
-			}
+			folder.doOn(".responseContainer > h6", function(node){
+				node.addEventListener("click", folder.foldEventMethodResponse);
+			});
 		});
 	}
 };
