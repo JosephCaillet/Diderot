@@ -154,108 +154,110 @@
 	</xsl:template>
 
 	<xsl:template name="printRouteDetail">
-		<p>
-			<xsl:call-template name="decodeNewLine">
-				<xsl:with-param name="text" select="description"/>
-			</xsl:call-template>
-		</p>
+		<div>
+			<p>
+				<xsl:call-template name="decodeNewLine">
+					<xsl:with-param name="text" select="description"/>
+				</xsl:call-template>
+			</p>
 
-		<xsl:if test="methods/method">
-			<xsl:for-each select="methods/method">
-				<div class="methodContainer">
-					<h4>
-						<xsl:value-of select="@name"/>
-					</h4>
+			<xsl:if test="methods/method">
+				<xsl:for-each select="methods/method">
+					<div class="methodContainer">
+						<h4>
+							<xsl:value-of select="@name"/>
+						</h4>
 
-					<div class="method">
-						<p>
-							<xsl:call-template name="decodeNewLine">
-								<xsl:with-param name="text" select="description"/>
-							</xsl:call-template>
-						</p>
+						<div class="method">
+							<p>
+								<xsl:call-template name="decodeNewLine">
+									<xsl:with-param name="text" select="description"/>
+								</xsl:call-template>
+							</p>
 
-						<xsl:if test="userDefinedProperties/value">
-							<div class="propertyContainer">
-								<h5>Property</h5>
-								<table>
-									<xsl:for-each select="userDefinedProperties/value">
+							<xsl:if test="userDefinedProperties/value">
+								<div class="propertyContainer">
+									<h5>Property</h5>
+									<table>
+										<xsl:for-each select="userDefinedProperties/value">
+											<tr>
+												<td>
+													<xsl:value-of select="@property"/>:
+												</td>
+												<td>
+													<xsl:value-of select="."/>
+												</td>
+											</tr>
+										</xsl:for-each>
+									</table>
+								</div>
+							</xsl:if>
+
+							<xsl:if test="parameters/parameter">
+								<div>
+									<h5>Parameters</h5>
+									<table class="params">
 										<tr>
-											<td>
-												<xsl:value-of select="@property"/>:
-											</td>
-											<td>
-												<xsl:value-of select="."/>
-											</td>
+											<th>Name</th>
+											<th>Required</th>
+											<th>Description</th>
 										</tr>
-									</xsl:for-each>
-								</table>
-							</div>
-						</xsl:if>
+										<xsl:for-each select="parameters/parameter">
+											<tr>
+												<td>
+													<xsl:value-of select="@name"/></td>
+												<td>
+													<xsl:if test="@required = 'true'">
+														&#10004;
+													</xsl:if>
+												</td>
+												<td>
+													<xsl:value-of select="@description"/></td>
+											</tr>
+										</xsl:for-each>
+									</table>
+								</div>
+							</xsl:if>
 
-						<xsl:if test="parameters/parameter">
-							<div>
-								<h5>Parameters</h5>
-								<table class="params">
-									<tr>
-										<th>Name</th>
-										<th>Required</th>
-										<th>Description</th>
-									</tr>
-									<xsl:for-each select="parameters/parameter">
-										<tr>
-											<td>
-												<xsl:value-of select="@name"/></td>
-											<td>
-												<xsl:if test="@required = 'true'">
-													&#10004;
-												</xsl:if>
-											</td>
-											<td>
-												<xsl:value-of select="@description"/></td>
-										</tr>
-									</xsl:for-each>
-								</table>
-							</div>
-						</xsl:if>
-
-						<xsl:if test="responses/response">
-							<h5>Responses</h5>
-							<div class="responsesContainer">
-								<xsl:for-each select="responses/response">
-									<div class="responseContainer">
-										<h6>
-											<xsl:value-of select="@name"/>
-										</h6>
-										<div class="response">
-											<pre>
-												<xsl:call-template name="decodeNewLine">
-													<xsl:with-param name="text" select="description"/>
-												</xsl:call-template>
-											</pre>
-											<i>
-												Output: <xsl:value-of select="@outputFormat"/>
-											</i>
-											<xsl:if test="string-length(outputSchema) != 0">
+							<xsl:if test="responses/response">
+								<h5>Responses</h5>
+								<div class="responsesContainer">
+									<xsl:for-each select="responses/response">
+										<div class="responseContainer">
+											<h6>
+												<xsl:value-of select="@name"/>
+											</h6>
+											<div class="response">
 												<pre>
-													<code>
-														<xsl:attribute name="class">
-															<xsl:value-of select="@outputFormat"/>
-														</xsl:attribute>
-														<xsl:call-template name="decodeNewLine">
-															<xsl:with-param name="text" select="outputSchema"/>
-														</xsl:call-template>
-													</code>
+													<xsl:call-template name="decodeNewLine">
+														<xsl:with-param name="text" select="description"/>
+													</xsl:call-template>
 												</pre>
-											</xsl:if>
+												<i>
+													Output: <xsl:value-of select="@outputFormat"/>
+												</i>
+												<xsl:if test="string-length(outputSchema) != 0">
+													<pre>
+														<code>
+															<xsl:attribute name="class">
+																<xsl:value-of select="@outputFormat"/>
+															</xsl:attribute>
+															<xsl:call-template name="decodeNewLine">
+																<xsl:with-param name="text" select="outputSchema"/>
+															</xsl:call-template>
+														</code>
+													</pre>
+												</xsl:if>
+											</div>
 										</div>
-									</div>
-								</xsl:for-each>
-							</div>
-						</xsl:if>
+									</xsl:for-each>
+								</div>
+							</xsl:if>
+						</div>
 					</div>
-				</div>
-			</xsl:for-each>
-		</xsl:if>
+				</xsl:for-each>
+			</xsl:if>
+		</div>
 	</xsl:template>
 
 	<xsl:template name="decodeNewLine">
