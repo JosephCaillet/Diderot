@@ -10,8 +10,17 @@
 			<head>
 				<title><xsl:value-of select="diderotProject/@name"/></title>
 				<link rel="stylesheet" href="style.css"/>
+				<link rel="stylesheet" href="highlight_js/monokai-sublime.css"/>
+				<script src="highlight_js/highlight.min.js"/>
+				<script>hljs.initHighlightingOnLoad();</script>
 			</head>
 			<body>
+				<xsl:comment>
+					Documentation generated with Diderot: https://github.com/JosephCaillet/Diderot
+				</xsl:comment>
+				<xsl:comment>
+					Syntax highlighting provided by https://github.com/isagalaev/highlight.js
+				</xsl:comment>
 				<h1><xsl:value-of select="diderotProject/@name"/></h1>
 				<h2>Project description</h2>
 				<p>Made by <xsl:value-of select="diderotProject/@authors"/>, for <xsl:value-of select="diderotProject/@company"/>.</p>
@@ -219,14 +228,21 @@
 													<xsl:with-param name="text" select="description"/>
 												</xsl:call-template>
 											</pre>
-											<span>
-												<xsl:value-of select="@outputFormat"/>
-											</span>
-											<pre>
-												<xsl:call-template name="decodeNewLine">
-													<xsl:with-param name="text" select="outputSchema"/>
-												</xsl:call-template>
-											</pre>
+											<i>
+												Output: <xsl:value-of select="@outputFormat"/>
+											</i>
+											<xsl:if test="string-length(outputSchema) != 0">
+												<pre>
+													<code>
+														<xsl:attribute name="class">
+															<xsl:value-of select="@outputFormat"/>
+														</xsl:attribute>
+														<xsl:call-template name="decodeNewLine">
+															<xsl:with-param name="text" select="outputSchema"/>
+														</xsl:call-template>
+													</code>
+												</pre>
+											</xsl:if>
 										</div>
 									</div>
 								</xsl:for-each>
@@ -240,6 +256,6 @@
 
 	<xsl:template name="decodeNewLine">
 		<xsl:param name="text"/>
-		<xsl:value-of  disable-output-escaping="yes" select="translate($text, '&amp;#xA;', '&lt;br&gt;')"/>
+		<xsl:value-of  disable-output-escaping="yes" select="translate($text, '&amp;#xA;', '&#xA;')"/>
 	</xsl:template>
 </xsl:stylesheet>
