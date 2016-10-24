@@ -250,6 +250,7 @@
 															</xsl:attribute>
 															<xsl:call-template name="decodeNewLine">
 																<xsl:with-param name="text" select="outputSchema"/>
+																<xsl:with-param name="code" select="true()"/>
 															</xsl:call-template>
 														</code>
 													</pre>
@@ -268,6 +269,14 @@
 
 	<xsl:template name="decodeNewLine">
 		<xsl:param name="text"/>
-		<xsl:value-of  disable-output-escaping="yes" select="translate($text, '&amp;#xA;', '&lt;br&gt;')"/>
+		<xsl:param name="code" select="false()"/>
+		<xsl:choose>
+			<xsl:when test="$code != true()">
+				<xsl:value-of disable-output-escaping="yes" select="translate($text, '&amp;#xA;', '&lt;br&gt;')"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="translate($text, '&amp;#xA;', '&#xA;')"/>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 </xsl:stylesheet>
