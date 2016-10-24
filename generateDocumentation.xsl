@@ -28,7 +28,7 @@
 				<header>
 					<h1><xsl:value-of select="diderotProject/@name"/></h1>
 				</header>
-				<h2>Project description</h2>
+				<h2><xsl:value-of select="diderotProject/@name"/></h2>
 				<p>Made by <xsl:value-of select="diderotProject/@authors"/>, for <xsl:value-of select="diderotProject/@company"/>.</p>
 				<xsl:apply-templates/>
 				<footer>
@@ -183,7 +183,7 @@
 
 							<xsl:if test="userDefinedProperties/value">
 								<div class="propertyContainer">
-									<h5>Property</h5>
+									<h5>Properties</h5>
 									<table>
 										<xsl:for-each select="userDefinedProperties/value">
 											<tr>
@@ -201,7 +201,7 @@
 
 							<xsl:if test="parameters/parameter">
 								<div>
-									<h5>Parameters</h5>
+									<h5>Parameter(s)</h5>
 									<table class="params">
 										<tr>
 											<th>Name</th>
@@ -226,7 +226,7 @@
 							</xsl:if>
 
 							<xsl:if test="responses/response">
-								<h5>Responses</h5>
+								<h5>Response(s)</h5>
 								<div class="responsesContainer">
 									<xsl:for-each select="responses/response">
 										<div class="responseContainer">

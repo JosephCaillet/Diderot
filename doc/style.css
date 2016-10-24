@@ -8,6 +8,11 @@ p, pre
 	text-indent: 2em;
 }
 
+h3, h4, h5, h6
+{
+	margin: 0;
+}
+
 h1
 {
 	font-size: 2em;
@@ -16,28 +21,51 @@ h1
 h2
 {
 	font-size: 1.75em;
+	color: cornflowerblue;
+	border-left: 0.2em cornflowerblue solid;
+	border-bottom: 0.1em cornflowerblue solid;
+	padding: 0.2em;
+	width: 15em;
 }
 
 h3
 {
 	font-size: 1.5em;
+	transition: all, ease, 0.25s;
+}
+
+h3:hover
+{
+	transform: scale(1.1, 1.1);
+	transform-origin: center;
+	color: coral;
 }
 
 h4
 {
 	font-size: 1.25em;
+	color: white;
 }
 
 h5
 {
 	font-size: 1.15em;
-	padding-top: 1em;
-	padding-bottom: 0.5em;
+	margin: 0.5em;
+	color: white;
+	border-left: antiquewhite 0.2em solid;
+	border-bottom: antiquewhite 0.1em solid;
+	padding: 0.2em;
+	width: 10em;
 }
 
 h6
 {
 	font-size: 1em;
+}
+
+a
+{
+	color: cornflowerblue;
 }
 
 /*header*/
@@ -117,11 +145,22 @@ footer > span:hover
 	display: block;
 }
 
-/*route details*/
-h3, h4, h5, h6
+.routeSummaryName a
 {
-	margin: 0;
+	transition: color ease 0.25s;
 }
+
+.routeSummaryName a:hover
+{
+	color: coral;
+}
+
+.routeSummaryName > span > span
+{
+	border-left: solid 1px lightslategray;
+}
+
+/*route details*/
 .routesDetailsSection{}
 
 .routeDetails
@@ -181,12 +220,19 @@ h3, h4, h5, h6
 
 .methodContainer > h4
 {
-	background: #6495ed;
+	background: #9FBDF4;
 	padding: 0.5em;
 	display: inline-block;
 	border-radius: 1em 1em 0 0;
 	cursor: pointer;
-	transition: border-radius ease 0.5s;
+	transition: border-radius ease 0.5s, background ease 0.25s;
+	min-width: 4em;
+	text-align: center;
+}
+
+.methodContainer > h4:hover
+{
+	background: #7F9DD4;
 }
 
 .methodContainer > h4.folded
@@ -196,7 +242,7 @@ h3, h4, h5, h6
 
 .method
 {
-	background: #6495ed;
+	background: #9FBDF4;
 	border-radius: 0 1em 1em 1em;
 	padding: 0.5em;
 	display: block;
@@ -219,7 +265,7 @@ h3, h4, h5, h6
 
 .propertyContainer > table  tr td:first-child
 {
-	font-weight: bold;
+	font-style: italic;
 	padding-right: 1em;
 }
 
@@ -240,6 +286,21 @@ h3, h4, h5, h6
 	padding: .2em;
 }
 
+.params tr:nth-child(even)
+{
+	background: #8BA9DE;
+}
+
+.params tr:nth-child(odd)
+{
+	background: #B4D2FF;
+}
+
+.params tr:first-child
+{
+	background: inherit;
+}
+
 .params td:nth-child(2)
 {
 	text-align: center;
@@ -257,12 +318,19 @@ h3, h4, h5, h6
 
 .responseContainer > h6
 {
-	background: #cdff4f;
+	background: #F4D69F;
 	display: inline-block;
 	padding: 0.5em;
 	border-radius: 1em 1em 0 0;
 	cursor: pointer;
-	transition: border-radius, ease, 0.5s;
+	transition: border-radius ease 0.5s, background ease 0.25s;
+	min-width: 4em;
+	text-align: center;
+}
+
+.responseContainer > h6:hover
+{
+	background: #E4B67F;
 }
 
 .responseContainer > h6.folded
@@ -272,7 +340,7 @@ h3, h4, h5, h6
 
 .response
 {
-	background: #cdff4f;
+	background: #F4D69F;
 	padding: 0.5em 0.5em 1em 0.5em;
 	border-radius: 0 1em 1em 1em;
 	display: block;

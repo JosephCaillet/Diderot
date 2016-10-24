@@ -16,13 +16,13 @@ var folder = {
 		let action;
 		if(bool){
 			action = function(classList){
-				classList.add(folder.foldedClassValue)
-			}
+				classList.add(folder.foldedClassValue);
+			};
 		}
 		else{
 			action = function(classList){
-				classList.remove(folder.foldedClassValue)
-			}
+				classList.remove(folder.foldedClassValue);
+			};
 		}
 
 		this.doOn(".routeDetails > div", function(node){
