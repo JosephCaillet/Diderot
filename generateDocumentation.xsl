@@ -128,7 +128,7 @@
 		<xsl:param name="tree"/>
 
 		<xsl:if test="$route/methods/method or $route/description != ''">
-			<span class="routeDetails">
+			<div class="routeDetails">
 				<a>
 					<xsl:attribute name="href">
 						<xsl:value-of select="concat('#', $goBackLinkPrefix, $tree)"/>
@@ -148,7 +148,7 @@
 					<xsl:value-of select="count($route/methods/method)"/> method(s)
 				</span>
 				<xsl:call-template name="printRouteDetail"/>
-			</span>
+			</div>
 		</xsl:if>
 
 		<xsl:for-each select="$route/routes/route">
