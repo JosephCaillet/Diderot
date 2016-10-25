@@ -14,9 +14,10 @@ public interface DiderotProjectExporter extends DiderotPlugin
 		return str.replace("\n", "&#xA;");
 	}
 
-	public HashMap<String, String> getAvailableExportingOperations();
+	//Todo: add icon per action support
 	public default boolean callConfigBeforeExport()
 	{
 		return false;
 	}
+	public HashMap<String, String> getAvailableExportingOperations();
 }

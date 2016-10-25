@@ -9,9 +9,10 @@ import java.util.HashMap;
  */
 public interface DiderotProjectEditor extends DiderotPlugin
 {
-	public HashMap<String, String> getAvailableEditingOperations();
+	//Todo: add icon per action support
 	public default boolean callConfigBeforeEdit()
 	{
 		return false;
 	}
+	public HashMap<String, String> getAvailableEditingOperations();
 }

@@ -4,6 +4,10 @@ import gui.dialog.InputStringDialogHelper;
 import gui.dialog.settings.ProjectSettingsDialog;
 import model.Project;
 import model.Route;
+import plugin.editor.DiderotProjectEditor;
+import plugin.exporter.DefaultDiderotDocumentationExporter;
+import plugin.exporter.DefaultDiderotProjectExporter;
+import plugin.exporter.DiderotProjectExporter;
 import plugin.importer.DefaultDiderotProjectImporter;
 import plugin.importer.DiderotProjectImporter;
 
@@ -13,6 +17,11 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.Vector;
 
 import static model.Route.getAbsoluteNodePath;
 
@@ -35,8 +44,13 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 	private JMenu methodMenu;
 	private JMenu importMenu;
 	private JMenu exportMenu;
+	private JMenu editMenu;
 	private MethodsManagementPanel methodsManagementPanel = new MethodsManagementPanel();
 	private JPanel routeMethodPanel;
+
+	private TreeMap<String, DiderotProjectImporter> importPlugins = new TreeMap<>();
+	private TreeMap<String, DiderotProjectExporter> exportPlugins = new TreeMap<>();
+	private TreeMap<String, DiderotProjectEditor> editPlugins = new TreeMap<>();
 
 	public MainWindow()
 	{
@@ -120,9 +134,9 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		confBtn.setMaximumSize(new Dimension(208,34));
 		btnPanel.add(confBtn);
 		//confBtn.doClick();
-		DefaultDiderotProjectImporter defaultDiderotProjectImporter = new DefaultDiderotProjectImporter();
+		/*DefaultDiderotProjectImporter defaultDiderotProjectImporter = new DefaultDiderotProjectImporter();
 		defaultDiderotProjectImporter.setDiderotData(rootRoutes, Project.getActiveProject());
-		defaultDiderotProjectImporter.importProject();
+		defaultDiderotProjectImporter.importProject();*/
 		//System.exit(0);
 		///////////////////////
 
@@ -185,6 +199,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
+				//Todo: add confirmation dialog
 				/*DefaultDiderotProjectExporter diderotProjectExporter = new DefaultDiderotProjectExporter();
 				diderotProjectExporter.setDiderotData(rootRoutes, Project.getActiveProject());
 				diderotProjectExporter.exportProject();
@@ -281,19 +296,246 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		jPopupMenu.show(routesTreePanel, x, y);
 	}
 
+	private void setUpImportPlugins()
+	{
+		importPlugins.clear();
+		importMenu.removeAll();
+		Vector<String> availableImporters = new Vector<>();
+		availableImporters.add(DefaultDiderotProjectImporter.class.getName());
+
+		for(String importerName : availableImporters)
+		{
+			Class importer = null;
+			try
+			{
+				importer = Class.forName(importerName);
+
+				DiderotProjectImporter importerInstance = (DiderotProjectImporter) importer.newInstance();
+				importPlugins.put(importerName, importerInstance);
+
+				JMenu actionMenu = new JMenu(importerInstance.getPluginName());
+				HashMap<String, String> importingOperations = importerInstance.getAvailableImportingOperations();
+
+				JFrame parent = this;
+
+				for(String actionName : importingOperations.keySet())
+				{
+					final Class finalImporter = importer;
+					JMenuItem actionMenuItem = new JMenuItem(new AbstractAction(actionName)
+					{
+						@Override
+						public void actionPerformed(ActionEvent e)
+						{
+							if(Project.getActiveProject().isOpened() && JOptionPane.YES_OPTION !=
+									JOptionPane.showConfirmDialog(parent, "Project \"" + Project.getActiveProject().getName() + "\" is currently opened.\nUnsaved modification may be lost.\nDo you want to continue?", "Project already opened", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE))
+							{
+								return;
+							}
+
+							importerInstance.setDiderotData(rootRoutes, Project.getActiveProject());
+							importerInstance.setParentFrame(parent);
+							try
+							{
+								Method method = finalImporter.getMethod(importerInstance.getAvailableImportingOperations().get(actionName));
+								method.invoke(importerInstance);
+								routesTreePanel.updateModel();
+							}
+							catch(NoSuchMethodException e1)
+							{
+								e1.printStackTrace();
+							}
+							catch(InvocationTargetException e1)
+							{
+								e1.printStackTrace();
+							}
+							catch(IllegalAccessException e1)
+							{
+								e1.printStackTrace();
+							}
+						}
+					});
+
+					if(importerName.equals("plugin.importer.DefaultDiderotProjectImporter"))
+					{
+						actionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
+					}
+
+					actionMenu.add(actionMenuItem);
+				}
+
+				importMenu.add(actionMenu);
+			}
+			catch(ClassNotFoundException e)
+			{
+				e.printStackTrace();
+				continue;
+			}
+			catch(InstantiationException e)
+			{
+				e.printStackTrace();
+				continue;
+			}
+			catch(IllegalAccessException e)
+			{
+				e.printStackTrace();
+				continue;
+			}
+		}
+	}
+
+	private void setUpExportPlugins()
+	{
+		exportPlugins.clear();
+		exportMenu.removeAll();
+		Vector<String> availableExporters = new Vector<>();
+		availableExporters.add(DefaultDiderotProjectExporter.class.getName());
+		availableExporters.add(DefaultDiderotDocumentationExporter.class.getName());
+
+		for(String exporterName : availableExporters)
+		{
+			Class exporter = null;
+			try
+			{
+				exporter = Class.forName(exporterName);
+
+				DiderotProjectExporter exporterInstance = (DiderotProjectExporter) exporter.newInstance();
+				exportPlugins.put(exporterName, exporterInstance);
+
+				JMenu actionMenu = new JMenu(exporterInstance.getPluginName());
+				HashMap<String, String> exportingOperations = exporterInstance.getAvailableExportingOperations();
+
+				JFrame parent = this;
+
+				for(String actionName : exportingOperations.keySet())
+				{
+					final Class finalExporter = exporter;
+					JMenuItem actionMenuItem = new JMenuItem(new AbstractAction(actionName)
+					{
+						@Override
+						public void actionPerformed(ActionEvent e)
+						{
+							exporterInstance.setDiderotData(rootRoutes, Project.getActiveProject());
+							exporterInstance.setParentFrame(parent);
+							try
+							{
+								Method method = finalExporter.getMethod(exporterInstance.getAvailableExportingOperations().get(actionName));
+								method.invoke(exporterInstance);
+							}
+							catch(NoSuchMethodException e1)
+							{
+								e1.printStackTrace();
+							}
+							catch(InvocationTargetException e1)
+							{
+								e1.printStackTrace();
+							}
+							catch(IllegalAccessException e1)
+							{
+								e1.printStackTrace();
+							}
+						}
+					});
+
+					if(exporterName.equals("plugin.exporter.DefaultDiderotProjectExporter"))
+					{
+						actionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+					}
+
+					actionMenu.add(actionMenuItem);
+				}
+
+				exportMenu.add(actionMenu);
+			}
+			catch(ClassNotFoundException e)
+			{
+				e.printStackTrace();
+				continue;
+			}
+			catch(InstantiationException e)
+			{
+				e.printStackTrace();
+				continue;
+			}
+			catch(IllegalAccessException e)
+			{
+				e.printStackTrace();
+				continue;
+			}
+		}
+	}
+
+	private void setUpEditPlugins()
+	{
+		editPlugins.clear();
+		editMenu.removeAll();
+		Vector<String> availableEditors = new Vector<>();
+		//availableEditors.add(DefaultDiderotProjectImporter.class.getName());
+
+		for(String editorName : availableEditors)
+		{
+			Class importer = null;
+			try
+			{
+				importer = Class.forName(editorName);
+
+				DiderotProjectEditor editorInstance = (DiderotProjectEditor) importer.newInstance();
+				editPlugins.put(editorName, editorInstance);
+
+				JMenu actionMenu = new JMenu(editorInstance.getPluginName());
+				HashMap<String, String> editingOperations = editorInstance.getAvailableEditingOperations();
+
+				for(String actionName : editingOperations.keySet())
+				{
+					JMenuItem actionMenuItem = new JMenuItem(new AbstractAction(actionName)
+					{
+						@Override
+						public void actionPerformed(ActionEvent e)
+						{
+							System.out.println(actionName);
+						}
+					});
+
+					actionMenu.add(actionMenuItem);
+				}
+
+				importMenu.add(actionMenu);
+			}
+			catch(ClassNotFoundException e)
+			{
+				e.printStackTrace();
+				continue;
+			}
+			catch(InstantiationException e)
+			{
+				e.printStackTrace();
+				continue;
+			}
+			catch(IllegalAccessException e)
+			{
+				e.printStackTrace();
+				continue;
+			}
+		}
+	}
+
 	private void buildMenuBar()
 	{
 		JMenuBar menuBar = new JMenuBar();
 
 		importMenu = new JMenu("Import");
-		Class<?>[] availableImporters = DiderotProjectImporter.class.getClasses();
-		for(Class importer : availableImporters)
-		{
-			if(importer.isInterface())
-			{
-				continue;
-			}
-		}
+		importMenu.setMnemonic('I');
+		setUpImportPlugins();
+		menuBar.add(importMenu);
+
+		exportMenu = new JMenu("Export");
+		exportMenu.setMnemonic('E');
+		setUpExportPlugins();
+		menuBar.add(exportMenu);
+
+		editMenu = new JMenu("Edit");
+		editMenu.setMnemonic('U');
+		setUpEditPlugins();
+		menuBar.add(editMenu);
 
 
 		JMenu routeMenu = new JMenu("Route");

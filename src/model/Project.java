@@ -17,10 +17,10 @@ public class Project
 
 	private boolean openedStatus = false;
 
-	private String name = "";
+	private String name = "New project";
 	private String company = "";
 	private String description = "";
-	private String domain = "";
+	private String domain = "newProject.com";
 	private String authors = "";
 	private String contact = "";
 
@@ -38,6 +38,7 @@ public class Project
 
 	public void createDefaultData()
 	{
+		//todo: move in new empty project functionality?
 		responseFormatList.add("HTML");
 		responseFormatList.add("JSON");
 		responseFormatList.add("XML");

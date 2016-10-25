@@ -3,6 +3,8 @@ package plugin;
 import model.Project;
 import model.Route;
 
+import javax.swing.*;
+
 /**
  * Created by joseph on 04/10/16.
  */
@@ -24,4 +26,8 @@ public interface DiderotPlugin
 	}
 
 	public void setDiderotData(Route rootRoute, Project project);
+	public default void setParentFrame(JFrame parent)
+	{
+		//nothing done by default
+	}
 }

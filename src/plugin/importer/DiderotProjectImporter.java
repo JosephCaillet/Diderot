@@ -14,6 +14,7 @@ public interface DiderotProjectImporter extends DiderotPlugin
 		return str.replace("&#xA;", "\n");
 	}
 
+	//Todo: add icon per action support
 	public HashMap<String, String> getAvailableImportingOperations();
 	public default boolean callConfigBeforeImport()
 	{

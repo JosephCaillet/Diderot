@@ -20,9 +20,10 @@ import java.util.HashMap;
  */
 public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectExporter
 {
+	static private HashMap<String, String> availableOperations = new HashMap<>();
+
 	static
 	{
-		availableOperations.clear();
 		availableOperations.put("Generate documentation", "generateHtmlDocumentation");
 	}
 

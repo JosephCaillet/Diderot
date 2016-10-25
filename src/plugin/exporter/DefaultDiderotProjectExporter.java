@@ -4,9 +4,13 @@ import model.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import javax.swing.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
@@ -21,8 +25,9 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 {
 	protected Route rootRoute;
 	protected Project project;
+	protected JFrame parent;
 
-	static protected HashMap<String, String> availableOperations = new HashMap<>();
+	static private HashMap<String, String> availableOperations = new HashMap<>();
 
 	static
 	{
@@ -72,6 +77,12 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		this.project = project;
 	}
 
+	@Override
+	public void setParentFrame(JFrame parent)
+	{
+		this.parent = parent;
+	}
+
 	public void exportProject()
 	{
 		try
@@ -83,6 +94,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 			xmlTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
 			xmlTransformer.transform(new DOMSource(xmlSaveDocument), new StreamResult(new File("save.xml")));
+			JOptionPane.showMessageDialog(parent, "Project successfully saved", "Project successfully saved", JOptionPane.INFORMATION_MESSAGE);
 		}
 		catch(ParserConfigurationException | TransformerException e)
 		{

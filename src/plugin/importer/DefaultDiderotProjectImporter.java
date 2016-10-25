@@ -174,6 +174,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 	private void loadRoutes(Node routeNode)
 	{
 		String routeName = routeNode.getAttributes().getNamedItem("name").getTextContent();
+		project.setDomain(routeName);
 		rootRoute.setName(routeName);
 		loadRoutes(routeNode, rootRoute);
 	}
