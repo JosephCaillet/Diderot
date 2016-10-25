@@ -68,9 +68,11 @@ var folder = {
 		}
 	},
 
-	setUpFoldingOnLoad(){
+	setUpFoldingOnLoad(initialFoldStatus = true){
 		window.addEventListener("load", function(){
-			folder.foldAll(true);
+			if(initialFoldStatus){
+				folder.foldAll(true);
+			}
 
 			folder.doOn(".routeDetails h3", function(node){
 				node.addEventListener("click", folder.foldEventRoute);

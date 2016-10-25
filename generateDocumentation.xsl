@@ -15,7 +15,7 @@
 				<script src="folding.js"/>
 				<script>
 					hljs.initHighlightingOnLoad();
-					folder.setUpFoldingOnLoad();
+					folder.setUpFoldingOnLoad(true);
 				</script>
 			</head>
 			<body>

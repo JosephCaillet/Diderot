@@ -5,7 +5,7 @@
 
 p, pre
 {
-	text-indent: 2em;
+	text-indent: 4em;
 }
 
 h3, h4, h5, h6
@@ -282,8 +282,13 @@ footer > span:hover
 
 .params td, .params th
 {
-	border: 1px solid black;
-	padding: .2em;
+	border-bottom: 1px solid antiquewhite;
+	padding: .3em;
+}
+
+.params th
+{
+	background: antiquewhite;
 }
 
 .params tr:nth-child(even)
