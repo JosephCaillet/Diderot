@@ -113,6 +113,14 @@ public class Route implements TreeModel
 		httpMethods.put("POST", new HttpMethod());
 	}
 
+	public void clear()
+	{
+		name = "";
+		description = "";
+		subRoutes.clear();
+		httpMethods.clear();
+	}
+
 	//Getter and setter
 	public String getName()
 	{

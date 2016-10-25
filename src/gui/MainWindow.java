@@ -4,9 +4,8 @@ import gui.dialog.InputStringDialogHelper;
 import gui.dialog.settings.ProjectSettingsDialog;
 import model.Project;
 import model.Route;
-import plugin.exporter.DefaultDiderotDocumentationExporter;
-import plugin.exporter.DefaultDiderotProjectExporter;
 import plugin.importer.DefaultDiderotProjectImporter;
+import plugin.importer.DiderotProjectImporter;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -34,6 +33,8 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		moveRouteBtn = new JButton();
 	private JTextField currentRouteLbl = new JTextField();
 	private JMenu methodMenu;
+	private JMenu importMenu;
+	private JMenu exportMenu;
 	private MethodsManagementPanel methodsManagementPanel = new MethodsManagementPanel();
 	private JPanel routeMethodPanel;
 
@@ -184,13 +185,13 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
-				DefaultDiderotProjectExporter diderotProjectExporter = new DefaultDiderotProjectExporter();
+				/*DefaultDiderotProjectExporter diderotProjectExporter = new DefaultDiderotProjectExporter();
 				diderotProjectExporter.setDiderotData(rootRoutes, Project.getActiveProject());
 				diderotProjectExporter.exportProject();
 
 				DefaultDiderotDocumentationExporter defaultDiderotDocumentationExporter = new DefaultDiderotDocumentationExporter();
 				defaultDiderotDocumentationExporter.setDiderotData(rootRoutes, Project.getActiveProject());
-				defaultDiderotDocumentationExporter.generateHtmlDocumentation();
+				defaultDiderotDocumentationExporter.generateHtmlDocumentation();*/
 
 				that.dispose();
 			}
@@ -283,6 +284,17 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 	private void buildMenuBar()
 	{
 		JMenuBar menuBar = new JMenuBar();
+
+		importMenu = new JMenu("Import");
+		Class<?>[] availableImporters = DiderotProjectImporter.class.getClasses();
+		for(Class importer : availableImporters)
+		{
+			if(importer.isInterface())
+			{
+				continue;
+			}
+		}
+
 
 		JMenu routeMenu = new JMenu("Route");
 		routeMenu.setMnemonic('R');

@@ -15,12 +15,14 @@ public class Project
 	private TreeSet<String> responseFormatList = new TreeSet<>();
 	private String defaultResponseFormat;
 
-	private String name = "Test Project";
-	private String company = "A.C.M.E";
-	private String description = "test description";
-	private String domain = "domain.com";
-	private String authors = "jojo";
-	private String contact = "contact@acme.wb";
+	private boolean openedStatus = false;
+
+	private String name = "";
+	private String company = "";
+	private String description = "";
+	private String domain = "";
+	private String authors = "";
+	private String contact = "";
 
 	public static Project getActiveProject()
 	{
@@ -45,7 +47,33 @@ public class Project
 		defaultResponseFormat = "JSON";
 	}
 
+	public void clear()
+	{
+		userDefinedRouteProperties.clear();
+		responseFormatList.clear();
+		defaultResponseFormat = "";
+
+		name = "";
+		company = "";
+		description = "";
+		domain = "";
+		authors = "";
+		contact = "";
+
+		openedStatus = false;
+	}
+
 	//project properties
+	public boolean isOpened()
+	{
+		return openedStatus;
+	}
+
+	public void setOpenedStatus(boolean openedStatus)
+	{
+		this.openedStatus = openedStatus;
+	}
+
 	public String getName()
 	{
 		return name;

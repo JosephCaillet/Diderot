@@ -29,7 +29,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 
 	static
 	{
-		availableOperations.put("importProject", "Open project");
+		availableOperations.put("Open project", "importProject");
 	}
 
 	@Override
@@ -82,10 +82,15 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			Element diderotProject = documentBuilder.parse("save.xml").getDocumentElement();
+
+			project.clear();
+			rootRoute.clear();
+
 			loadProject(diderotProject);
 			loadResponsesOutputFormat(diderotProject);
 			loadUserDefinedProperties(diderotProject);
 			loadRoutes(diderotProject.getElementsByTagName("route").item(0));
+			project.setOpenedStatus(true);
 		}
 		catch(SAXException e)
 		{

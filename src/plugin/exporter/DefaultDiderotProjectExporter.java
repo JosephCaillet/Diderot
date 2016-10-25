@@ -26,7 +26,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 
 	static
 	{
-		availableOperations.put("exportProject", "Save project");
+		availableOperations.put("Save project", "exportProject");
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectEx
 	static
 	{
 		availableOperations.clear();
-		availableOperations.put("generateHtmlDocumentation", "Generate HTML Documentation");
+		availableOperations.put("Generate documentation", "generateHtmlDocumentation");
 	}
 
 	@Override
