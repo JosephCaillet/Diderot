@@ -355,7 +355,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 						}
 					});
 
-					if(importerName.equals("plugin.importer.DefaultDiderotProjectImporter"))
+					if("plugin.importer.DefaultDiderotProjectImporter".equals(importerName))
 					{
 						actionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 					}
@@ -436,7 +436,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 						}
 					});
 
-					if(exporterName.equals("plugin.exporter.DefaultDiderotProjectExporter"))
+					if("plugin.exporter.DefaultDiderotProjectExporter".equals(exporterName))
 					{
 						actionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 					}

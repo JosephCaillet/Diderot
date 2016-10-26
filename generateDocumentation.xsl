@@ -169,7 +169,42 @@
 
 			<xsl:if test="methods/method">
 				<xsl:for-each select="methods/method">
-					<div class="methodContainer">
+					<div>
+						<xsl:variable name="baseClassName" select="'methodContainer'"/>
+						<xsl:choose>
+							<xsl:when test="@name = 'GET'">
+								<xsl:attribute name="class"><xsl:value-of select="$baseClassName"/> getMethod</xsl:attribute>
+							</xsl:when>
+							<xsl:when test="@name = 'HEAD'">
+								<xsl:attribute name="class"><xsl:value-of select="$baseClassName"/> headMethod</xsl:attribute>
+							</xsl:when>
+							<xsl:when test="@name = 'POST'">
+								<xsl:attribute name="class"><xsl:value-of select="$baseClassName"/> postMethod</xsl:attribute>
+							</xsl:when>
+							<xsl:when test="@name = 'OPTIONS'">
+								<xsl:attribute name="class"><xsl:value-of select="$baseClassName"/> optionsMethod</xsl:attribute>
+							</xsl:when>
+							<xsl:when test="@name = 'CONNECT'">
+								<xsl:attribute name="class"><xsl:value-of select="$baseClassName"/> connectMethod</xsl:attribute>
+							</xsl:when>
+							<xsl:when test="@name = 'TRACE'">
+								<xsl:attribute name="class"><xsl:value-of select="$baseClassName"/> traceMethod</xsl:attribute>
+							</xsl:when>
+							<xsl:when test="@name = 'PUT'">
+								<xsl:attribute name="class"><xsl:value-of select="$baseClassName"/> putMethod</xsl:attribute>
+							</xsl:when>
+							<xsl:when test="@name = 'PATCH'">
+								<xsl:attribute name="class"><xsl:value-of select="$baseClassName"/> patchMethod</xsl:attribute>
+							</xsl:when>
+							<xsl:when test="@name = 'DELETE'">
+								<xsl:attribute name="class"><xsl:value-of select="$baseClassName"/> deleteMethod</xsl:attribute>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:attribute name="class">
+									<xsl:value-of select="$baseClassName"/>
+								</xsl:attribute>
+							</xsl:otherwise>
+						</xsl:choose>
 						<h4>
 							<xsl:value-of select="@name"/>
 						</h4>

@@ -6,6 +6,7 @@
 p, pre
 {
 	text-indent: 4em;
+	margin-top: 0;
 }
 
 h3, h4, h5, h6
@@ -30,20 +31,19 @@ h2
 
 h3
 {
-	font-size: 1.5em;
+	font-size: 1.2em;
 	transition: all, ease, 0.25s;
 }
 
 h3:hover
 {
-	transform: scale(1.1, 1.1);
 	transform-origin: center;
 	color: coral;
 }
 
 h4
 {
-	font-size: 1.25em;
+	font-size: 1em;
 	color: white;
 }
 
@@ -52,8 +52,8 @@ h5
 	font-size: 1.15em;
 	margin: 0.5em;
 	color: white;
-	border-left: antiquewhite 0.2em solid;
-	border-bottom: antiquewhite 0.1em solid;
+	border-left: white 0.2em solid;
+	border-bottom: white 0.1em solid;
 	padding: 0.2em;
 	width: 10em;
 }
@@ -166,11 +166,12 @@ footer > span:hover
 .routeDetails
 {
 	display: block;
-	background: lightgray;
-	padding: 0.8em;
+	border: gray 1px solid;
+	padding: 0.5em;
 	margin: 1em;
 	border-radius: 0.5em;
 	position: relative;
+	background: #e1e1e1;
 }
 
 .routeDetails > h3
@@ -185,7 +186,7 @@ footer > span:hover
 	display: inline-block;
 	position: absolute;
 	right: 1em;
-	top: 1em;
+	top: 0.65em;
 	text-align: left;
 }
 
@@ -193,7 +194,7 @@ footer > span:hover
 {
 	display: inline-block;
 	text-decoration: none;
-	font-size: 1.5em;
+	font-size: 1.2em;
 	color: black;
 	margin-right: 0.3em;
 }
@@ -220,19 +221,20 @@ footer > span:hover
 
 .methodContainer > h4
 {
-	background: #9FBDF4;
-	padding: 0.5em;
+	background: #3498db;
+	padding: 3px;
 	display: inline-block;
-	border-radius: 1em 1em 0 0;
+	border-radius: 0.7em 0.7em 0 0;
 	cursor: pointer;
 	transition: border-radius ease 0.5s, background ease 0.25s;
-	min-width: 4em;
+	min-width: 5em;
 	text-align: center;
 }
 
+/*colors taken from https://flatuicolors.com/*/
 .methodContainer > h4:hover
 {
-	background: #7F9DD4;
+	background: #2980b9;
 }
 
 .methodContainer > h4.folded
@@ -240,10 +242,59 @@ footer > span:hover
 	border-radius: 0;
 }
 
+.getMethod h4, .headMethod h4
+{
+	background: #3498db;
+}
+
+.getMethod h4:hover, .headMethod h4:hover
+{
+	background: #2980b9;
+}
+
+.postMethod h4, .putMethod h4
+{
+	background: #2ecc71;
+}
+.postMethod h4:hover, .putMethod h4:hover
+{
+	background: #27ae60;
+}
+
+.optionsMethod h4, .connectMethod h4, .traceMethod h4
+{
+	background: #9b59b6;
+}
+
+.optionsMethod h4:hover, .connectMethod h4:hover, .traceMethod h4:hover
+{
+	background: #8e44ad;
+}
+
+.patchMethod h4
+{
+	background: #f1c40f;
+}
+
+.patchMethod h4:hover
+{
+	background: #f39c12;
+}
+
+.deleteMethod h4
+{
+	background: #e74c3c;
+}
+
+.deleteMethod h4:hover
+{
+	background: #c0392b;
+}
+
 .method
 {
-	background: #9FBDF4;
-	border-radius: 0 1em 1em 1em;
+	border: #9FBDF4 2px solid;
+	border-radius: 0 0.7em 0.7em 0.7em;
 	padding: 0.5em;
 	display: block;
 }
@@ -256,6 +307,36 @@ footer > span:hover
 .method > p
 {
 	margin: 0;
+}
+
+.getMethod .method, .headMethod .method
+{
+	border: #3498db 1px solid;
+	background: rgba(52, 152, 219, 0.2);
+}
+
+.postMethod .method, .putMethod .method
+{
+	border: #2ecc71 1px solid;
+	background: rgba(46, 204, 113, 0.2);
+}
+
+.optionsMethod .method, .connectMethod .method, .traceMethod .method
+{
+	border: #9b59b6 1px solid;
+	background: rgba(155, 89, 182, 0.21);
+}
+
+.patchMethod .method
+{
+	border: #f1c40f 1px solid;
+	background: rgba(241, 196, 15, 0.2);
+}
+
+.deleteMethod .method
+{
+	border: #e74c3c 1px solid;
+	background: rgba(231, 76, 60, 0.21);
 }
 
 .propertyContainer > table
@@ -282,23 +363,22 @@ footer > span:hover
 
 .params td, .params th
 {
-	border-bottom: 1px solid antiquewhite;
 	padding: .3em;
 }
 
 .params th
 {
-	background: antiquewhite;
+	background: white;
 }
 
 .params tr:nth-child(even)
 {
-	background: #8BA9DE;
+	background: #ecf0f1;
 }
 
 .params tr:nth-child(odd)
 {
-	background: #B4D2FF;
+	background: #bdc3c7;
 }
 
 .params tr:first-child
@@ -323,10 +403,11 @@ footer > span:hover
 
 .responseContainer > h6
 {
-	background: #F4D69F;
+	background: #7f8c8d;
+	color: white;
 	display: inline-block;
 	padding: 0.5em;
-	border-radius: 1em 1em 0 0;
+	border-radius: 0.7em 0.7em 0 0;
 	cursor: pointer;
 	transition: border-radius ease 0.5s, background ease 0.25s;
 	min-width: 4em;
@@ -335,7 +416,7 @@ footer > span:hover
 
 .responseContainer > h6:hover
 {
-	background: #E4B67F;
+	background: #34495e;
 }
 
 .responseContainer > h6.folded
@@ -345,9 +426,10 @@ footer > span:hover
 
 .response
 {
-	background: #F4D69F;
+	background: #ecf0f1;
+	border: #7f8c8d 1px solid;
 	padding: 0.5em 0.5em 1em 0.5em;
-	border-radius: 0 1em 1em 1em;
+	border-radius: 0 0.7em 0.7em 0.7em;
 	display: block;
 }
 
