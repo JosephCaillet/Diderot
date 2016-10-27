@@ -69,7 +69,7 @@ var folder = {
 		}
 	},
 
-	setUpMethodRouteDisplayInHeader: function () {
+	setUpMethodRouteDisplayInHeader() {
 		let projectTitle = document.querySelector("h1");
 		let projectName = projectTitle.textContent;
 
@@ -89,13 +89,11 @@ var folder = {
 
 			folder.doOn(".methodContainer", function (node) {
 				node.addEventListener("mouseenter", function (event) {
-					console.log("in method");
 					let source = event.target || event.srcElement;
 					projectTitle.textContent = projectName + ": " + source.querySelector("h4").textContent + " " + method;
 				});
 
 				node.addEventListener("mouseleave", function (event) {
-					console.log("out method");
 					let source = event.target || event.srcElement;
 					projectTitle.textContent = projectName + ": " + method;
 				});
