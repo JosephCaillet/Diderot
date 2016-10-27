@@ -1,11 +1,12 @@
 /**
  * Created by joseph on 23/10/16.
  */
+
 var folder = {
 	foldedClassValue : "folded",
 
-	doOn(selector, action){
-		let selectedNode = document.querySelectorAll(selector);
+	doOn(selector, action, target = document){
+		let selectedNode = target.querySelectorAll(selector);
 		for(let node of selectedNode)
 		{
 			action(node);
@@ -68,11 +69,47 @@ var folder = {
 		}
 	},
 
+	setUpMethodRouteDisplayInHeader: function () {
+		let projectTitle = document.querySelector("h1");
+		let projectName = projectTitle.textContent;
+
+		folder.doOn(".routeDetails", function (node) {
+			let method = null;
+
+			node.addEventListener("mouseenter", function (event) {
+				let source = event.target || event.srcElement;
+				method = source.querySelector("h3").textContent;
+				projectTitle.textContent = projectName + ": " + method;
+			});
+
+			node.addEventListener("mouseleave", function (event) {
+				let source = event.target || event.srcElement;
+				projectTitle.textContent = projectName;
+			});
+
+			folder.doOn(".methodContainer", function (node) {
+				node.addEventListener("mouseenter", function (event) {
+					console.log("in method");
+					let source = event.target || event.srcElement;
+					projectTitle.textContent = projectName + ": " + source.querySelector("h4").textContent + " " + method;
+				});
+
+				node.addEventListener("mouseleave", function (event) {
+					console.log("out method");
+					let source = event.target || event.srcElement;
+					projectTitle.textContent = projectName + ": " + method;
+				});
+			}, node);
+		});
+	},
+
 	setUpFoldingOnLoad(initialFoldStatus = true){
 		window.addEventListener("load", function(){
 			if(initialFoldStatus){
 				folder.foldAll(true);
 			}
+
+			folder.setUpMethodRouteDisplayInHeader();
 
 			folder.doOn(".routeDetails h3", function(node){
 				node.addEventListener("click", folder.foldEventRoute);
