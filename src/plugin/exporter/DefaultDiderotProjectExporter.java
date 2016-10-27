@@ -3,8 +3,10 @@ package plugin.exporter;
 import model.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import plugin.PluginsSettings;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
@@ -32,6 +34,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 	static
 	{
 		availableOperations.put("Save project", "exportProject");
+		availableOperations.put("Save project as", "exportProjectAs");
 	}
 
 	@Override
@@ -85,6 +88,42 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 
 	public void exportProject()
 	{
+		String fileName = PluginsSettings.getValue(getPluginName(), "projectFileName");
+		if(fileName == null)
+		{
+			exportProjectAs();
+			return;
+		}
+		launchExport(fileName);
+	}
+
+	public void exportProjectAs()
+	{
+		//Todo: remove "." to start in home directory of user
+		JFileChooser fileChooser = new JFileChooser(".");
+		String projectFileName = PluginsSettings.getValue(getPluginName(), "projectFileName");
+		if(projectFileName != null)
+		{
+			fileChooser.setSelectedFile(new File(projectFileName));
+		}
+		fileChooser.setFileFilter(new FileNameExtensionFilter("Diderot project file", "dip"));
+
+		if(JFileChooser.APPROVE_OPTION != fileChooser.showSaveDialog(parent))
+		{
+			return;
+		}
+
+		String fileName = fileChooser.getSelectedFile().getAbsolutePath();
+		if(!fileName.endsWith(".dip"))
+		{
+			fileName = fileName + ".dip";
+		}
+
+		launchExport(fileName);
+	}
+
+	private void launchExport(String fileName)
+	{
 		try
 		{
 			Document xmlSaveDocument = createDocument();
@@ -93,7 +132,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 			xmlTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			xmlTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
-			xmlTransformer.transform(new DOMSource(xmlSaveDocument), new StreamResult(new File("save.xml")));
+			xmlTransformer.transform(new DOMSource(xmlSaveDocument), new StreamResult(fileName));
 			JOptionPane.showMessageDialog(parent, "Project successfully saved", "Project successfully saved", JOptionPane.INFORMATION_MESSAGE);
 		}
 		catch(ParserConfigurationException | TransformerException e)

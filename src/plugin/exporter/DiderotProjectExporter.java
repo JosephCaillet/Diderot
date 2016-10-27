@@ -15,9 +15,5 @@ public interface DiderotProjectExporter extends DiderotPlugin
 	}
 
 	//Todo: add icon per action support
-	public default boolean callConfigBeforeExport()
-	{
-		return false;
-	}
 	public HashMap<String, String> getAvailableExportingOperations();
 }

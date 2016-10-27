@@ -7,7 +7,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import plugin.PluginsSettings;
 
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -24,6 +27,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 {
 	private Route rootRoute;
 	private Project project;
+	private JFrame parent;
 
 	static private HashMap<String, String> availableOperations = new HashMap<>();
 
@@ -75,13 +79,27 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		this.project = project;
 	}
 
+	@Override
+	public void setParentFrame(JFrame parent)
+	{
+		this.parent = parent;
+	}
+
 	public void importProject()
 	{
+		//Todo: remove "." to start in home directory of user
+		JFileChooser fileChooser = new JFileChooser(".");
+		fileChooser.setFileFilter(new FileNameExtensionFilter("Diderot project file", "dip"));
+		if(JFileChooser.APPROVE_OPTION != fileChooser.showOpenDialog(parent))
+		{
+			return;
+		}
+
 		try
 		{
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-			Element diderotProject = documentBuilder.parse("save.xml").getDocumentElement();
+			Element diderotProject = documentBuilder.parse(fileChooser.getSelectedFile()).getDocumentElement();
 
 			project.clear();
 			rootRoute.clear();
@@ -91,6 +109,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 			loadUserDefinedProperties(diderotProject);
 			loadRoutes(diderotProject.getElementsByTagName("route").item(0));
 			project.setOpenedStatus(true);
+			PluginsSettings.setValue("Diderot default project exporter", "projectFileName", fileChooser.getSelectedFile().getAbsolutePath());
 		}
 		catch(SAXException e)
 		{
@@ -112,7 +131,12 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		project.setCompany(projectElement.getAttribute("company"));
 		project.setAuthors(projectElement.getAttribute("authors"));
 		project.setContact(projectElement.getAttribute("contact"));
-		project.setDescription(decodeNewLine(projectElement.getElementsByTagName("description").item(0).getFirstChild().getTextContent()));
+
+		Node description = projectElement.getElementsByTagName("description").item(0).getFirstChild();
+		if(description != null)
+		{
+			project.setDescription(decodeNewLine(description.getTextContent()));
+		}
 	}
 
 	private void loadResponsesOutputFormat(Element projectElement)

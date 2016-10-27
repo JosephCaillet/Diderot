@@ -327,7 +327,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 						public void actionPerformed(ActionEvent e)
 						{
 							if(Project.getActiveProject().isOpened() && JOptionPane.YES_OPTION !=
-									JOptionPane.showConfirmDialog(parent, "Project \"" + Project.getActiveProject().getName() + "\" is currently opened.\nUnsaved modification may be lost.\nDo you want to continue?", "Project already opened", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE))
+									JOptionPane.showConfirmDialog(parent, "Project \"" + Project.getActiveProject().getName() + "\" is currently opened.\nUnsaved modifications may be lost.\nDo you want to continue?", "Project already opened", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE))
 							{
 								return;
 							}
@@ -438,7 +438,14 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 					if("plugin.exporter.DefaultDiderotProjectExporter".equals(exporterName))
 					{
-						actionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+						if("exportProject".equals(exporterInstance.getAvailableExportingOperations().get(actionName)))
+						{
+							actionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+						}
+						else if("exportProjectAs".equals(exporterInstance.getAvailableExportingOperations().get(actionName)))
+						{
+							actionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK + InputEvent.SHIFT_DOWN_MASK));
+						}
 					}
 
 					actionMenu.add(actionMenuItem);

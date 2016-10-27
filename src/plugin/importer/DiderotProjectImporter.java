@@ -16,8 +16,4 @@ public interface DiderotProjectImporter extends DiderotPlugin
 
 	//Todo: add icon per action support
 	public HashMap<String, String> getAvailableImportingOperations();
-	public default boolean callConfigBeforeImport()
-	{
-		return false;
-	}
 }
