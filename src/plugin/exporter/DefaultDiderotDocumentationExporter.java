@@ -135,10 +135,10 @@ public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectEx
 
 	public void generateHtmlDocumentation()
 	{
-		String fileName = PluginsSettings.getValue(getPluginName(), "documentationFolder");
+		String fileName = PluginsSettings.getValue(getPluginName() + "documentationFolder");
 		if(fileName == null)
 		{
-			fileName = PluginsSettings.getValue("Diderot default project exporter", "projectFileName");
+			fileName = PluginsSettings.getValue("Diderot default project exporter" + "projectFileName");
 			if(fileName == null)
 			{
 				fileName = ".";
@@ -159,7 +159,7 @@ public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectEx
 			docPath = docPath + "/";
 		}
 
-		PluginsSettings.setValue(getPluginName(), "documentationFolder", docPath);
+		PluginsSettings.setValue(getPluginName() + "documentationFolder", docPath);
 
 		try
 		{
@@ -171,7 +171,7 @@ public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectEx
 			xmlTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			xmlTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
-			copyDirectory(new File("doc/"), new File(docPath));
+			copyDirectory(new File("documentationTemplate/"), new File(docPath));
 
 			File f = new File(docPath + "index.html");
 			xmlTransformer.transform(new DOMSource(xmlSaveDocument), new StreamResult(f));

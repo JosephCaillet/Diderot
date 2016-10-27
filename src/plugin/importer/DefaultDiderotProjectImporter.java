@@ -105,11 +105,12 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 			rootRoute.clear();
 
 			loadProject(diderotProject);
+			loadPluginsProperties(diderotProject);
 			loadResponsesOutputFormat(diderotProject);
 			loadUserDefinedProperties(diderotProject);
 			loadRoutes(diderotProject.getElementsByTagName("route").item(0));
 			project.setOpenedStatus(true);
-			PluginsSettings.setValue("Diderot default project exporter", "projectFileName", fileChooser.getSelectedFile().getAbsolutePath());
+			PluginsSettings.setValue("Diderot default project exporter" + "projectFileName", fileChooser.getSelectedFile().getAbsolutePath());
 		}
 		catch(SAXException e)
 		{
@@ -136,6 +137,24 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		if(description != null)
 		{
 			project.setDescription(decodeNewLine(description.getTextContent()));
+		}
+	}
+
+	private void loadPluginsProperties(Element projectElement)
+	{
+		Node pluginsProperties = projectElement.getElementsByTagName("pluginsProperties").item(0);
+		NodeList nodeList = pluginsProperties.getChildNodes();
+		PluginsSettings.clear();
+
+		for(int i = 0; i < nodeList.getLength(); i++)
+		{
+			Node node = nodeList.item(i);
+			if(node.getNodeType() == Node.TEXT_NODE)
+			{
+				continue;
+			}
+
+			PluginsSettings.setValue(node.getAttributes().getNamedItem("property").getTextContent(),node.getTextContent());
 		}
 	}
 

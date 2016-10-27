@@ -88,7 +88,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 
 	public void exportProject()
 	{
-		String fileName = PluginsSettings.getValue(getPluginName(), "projectFileName");
+		String fileName = PluginsSettings.getValue(getPluginName() + "projectFileName");
 		if(fileName == null)
 		{
 			exportProjectAs();
@@ -101,7 +101,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 	{
 		//Todo: remove "." to start in home directory of user
 		JFileChooser fileChooser = new JFileChooser(".");
-		String projectFileName = PluginsSettings.getValue(getPluginName(), "projectFileName");
+		String projectFileName = PluginsSettings.getValue(getPluginName() + "projectFileName");
 		if(projectFileName != null)
 		{
 			fileChooser.setSelectedFile(new File(projectFileName));
@@ -156,6 +156,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		Element projectDescription = xmlSaveDocument.createElement("description");
 		projectDescription.appendChild(xmlSaveDocument.createTextNode(encodeNewLine(project.getDescription())));
 		diderotProject.appendChild(projectDescription);
+		diderotProject.appendChild(buildPluginsPropertiesXml(xmlSaveDocument));
 		diderotProject.appendChild(buildResponseOutputFormatXml(xmlSaveDocument));
 		diderotProject.appendChild(buildUserDefinedPropertiesXml(xmlSaveDocument));
 
@@ -165,6 +166,22 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		diderotProject.appendChild(routeXml);
 
 		return xmlSaveDocument;
+	}
+
+	private Element buildPluginsPropertiesXml(Document rootXml)
+	{
+		Element pluginsProperties = rootXml.createElement("pluginsProperties");
+
+		for(String property : PluginsSettings.getKeys())
+		{
+			Element pluginProperty = rootXml.createElement("pluginProperty");
+			pluginProperty.setAttribute("property", property);
+			pluginProperty.appendChild(rootXml.createTextNode(PluginsSettings.getValue(property)));
+
+			pluginsProperties.appendChild(pluginProperty);
+		}
+
+		return pluginsProperties;
 	}
 
 	private Element buildResponseOutputFormatXml(Document rootXml)
