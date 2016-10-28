@@ -339,6 +339,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 								Method method = finalImporter.getMethod(importerInstance.getAvailableImportingOperations().get(actionName));
 								method.invoke(importerInstance);
 
+								setTitle("Diderot - " + Project.getActiveProject().getName());
 								routesTreePanel.updateModel();
 							}
 							catch(NoSuchMethodException e1)
