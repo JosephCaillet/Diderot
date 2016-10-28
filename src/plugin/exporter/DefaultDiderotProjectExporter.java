@@ -88,7 +88,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 
 	public void exportProject()
 	{
-		String fileName = PluginsSettings.getValue(getPluginName() + "projectFileName");
+		String fileName = PluginsSettings.getPropertyValue(getPluginName() + "projectFileName");
 		if(fileName == null)
 		{
 			exportProjectAs();
@@ -100,12 +100,9 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 	public void exportProjectAs()
 	{
 		//Todo: remove "." to start in home directory of user
-		JFileChooser fileChooser = new JFileChooser(".");
-		String projectFileName = PluginsSettings.getValue(getPluginName() + "projectFileName");
-		if(projectFileName != null)
-		{
-			fileChooser.setSelectedFile(new File(projectFileName));
-		}
+		JFileChooser fileChooser = new JFileChooser();
+		String projectFileName = PluginsSettings.getPropertyValue(getPluginName() + "projectFileName", ".");
+		fileChooser.setSelectedFile(new File(projectFileName));
 		fileChooser.setFileFilter(new FileNameExtensionFilter("Diderot project file", "dip"));
 
 		if(JFileChooser.APPROVE_OPTION != fileChooser.showSaveDialog(parent))
@@ -172,11 +169,11 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 	{
 		Element pluginsProperties = rootXml.createElement("pluginsProperties");
 
-		for(String property : PluginsSettings.getKeys())
+		for(String property : PluginsSettings.getProperties())
 		{
 			Element pluginProperty = rootXml.createElement("pluginProperty");
 			pluginProperty.setAttribute("property", property);
-			pluginProperty.appendChild(rootXml.createTextNode(PluginsSettings.getValue(property)));
+			pluginProperty.appendChild(rootXml.createTextNode(PluginsSettings.getPropertyValue(property)));
 
 			pluginsProperties.appendChild(pluginProperty);
 		}

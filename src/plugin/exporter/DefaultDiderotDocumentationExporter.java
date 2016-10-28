@@ -135,16 +135,11 @@ public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectEx
 
 	public void generateHtmlDocumentation()
 	{
-		String fileName = PluginsSettings.getValue(getPluginName() + "documentationFolder");
+		String fileName = PluginsSettings.getPropertyValue(getPluginName() + "documentationFolder");
 		if(fileName == null)
 		{
-			fileName = PluginsSettings.getValue("Diderot default project exporter" + "projectFileName");
-			if(fileName == null)
-			{
-				fileName = ".";
-			}
+			fileName = PluginsSettings.getPropertyValue("Diderot default project exporter" + "projectFileName", ".");
 		}
-
 
 		JFileChooser fileChooser = new JFileChooser(fileName);
 		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -159,7 +154,7 @@ public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectEx
 			docPath = docPath + "/";
 		}
 
-		PluginsSettings.setValue(getPluginName() + "documentationFolder", docPath);
+		PluginsSettings.setPropertyValue(getPluginName() + "documentationFolder", docPath);
 
 		try
 		{

@@ -110,7 +110,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 			loadUserDefinedProperties(diderotProject);
 			loadRoutes(diderotProject.getElementsByTagName("route").item(0));
 			project.setOpenedStatus(true);
-			PluginsSettings.setValue("Diderot default project exporter" + "projectFileName", fileChooser.getSelectedFile().getAbsolutePath());
+			PluginsSettings.setPropertyValue("Diderot default project exporter" + "projectFileName", fileChooser.getSelectedFile().getAbsolutePath());
 		}
 		catch(SAXException e)
 		{
@@ -154,7 +154,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 				continue;
 			}
 
-			PluginsSettings.setValue(node.getAttributes().getNamedItem("property").getTextContent(),node.getTextContent());
+			PluginsSettings.setPropertyValue(node.getAttributes().getNamedItem("property").getTextContent(), node.getTextContent());
 		}
 	}
 

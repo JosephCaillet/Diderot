@@ -338,6 +338,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 							{
 								Method method = finalImporter.getMethod(importerInstance.getAvailableImportingOperations().get(actionName));
 								method.invoke(importerInstance);
+
 								routesTreePanel.updateModel();
 							}
 							catch(NoSuchMethodException e1)

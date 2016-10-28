@@ -10,17 +10,36 @@ public class PluginsSettings
 {
 	static private HashMap<String, String> settings = new HashMap<>();
 
-	static public String getValue(String propertyName)
+	static public void setPropertyValueIfNotExists(String propertyName, String value)
+	{
+		if(!settings.containsKey(propertyName))
+		{
+			settings.put(propertyName, value);
+		}
+	}
+
+	static public String getPropertyValue(String propertyName)
 	{
 		return settings.get(propertyName);
 	}
 
-	static public void setValue(String propertyName, String value)
+	static public String getPropertyValue(String propertyName, String defaultValue)
+	{
+		setPropertyValueIfNotExists(propertyName, defaultValue);
+		return settings.get(propertyName);
+	}
+
+	static public void setPropertyValue(String propertyName, String value)
 	{
 		settings.put(propertyName, value);
 	}
 
-	static public Set<String> getKeys()
+	static public boolean containsProperty(String property)
+	{
+		return settings.containsKey(property);
+	}
+
+	static public Set<String> getProperties()
 	{
 		return settings.keySet();
 	}

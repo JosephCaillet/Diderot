@@ -39,6 +39,8 @@
 		</html>
 	</xsl:template>
 
+	<xsl:template match="pluginsProperties"/>
+
 	<xsl:template match="diderotProject/description">
 		<p>
 			<xsl:call-template name="decodeNewLine">
