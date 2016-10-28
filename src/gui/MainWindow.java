@@ -54,7 +54,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 	public MainWindow()
 	{
-		super("Diderot");
+		super();
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
 		rootRoutes = new Route(Project.getActiveProject().getDomain());
@@ -66,6 +66,14 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		setPreferredSize(new Dimension(900, 800));
 		pack();
 		setLocationRelativeTo(null);
+
+		DiderotProjectImporter importer = importPlugins.get(DefaultDiderotProjectImporter.class.getName());
+		DefaultDiderotProjectImporter defaultImporter = (DefaultDiderotProjectImporter) importer;
+		defaultImporter.setDiderotData(rootRoutes, Project.getActiveProject());
+		defaultImporter.createProject();
+		routesTreePanel.updateModel();
+
+		setTitle("Diderot - " + Project.getActiveProject().getName());
 		setVisible(true);
 		//getWindowListeners()[0].windowClosing(null);
 	}
@@ -359,7 +367,14 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 					if("plugin.importer.DefaultDiderotProjectImporter".equals(importerName))
 					{
-						actionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
+						if("createProject".equals(importerInstance.getAvailableImportingOperations().get(actionName)))
+						{
+							actionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
+						}
+						else if("importProject".equals(importerInstance.getAvailableImportingOperations().get(actionName)))
+						{
+							actionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
+						}
 					}
 
 					actionMenu.add(actionMenuItem);

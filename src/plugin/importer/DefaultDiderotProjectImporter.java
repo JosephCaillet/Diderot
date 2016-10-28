@@ -33,6 +33,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 
 	static
 	{
+		availableOperations.put("New project", "createProject");
 		availableOperations.put("Open project", "importProject");
 	}
 
@@ -83,6 +84,25 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 	public void setParentFrame(JFrame parent)
 	{
 		this.parent = parent;
+	}
+
+	public void createProject()
+	{
+		project.clear();
+		project.addResponseFormat("HTML");
+		project.addResponseFormat("JSON");
+		project.addResponseFormat("XML");
+		project.addResponseFormat("CSS");
+		project.addResponseFormat("CSV");
+		project.addResponseFormat("Plain text");
+		project.setDefaultResponseFormat("JSON");
+
+		project.setName("New Project");
+		project.setDomain("newProject.com");
+		project.setAuthors(System.getProperty("user.name"));
+
+		rootRoute.clear();
+		rootRoute.setName("newProject.com");
 	}
 
 	public void importProject()
