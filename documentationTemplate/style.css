@@ -80,10 +80,19 @@ header
 	border-bottom: #ccd0d1 1px solid;
 }
 
+header img
+{
+	height: 2.3em;
+	padding: 0.2em;
+	margin-left: 2em;
+}
+
 h1
 {
 	color: white;
-	margin: 0.1em 0 0 3em;
+	margin: 0.1em 0 0 1em;
+	display: inline-block;
+	vertical-align: top;
 }
 
 body

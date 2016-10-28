@@ -26,6 +26,11 @@
 					Syntax highlighting provided by https://github.com/isagalaev/highlight.js
 				</xsl:comment>
 				<header>
+					<img src="logo.png">
+						<xsl:attribute name="alt">
+							<xsl:value-of select="@name"/> project logo.
+						</xsl:attribute>
+					</img>
 					<h1><xsl:value-of select="diderotProject/@name"/></h1>
 				</header>
 				<h2><xsl:value-of select="diderotProject/@name"/></h2>
