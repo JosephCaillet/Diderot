@@ -40,7 +40,8 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 	private AbstractAction addRouteAction, delRouteAction, moveRouteAction, focusOnRouteAction;
 	private JButton addRouteBtn = new JButton(),
 			delRouteBtn = new JButton(),
-		moveRouteBtn = new JButton();
+			moveRouteBtn = new JButton(),
+			confBtn = new JButton();
 	private JTextField currentRouteLbl = new JTextField();
 	private JMenu methodMenu;
 	private JMenu importMenu;
@@ -119,29 +120,19 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		btnPanel.add(addRouteBtn);
 		btnPanel.add(moveRouteBtn);
 		btnPanel.add(delRouteBtn);
+		btnPanel.add(confBtn);
 		btnPanel.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
 
 		addRouteBtn.setAlignmentX(CENTER_ALIGNMENT);
 		delRouteBtn.setAlignmentX(CENTER_ALIGNMENT);
 		moveRouteBtn.setAlignmentX(CENTER_ALIGNMENT);
+		confBtn.setAlignmentX(CENTER_ALIGNMENT);
 		addRouteBtn.setMaximumSize(new Dimension(208,34));
 		delRouteBtn.setMaximumSize(new Dimension(208,34));
 		moveRouteBtn.setMaximumSize(new Dimension(208,34));
+		confBtn.setMaximumSize(new Dimension(208,34));
 
 		///////////////////////
-		final JFrame parent = this;
-		JButton confBtn = new JButton(new AbstractAction("Project settings", ImageIconProxy.getIcon("conf"))
-		{
-			@Override
-			public void actionPerformed(ActionEvent actionEvent)
-			{
-				ProjectSettingsDialog projectSettingsDialog = new ProjectSettingsDialog(parent, rootRoutes);
-				projectSettingsDialog.display();
-			}
-		});
-		confBtn.setAlignmentX(CENTER_ALIGNMENT);
-		confBtn.setMaximumSize(new Dimension(208,34));
-		btnPanel.add(confBtn);
 		//confBtn.doClick();
 		/*DefaultDiderotProjectImporter defaultDiderotProjectImporter = new DefaultDiderotProjectImporter();
 		defaultDiderotProjectImporter.setDiderotData(rootRoutes, Project.getActiveProject());
@@ -260,6 +251,25 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		addRouteBtn.setAction(addRouteAction);
 		delRouteBtn.setAction(delRouteAction);
 		moveRouteBtn.setAction(moveRouteAction);
+
+		final JFrame parent = this;
+		confBtn.setAction(new AbstractAction("Project settings", ImageIconProxy.getIcon("conf"))
+		{
+			@Override
+			public void actionPerformed(ActionEvent actionEvent)
+			{
+				ProjectSettingsDialog projectSettingsDialog = new ProjectSettingsDialog(parent, rootRoutes);
+				projectSettingsDialog.display();
+
+				TreePath selectedElement = routesTreePanel.getSelectionPath();
+				methodsManagementPanel.saveDisplayStatus();
+
+				routesTreePanel.updateModel();
+
+				routesTreePanel.setSelectionPath(selectedElement);
+				methodsManagementPanel.restoreDisplayStatus();
+			}
+		});
 
 		routesTreePanel.addTreeSelectionListener(this);
 		routesTreePanel.addMouseListener(new MouseAdapter()

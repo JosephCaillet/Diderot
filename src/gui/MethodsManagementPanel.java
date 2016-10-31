@@ -30,6 +30,8 @@ public class MethodsManagementPanel extends JPanel
 	private JTabbedPane methodsTabbedPanel = new JTabbedPane();
 	private Route route;
 	private JTextArea descriptionTextArea = new JTextArea();
+	private int savedMethodIndex;
+	private int savedViewHorizontalPosition;
 
 	public MethodsManagementPanel()
 	{
@@ -282,6 +284,26 @@ public class MethodsManagementPanel extends JPanel
 			{
 				setEnabledButton(false);
 			}
+		}
+	}
+
+	public void saveDisplayStatus()
+	{
+		JScrollPane scrollPane = (JScrollPane) methodsTabbedPanel.getSelectedComponent();
+		if(scrollPane != null)
+		{
+			savedViewHorizontalPosition = scrollPane.getVerticalScrollBar().getValue();
+			savedMethodIndex = methodsTabbedPanel.getSelectedIndex();
+		}
+	}
+
+	public void restoreDisplayStatus()
+	{
+		JScrollPane scrollPane = (JScrollPane) methodsTabbedPanel.getSelectedComponent();
+		if(scrollPane != null)
+		{
+			methodsTabbedPanel.setSelectedIndex(savedMethodIndex);
+			scrollPane.getVerticalScrollBar().setValue(savedViewHorizontalPosition);
 		}
 	}
 }
