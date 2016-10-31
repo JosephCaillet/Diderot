@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 public class ProjectSettingsDialog extends JDialog
 {
 	private static final String[] settingsSections = {"Project", "User defined properties", "Response output format"};
+	private static String lastSelectedMenu = settingsSections[0];
 
 	private Route rootRoutes;
 	private Frame parent;
@@ -75,7 +76,7 @@ public class ProjectSettingsDialog extends JDialog
 
 		addListeners();
 
-		settingsSectionList.setSelectedIndex(2);
+		settingsSectionList.setSelectedValue(lastSelectedMenu, true);
 	}
 
 	private void addListeners()
@@ -89,6 +90,7 @@ public class ProjectSettingsDialog extends JDialog
 				if(settingsSectionList.getSelectedIndex() != -1)
 				{
 					cardLayout.show(settingsPanel, settingsSectionList.getSelectedValue());
+					lastSelectedMenu = settingsSectionList.getSelectedValue();
 				}
 			}
 		});
