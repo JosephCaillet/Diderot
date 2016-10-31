@@ -55,9 +55,7 @@ public class ProjectSettingsDialog extends JDialog
 		settingsPanel.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
 
 		//Project settings
-		JPanel panel = new JPanel();
-		panel.add(new JLabel(settingsSections[0]));
-		settingsPanel.add(panel, settingsSections[0]);
+		settingsPanel.add(new ProjectPanel(parent, rootRoutes), settingsSections[0]);
 
 		//user defined properties
 		settingsPanel.add(new UserDefinedPropertiesPanel(parent, rootRoutes), settingsSections[1]);
@@ -66,8 +64,7 @@ public class ProjectSettingsDialog extends JDialog
 		settingsPanel.add(new ResponsePanel(parent, rootRoutes), settingsSections[2]);
 
 		mainPanel.add(settingsPanel, BorderLayout.CENTER);
-
-		panel = new JPanel();
+		JPanel panel = new JPanel();
 		panel.add(exitButton);
 		mainPanel.add(panel, BorderLayout.SOUTH);
 
