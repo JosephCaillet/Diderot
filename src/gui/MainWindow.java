@@ -4,6 +4,7 @@ import gui.dialog.InputStringDialogHelper;
 import gui.dialog.settings.ProjectSettingsDialog;
 import model.Project;
 import model.Route;
+import plugin.OperationNameIcon;
 import plugin.editor.DiderotProjectEditor;
 import plugin.exporter.DefaultDiderotDocumentationExporter;
 import plugin.exporter.DefaultDiderotProjectExporter;
@@ -322,14 +323,14 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 				importPlugins.put(importerName, importerInstance);
 
 				JMenu actionMenu = new JMenu(importerInstance.getPluginName());
-				HashMap<String, String> importingOperations = importerInstance.getAvailableImportingOperations();
+				HashMap<String, OperationNameIcon> importingOperations = importerInstance.getAvailableImportingOperations();
 
 				JFrame parent = this;
 
 				for(String actionName : importingOperations.keySet())
 				{
 					final Class finalImporter = importer;
-					JMenuItem actionMenuItem = new JMenuItem(new AbstractAction(actionName)
+					JMenuItem actionMenuItem = new JMenuItem(new AbstractAction(actionName, importingOperations.get(actionName).operationIcon)
 					{
 						@Override
 						public void actionPerformed(ActionEvent e)
@@ -344,7 +345,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 							importerInstance.setParentFrame(parent);
 							try
 							{
-								Method method = finalImporter.getMethod(importerInstance.getAvailableImportingOperations().get(actionName));
+								Method method = finalImporter.getMethod(importerInstance.getAvailableImportingOperations().get(actionName).methodName);
 								method.invoke(importerInstance);
 
 								setTitle("Diderot - " + Project.getActiveProject().getName());
@@ -367,11 +368,11 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 					if("plugin.importer.DefaultDiderotProjectImporter".equals(importerName))
 					{
-						if("createProject".equals(importerInstance.getAvailableImportingOperations().get(actionName)))
+						if("createProject".equals(importerInstance.getAvailableImportingOperations().get(actionName).methodName))
 						{
 							actionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
 						}
-						else if("importProject".equals(importerInstance.getAvailableImportingOperations().get(actionName)))
+						else if("importProject".equals(importerInstance.getAvailableImportingOperations().get(actionName).methodName))
 						{
 							actionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 						}
@@ -419,14 +420,14 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 				exportPlugins.put(exporterName, exporterInstance);
 
 				JMenu actionMenu = new JMenu(exporterInstance.getPluginName());
-				HashMap<String, String> exportingOperations = exporterInstance.getAvailableExportingOperations();
+				HashMap<String, OperationNameIcon> exportingOperations = exporterInstance.getAvailableExportingOperations();
 
 				JFrame parent = this;
 
 				for(String actionName : exportingOperations.keySet())
 				{
 					final Class finalExporter = exporter;
-					JMenuItem actionMenuItem = new JMenuItem(new AbstractAction(actionName)
+					JMenuItem actionMenuItem = new JMenuItem(new AbstractAction(actionName, exportingOperations.get(actionName).operationIcon)
 					{
 						@Override
 						public void actionPerformed(ActionEvent e)
@@ -435,7 +436,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 							exporterInstance.setParentFrame(parent);
 							try
 							{
-								Method method = finalExporter.getMethod(exporterInstance.getAvailableExportingOperations().get(actionName));
+								Method method = finalExporter.getMethod(exporterInstance.getAvailableExportingOperations().get(actionName).methodName);
 								method.invoke(exporterInstance);
 							}
 							catch(NoSuchMethodException e1)
@@ -455,11 +456,11 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 					if("plugin.exporter.DefaultDiderotProjectExporter".equals(exporterName))
 					{
-						if("exportProject".equals(exporterInstance.getAvailableExportingOperations().get(actionName)))
+						if("exportProject".equals(exporterInstance.getAvailableExportingOperations().get(actionName).methodName))
 						{
 							actionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 						}
-						else if("exportProjectAs".equals(exporterInstance.getAvailableExportingOperations().get(actionName)))
+						else if("exportProjectAs".equals(exporterInstance.getAvailableExportingOperations().get(actionName).methodName))
 						{
 							actionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK + InputEvent.SHIFT_DOWN_MASK));
 						}
@@ -506,11 +507,11 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 				editPlugins.put(editorName, editorInstance);
 
 				JMenu actionMenu = new JMenu(editorInstance.getPluginName());
-				HashMap<String, String> editingOperations = editorInstance.getAvailableEditingOperations();
+				HashMap<String, OperationNameIcon> editingOperations = editorInstance.getAvailableEditingOperations();
 
 				for(String actionName : editingOperations.keySet())
 				{
-					JMenuItem actionMenuItem = new JMenuItem(new AbstractAction(actionName)
+					JMenuItem actionMenuItem = new JMenuItem(new AbstractAction(actionName, editingOperations.get(actionName).operationIcon)
 					{
 						@Override
 						public void actionPerformed(ActionEvent e)

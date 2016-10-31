@@ -1,6 +1,7 @@
 package plugin.editor;
 
 import plugin.DiderotPlugin;
+import plugin.OperationNameIcon;
 
 import java.util.HashMap;
 
@@ -10,5 +11,5 @@ import java.util.HashMap;
 public interface DiderotProjectEditor extends DiderotPlugin
 {
 	//Todo: add icon per action support
-	public HashMap<String, String> getAvailableEditingOperations();
+	public HashMap<String, OperationNameIcon> getAvailableEditingOperations();
 }

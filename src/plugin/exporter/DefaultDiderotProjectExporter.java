@@ -3,6 +3,7 @@ package plugin.exporter;
 import model.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import plugin.OperationNameIcon;
 import plugin.PluginsSettings;
 
 import javax.swing.*;
@@ -29,16 +30,16 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 	protected Project project;
 	protected JFrame parent;
 
-	static private HashMap<String, String> availableOperations = new HashMap<>();
+	static private HashMap<String, OperationNameIcon> availableOperations = new HashMap<>();
 
 	static
 	{
-		availableOperations.put("Save project", "exportProject");
-		availableOperations.put("Save project as", "exportProjectAs");
+		availableOperations.put("Save project", new OperationNameIcon("exportProject", "save"));
+		availableOperations.put("Save project as", new OperationNameIcon("exportProjectAs", "saveas"));
 	}
 
 	@Override
-	public HashMap<String, String> getAvailableExportingOperations()
+	public HashMap<String, OperationNameIcon> getAvailableExportingOperations()
 	{
 		return availableOperations;
 	}

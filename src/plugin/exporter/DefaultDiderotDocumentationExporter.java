@@ -1,6 +1,7 @@
 package plugin.exporter;
 
 import org.w3c.dom.Document;
+import plugin.OperationNameIcon;
 import plugin.PluginsSettings;
 
 import javax.swing.*;
@@ -21,11 +22,11 @@ import java.util.HashMap;
  */
 public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectExporter
 {
-	static private HashMap<String, String> availableOperations = new HashMap<>();
+	static private HashMap<String, OperationNameIcon> availableOperations = new HashMap<>();
 
 	static
 	{
-		availableOperations.put("Generate documentation", "generateHtmlDocumentation");
+		availableOperations.put("Generate documentation", new OperationNameIcon("generateHtmlDocumentation", "exportweb"));
 	}
 
 	//method strongly inspired by kayz1's solution here: http://stackoverflow.com/questions/6214703/copy-entire-directory-contents-to-another-directory
@@ -98,7 +99,7 @@ public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectEx
 	}
 
 	@Override
-	public HashMap<String, String> getAvailableExportingOperations()
+	public HashMap<String, OperationNameIcon> getAvailableExportingOperations()
 	{
 		return availableOperations;
 	}

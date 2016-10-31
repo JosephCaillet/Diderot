@@ -19,6 +19,12 @@ public class ImageIconProxy
 		imageIconHashMap.put("exit", new ImageIcon("rsc/exit.png"));
 		imageIconHashMap.put("sort", new ImageIcon("rsc/sort.png"));
 		imageIconHashMap.put("editwide", new ImageIcon("rsc/editwide.png"));
+
+		imageIconHashMap.put("new", new ImageIcon("rsc/new.png"));
+		imageIconHashMap.put("save", new ImageIcon("rsc/save.png"));
+		imageIconHashMap.put("saveas", new ImageIcon("rsc/saveas.png"));
+		imageIconHashMap.put("exportweb", new ImageIcon("rsc/exportweb.png"));
+		imageIconHashMap.put("open", new ImageIcon("rsc/open.png"));
 	}
 
 	public static ImageIcon getIcon(String path)

@@ -7,6 +7,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import plugin.OperationNameIcon;
 import plugin.PluginsSettings;
 
 import javax.swing.*;
@@ -29,16 +30,16 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 	private Project project;
 	private JFrame parent;
 
-	static private HashMap<String, String> availableOperations = new HashMap<>();
+	static private HashMap<String, OperationNameIcon> availableOperations = new HashMap<>();
 
 	static
 	{
-		availableOperations.put("New project", "createProject");
-		availableOperations.put("Open project", "importProject");
+		availableOperations.put("New project", new OperationNameIcon("createProject", "new"));
+		availableOperations.put("Open project", new OperationNameIcon("importProject", "open"));
 	}
 
 	@Override
-	public HashMap<String, String> getAvailableImportingOperations()
+	public HashMap<String, OperationNameIcon> getAvailableImportingOperations()
 	{
 		return availableOperations;
 	}

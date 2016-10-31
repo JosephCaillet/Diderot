@@ -1,6 +1,7 @@
 package plugin.exporter;
 
 import plugin.DiderotPlugin;
+import plugin.OperationNameIcon;
 
 import java.util.HashMap;
 
@@ -15,5 +16,5 @@ public interface DiderotProjectExporter extends DiderotPlugin
 	}
 
 	//Todo: add icon per action support
-	public HashMap<String, String> getAvailableExportingOperations();
+	public HashMap<String, OperationNameIcon> getAvailableExportingOperations();
 }
