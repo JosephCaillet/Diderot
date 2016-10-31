@@ -102,7 +102,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 	{
 		//Todo: remove "." to start in home directory of user
 		JFileChooser fileChooser = new JFileChooser();
-		String projectFileName = PluginsSettings.getPropertyValue(getPluginName() + "projectFileName", ".");
+		String projectFileName = PluginsSettings.getPropertyValue(getPluginName() + "projectFileName", project.getName() + ".dip");
 		fileChooser.setSelectedFile(new File(projectFileName));
 		fileChooser.setFileFilter(new FileNameExtensionFilter("Diderot project file", "dip"));
 
@@ -118,6 +118,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		}
 
 		launchExport(fileName);
+		PluginsSettings.setPropertyValue(getPluginName() + "projectFileName", fileName);
 	}
 
 	private void launchExport(String fileName)

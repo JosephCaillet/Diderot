@@ -104,6 +104,8 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 
 		rootRoute.clear();
 		rootRoute.setName("newProject.com");
+
+		PluginsSettings.clear();
 	}
 
 	public void importProject()
