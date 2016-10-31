@@ -13,6 +13,18 @@ var folder = {
 		}
 	},
 
+	//strongly inspired by AnhSirk Dasarp : http://stackoverflow.com/questions/5007530/how-do-i-scroll-to-an-element-using-javascript
+	findPos(selector) {
+		let obj = document.querySelector(selector);
+		let curtop = 0;
+		if (obj.offsetParent) {
+			do {
+				curtop += obj.offsetTop;
+			} while (obj = obj.offsetParent);
+			return [curtop];
+		}
+	},
+
 	foldAll(bool){
 		let action;
 		if(bool){
@@ -101,11 +113,26 @@ var folder = {
 		});
 	},
 
+	setUpGoToRouteLink(){
+		this.doOn(".routeSummaryName a", function(element)
+		{
+			element.addEventListener("click", function(event){
+				event.preventDefault();
+				let source = event.target || event.srcElement;
+				let offset = parseInt(window.getComputedStyle(document.querySelector("header")).height);
+				offset += 15;
+				window.scrollTo(0, folder.findPos(source.getAttribute("href").replace(new RegExp("/", "g"), "\\/")) - offset);
+			});
+		});
+	},
+
 	setUpFoldingOnLoad(initialFoldStatus = true){
 		window.addEventListener("load", function(){
 			if(initialFoldStatus){
 				folder.foldAll(true);
 			}
+
+			folder.setUpGoToRouteLink();
 
 			folder.setUpMethodRouteDisplayInHeader();
 
