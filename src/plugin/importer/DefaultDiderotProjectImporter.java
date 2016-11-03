@@ -126,6 +126,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 
 			project.clear();
 			rootRoute.clear();
+			PluginsSettings.clear();
 
 			loadProject(diderotProject);
 			loadPluginsProperties(diderotProject);
@@ -166,8 +167,12 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 	private void loadPluginsProperties(Element projectElement)
 	{
 		Node pluginsProperties = projectElement.getElementsByTagName("pluginsProperties").item(0);
+		if(pluginsProperties == null)
+		{
+			return;
+		}
+
 		NodeList nodeList = pluginsProperties.getChildNodes();
-		PluginsSettings.clear();
 
 		for(int i = 0; i < nodeList.getLength(); i++)
 		{

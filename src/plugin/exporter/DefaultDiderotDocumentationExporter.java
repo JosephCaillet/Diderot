@@ -1,5 +1,6 @@
 package plugin.exporter;
 
+import gui.dialog.DocumentationExportDialog;
 import org.w3c.dom.Document;
 import plugin.OperationNameIcon;
 import plugin.PluginsSettings;
@@ -142,21 +143,34 @@ public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectEx
 			fileName = PluginsSettings.getPropertyValue("Diderot default project exporter" + "projectFileName", ".");
 		}
 
-		JFileChooser fileChooser = new JFileChooser(fileName);
-		fileChooser.setSelectedFile(new File("."));
-		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		if(JFileChooser.APPROVE_OPTION != fileChooser.showOpenDialog(parent))
+		String logoLocation = PluginsSettings.getPropertyValue(getClass().getName() + "documentationLogo", ".");
+		boolean openBrowser = Boolean.parseBoolean(
+				PluginsSettings.getPropertyValue(getClass().getName() + "documentationOpenInBrowser", "true"));
+
+		DocumentationExportDialog exportDialog = new DocumentationExportDialog(parent, fileName, logoLocation, openBrowser);
+		if(!exportDialog.display())
 		{
 			return;
 		}
 
-		String docPath = fileChooser.getSelectedFile().getAbsolutePath();
-		if(!docPath.endsWith("/"))
+		openBrowser = exportDialog.isOpenInBrowserAsked();
+		logoLocation = exportDialog.getLogoLocation();
+		fileName = exportDialog.getExportLocation();
+
+		if(!new File(fileName).isDirectory())
 		{
-			docPath = docPath + "/";
+			JOptionPane.showMessageDialog(parent,  fileName + " is not a folder.", "Export error", JOptionPane.ERROR_MESSAGE);
+			return;
 		}
 
-		PluginsSettings.setPropertyValue(getPluginName() + "documentationFolder", docPath);
+		PluginsSettings.setPropertyValue(getPluginName() + "documentationFolder", fileName);
+		PluginsSettings.setPropertyValue(getClass().getName() + "documentationLogo", logoLocation);
+		PluginsSettings.setPropertyValue(getClass().getName() + "documentationOpenInBrowser", String.valueOf(openBrowser));
+
+		if(!fileName.endsWith("/"))
+		{
+			fileName = fileName + "/";
+		}
 
 		try
 		{
@@ -168,13 +182,21 @@ public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectEx
 			xmlTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			xmlTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
-			copyDirectory(new File("documentationTemplate/"), new File(docPath));
+			copyDirectory(new File("documentationTemplate/"), new File(fileName));
 
-			File f = new File(docPath + "index.html");
+			File f = new File(fileName + "index.html");
 			xmlTransformer.transform(new DOMSource(xmlSaveDocument), new StreamResult(f));
 
+			File logo = new File(logoLocation);
+			if(logo.exists() && logoLocation.toLowerCase().endsWith("png"))//because default value is ".", the current directory, which exists.
+			{
+				copyDirectory(logo, new File(fileName + "logo.png"));
+			}
 
-			Desktop.getDesktop().browse(f.toURI());
+			if(openBrowser)
+			{
+				Desktop.getDesktop().browse(f.toURI());
+			}
 		}
 		catch(ParserConfigurationException | TransformerException e)
 		{
