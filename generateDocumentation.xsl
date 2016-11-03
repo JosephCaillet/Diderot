@@ -60,10 +60,6 @@
 				<xsl:with-param name="text" select="."/>
 			</xsl:call-template>
 		</p>
-
-		<p>
-			<xsl:value-of select="."/>
-		</p>
 	</xsl:template>
 
 	<xsl:template match="responseOutputFormat">
