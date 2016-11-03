@@ -209,7 +209,7 @@ public class Project
 			super();
 			this.defaultValue = defaultValue;
 			add(defaultValue);
-			createSampleData();
+			//createSampleData();
 		}
 
 		private void createSampleData()
