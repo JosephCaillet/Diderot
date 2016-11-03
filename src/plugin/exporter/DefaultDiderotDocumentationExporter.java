@@ -143,6 +143,7 @@ public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectEx
 		}
 
 		JFileChooser fileChooser = new JFileChooser(fileName);
+		fileChooser.setSelectedFile(new File("."));
 		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		if(JFileChooser.APPROVE_OPTION != fileChooser.showOpenDialog(parent))
 		{
