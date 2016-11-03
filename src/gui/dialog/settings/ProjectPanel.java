@@ -1,7 +1,6 @@
 package gui.dialog.settings;
 
 import model.Project;
-import model.Route;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,15 +12,13 @@ import java.awt.event.KeyEvent;
  */
 public class ProjectPanel extends JPanel
 {
-	private Route rootRoute;
 	private Frame parent;
 
 	private JTextField name, company, domain, authors, contact;
 	private JTextArea description;
 
-	public ProjectPanel(Frame parent, Route rootRoute)
+	public ProjectPanel(Frame parent)
 	{
-		this.rootRoute = rootRoute;
 		this.parent = parent;
 
 		buildUI();

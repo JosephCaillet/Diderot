@@ -55,7 +55,7 @@ public class ProjectSettingsDialog extends JDialog
 		settingsPanel.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
 
 		//Project settings
-		settingsPanel.add(new ProjectPanel(parent, rootRoutes), settingsSections[0]);
+		settingsPanel.add(new ProjectPanel(parent), settingsSections[0]);
 
 		//user defined properties
 		settingsPanel.add(new UserDefinedPropertiesPanel(parent, rootRoutes), settingsSections[1]);

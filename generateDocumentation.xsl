@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output method="html" indent="no"/>
 
 	<xsl:variable name="goBackLinkPrefix" select="'--!--'"/>
@@ -8,7 +8,9 @@
 		<xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html&gt;</xsl:text>
 		<html>
 			<head>
-				<title><xsl:value-of select="diderotProject/@name"/></title>
+				<title>
+					<xsl:value-of select="diderotProject/@name"/>
+				</title>
 				<link rel="stylesheet" href="style.css"/>
 				<link rel="stylesheet" href="highlight_js/monokai-sublime.css"/>
 				<script src="highlight_js/highlight.min.js"/>
@@ -31,10 +33,16 @@
 							<xsl:value-of select="@name"/> project logo.
 						</xsl:attribute>
 					</img>
-					<h1><xsl:value-of select="diderotProject/@name"/></h1>
+					<h1>
+						<xsl:value-of select="diderotProject/@name"/>
+					</h1>
 				</header>
-				<h2><xsl:value-of select="diderotProject/@name"/></h2>
-				<p>Made by <xsl:value-of select="diderotProject/@authors"/>, for <xsl:value-of select="diderotProject/@company"/>.</p>
+				<h2>
+					<xsl:value-of select="diderotProject/@name"/>
+				</h2>
+				<p>Made by <xsl:value-of select="diderotProject/@authors"/>, for <xsl:value-of
+						select="diderotProject/@company"/>.
+				</p>
 				<xsl:apply-templates/>
 				<footer>
 					<span>&#8609; Expand all</span>
@@ -52,33 +60,37 @@
 				<xsl:with-param name="text" select="."/>
 			</xsl:call-template>
 		</p>
+
+		<p>
+			<xsl:value-of select="."/>
+		</p>
 	</xsl:template>
 
 	<xsl:template match="responseOutputFormat">
 		<!--<p>-->
-			<!--These routes can produce the following outputs:-->
-			<!--<ul>-->
-				<!--<xsl:for-each select="format">-->
-					<!--<li>-->
-						<!--<xsl:value-of select="."/>-->
-					<!--</li>-->
-				<!--</xsl:for-each>-->
-			<!--</ul>-->
+		<!--These routes can produce the following outputs:-->
+		<!--<ul>-->
+		<!--<xsl:for-each select="format">-->
+		<!--<li>-->
+		<!--<xsl:value-of select="."/>-->
+		<!--</li>-->
+		<!--</xsl:for-each>-->
+		<!--</ul>-->
 		<!--</p>-->
 	</xsl:template>
 
 	<xsl:template match="userDefinedProperties">
 		<!--<xsl:if test="property">-->
-			<!--<p>-->
-				<!--The following routes' properties as been defined:-->
-				<!--<ul>-->
-					<!--<xsl:for-each select="property">-->
-						<!--<li>-->
-							<!--<xsl:value-of select="@name"/>-->
-						<!--</li>-->
-					<!--</xsl:for-each>-->
-				<!--</ul>-->
-			<!--</p>-->
+		<!--<p>-->
+		<!--The following routes' properties as been defined:-->
+		<!--<ul>-->
+		<!--<xsl:for-each select="property">-->
+		<!--<li>-->
+		<!--<xsl:value-of select="@name"/>-->
+		<!--</li>-->
+		<!--</xsl:for-each>-->
+		<!--</ul>-->
+		<!--</p>-->
 		<!--</xsl:if>-->
 	</xsl:template>
 
@@ -180,31 +192,49 @@
 						<xsl:variable name="baseClassName" select="'methodContainer'"/>
 						<xsl:choose>
 							<xsl:when test="@name = 'GET'">
-								<xsl:attribute name="class"><xsl:value-of select="$baseClassName"/> getMethod</xsl:attribute>
+								<xsl:attribute name="class">
+									<xsl:value-of select="$baseClassName"/> getMethod
+								</xsl:attribute>
 							</xsl:when>
 							<xsl:when test="@name = 'HEAD'">
-								<xsl:attribute name="class"><xsl:value-of select="$baseClassName"/> headMethod</xsl:attribute>
+								<xsl:attribute name="class">
+									<xsl:value-of select="$baseClassName"/> headMethod
+								</xsl:attribute>
 							</xsl:when>
 							<xsl:when test="@name = 'POST'">
-								<xsl:attribute name="class"><xsl:value-of select="$baseClassName"/> postMethod</xsl:attribute>
+								<xsl:attribute name="class">
+									<xsl:value-of select="$baseClassName"/> postMethod
+								</xsl:attribute>
 							</xsl:when>
 							<xsl:when test="@name = 'OPTIONS'">
-								<xsl:attribute name="class"><xsl:value-of select="$baseClassName"/> optionsMethod</xsl:attribute>
+								<xsl:attribute name="class">
+									<xsl:value-of select="$baseClassName"/> optionsMethod
+								</xsl:attribute>
 							</xsl:when>
 							<xsl:when test="@name = 'CONNECT'">
-								<xsl:attribute name="class"><xsl:value-of select="$baseClassName"/> connectMethod</xsl:attribute>
+								<xsl:attribute name="class">
+									<xsl:value-of select="$baseClassName"/> connectMethod
+								</xsl:attribute>
 							</xsl:when>
 							<xsl:when test="@name = 'TRACE'">
-								<xsl:attribute name="class"><xsl:value-of select="$baseClassName"/> traceMethod</xsl:attribute>
+								<xsl:attribute name="class">
+									<xsl:value-of select="$baseClassName"/> traceMethod
+								</xsl:attribute>
 							</xsl:when>
 							<xsl:when test="@name = 'PUT'">
-								<xsl:attribute name="class"><xsl:value-of select="$baseClassName"/> putMethod</xsl:attribute>
+								<xsl:attribute name="class">
+									<xsl:value-of select="$baseClassName"/> putMethod
+								</xsl:attribute>
 							</xsl:when>
 							<xsl:when test="@name = 'PATCH'">
-								<xsl:attribute name="class"><xsl:value-of select="$baseClassName"/> patchMethod</xsl:attribute>
+								<xsl:attribute name="class">
+									<xsl:value-of select="$baseClassName"/> patchMethod
+								</xsl:attribute>
 							</xsl:when>
 							<xsl:when test="@name = 'DELETE'">
-								<xsl:attribute name="class"><xsl:value-of select="$baseClassName"/> deleteMethod</xsl:attribute>
+								<xsl:attribute name="class">
+									<xsl:value-of select="$baseClassName"/> deleteMethod
+								</xsl:attribute>
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:attribute name="class">
@@ -253,14 +283,16 @@
 										<xsl:for-each select="parameters/parameter">
 											<tr>
 												<td>
-													<xsl:value-of select="@name"/></td>
+													<xsl:value-of select="@name"/>
+												</td>
 												<td>
 													<xsl:if test="@required = 'true'">
 														&#10004;
 													</xsl:if>
 												</td>
 												<td>
-													<xsl:value-of select="@description"/></td>
+													<xsl:value-of select="@description"/>
+												</td>
 											</tr>
 										</xsl:for-each>
 									</table>
@@ -282,7 +314,8 @@
 													</xsl:call-template>
 												</pre>
 												<i>
-													Output: <xsl:value-of select="@outputFormat"/>
+													Output:
+													<xsl:value-of select="@outputFormat"/>
 												</i>
 												<xsl:if test="string-length(outputSchema) != 0">
 													<pre>
@@ -292,7 +325,6 @@
 															</xsl:attribute>
 															<xsl:call-template name="decodeNewLine">
 																<xsl:with-param name="text" select="outputSchema"/>
-																<xsl:with-param name="code" select="true()"/>
 															</xsl:call-template>
 														</code>
 													</pre>
@@ -311,14 +343,33 @@
 
 	<xsl:template name="decodeNewLine">
 		<xsl:param name="text"/>
-		<xsl:param name="code" select="false()"/>
+		<xsl:call-template name="replaceString">
+			<xsl:with-param name="text" select="$text"/>
+			<xsl:with-param name="replace" select="'&amp;#xA;'"/>
+			<xsl:with-param name="by" select="'&lt;br&gt;'"/>
+		</xsl:call-template>
+	</xsl:template>
+
+	<!--by Mads Hansen : http://stackoverflow.com/questions/7520762/xslt-1-0-string-replace-function-->
+	<xsl:template name="replaceString">
+		<xsl:param name="text"/>
+		<xsl:param name="replace"/>
+		<xsl:param name="by"/>
 		<xsl:choose>
-			<xsl:when test="$code != true()">
-				<xsl:value-of disable-output-escaping="yes" select="translate($text, '&amp;#xA;', '&lt;br&gt;')"/>
+			<xsl:when test="contains($text,$replace)">
+				<xsl:value-of select="substring-before($text,$replace)"/>
+				<xsl:value-of disable-output-escaping="yes" select="$by"/>
+				<xsl:call-template name="replaceString">
+					<xsl:with-param name="text"
+									select="substring-after($text,$replace)"/>
+					<xsl:with-param name="replace" select="$replace"/>
+					<xsl:with-param name="by" select="$by"/>
+				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="translate($text, '&amp;#xA;', '&#xA;')"/>
+				<xsl:value-of select="$text"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+
 </xsl:stylesheet>
