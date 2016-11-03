@@ -44,10 +44,10 @@
 						select="diderotProject/@company"/>.
 				</p>
 				<xsl:apply-templates/>
-				<footer>
+				<div class="expand">
 					<span>&#8609; Expand all</span>
 					<span>&#8607; Collapse all</span>
-				</footer>
+				</div>
 			</body>
 		</html>
 	</xsl:template>

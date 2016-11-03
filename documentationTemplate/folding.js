@@ -148,11 +148,11 @@ var folder = {
 				node.addEventListener("click", folder.foldEventMethodResponse);
 			});
 
-			document.querySelector("footer span:nth-child(1)").addEventListener("click", function(){
+			document.querySelector(".expand span:nth-child(1)").addEventListener("click", function(){
 				folder.foldAll(false);
 			});
 
-			document.querySelector("footer span:nth-child(2)").addEventListener("click", function(){
+			document.querySelector(".expand span:nth-child(2)").addEventListener("click", function(){
 				folder.foldAll(true);
 			});
 		});
