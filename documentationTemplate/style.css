@@ -6,7 +6,8 @@
 p, pre
 {
 	text-indent: 4em;
-	margin-top: 0;
+	margin-top: 0.2em;
+	margin-bottom: 0.1em;
 }
 
 h3, h4, h5, h6
@@ -32,6 +33,7 @@ h3
 {
 	font-size: 1.2em;
 	transition: all, ease, 0.25s;
+	width: 90%;
 }
 
 h3:hover
@@ -49,7 +51,7 @@ h4
 h5
 {
 	font-size: 1.15em;
-	margin: 0.5em;
+	margin: 0.4em 0.5em;
 	color: black;
 	border-bottom: black 0.1em solid;
 	padding: 0.2em;
@@ -218,12 +220,7 @@ a:before, h3:before
 
 .methodContainer
 {
-	margin-bottom: 1em;
-}
-
-.methodContainer:last-child
-{
-	margin-bottom: 0;
+	margin-top: 0.5em;
 }
 
 .methodContainer > h4
@@ -400,10 +397,10 @@ a:before, h3:before
 
 .responsesContainer
 {
-	padding: 0em 0.5em;
+	padding: 0 0.5em;
 }
 
-.responseContainer
+.responseContainer:not(:last-child)
 {
 	padding-bottom: 0.5em;
 }
@@ -445,12 +442,18 @@ a:before, h3:before
 	display: none;
 }
 
+.response i
+{
+	margin-top: 0.5em;
+	display: inline-block;
+}
+
 pre:nth-of-type(2)
 {
 	text-indent: 0;
 	tab-size: 4;
 	font-family: Monospaced, "Andale Mono", monospace;
-	margin-bottom: -1em;
+	margin-bottom: -1.5em;
 	margin-top: 0.25em;
 }
 
