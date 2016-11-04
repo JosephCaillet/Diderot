@@ -20,17 +20,10 @@ public class PluginConfigPanel extends JTabbedPane
 {
 	private Frame parent;
 
-	private TreeMap<String, DiderotProjectImporter> importPlugins = new TreeMap<>();
-	private TreeMap<String, DiderotProjectExporter> exportPlugins = new TreeMap<>();
-	private TreeMap<String, DiderotProjectEditor> editPlugins = new TreeMap<>();
-
 	public PluginConfigPanel(Frame parent, TreeMap<String, DiderotProjectImporter> importPlugins, TreeMap<String, DiderotProjectExporter> exportPlugins, TreeMap<String, DiderotProjectEditor> editPlugins)
 	{
 		super(TOP);
 		this.parent = parent;
-		this.importPlugins = importPlugins;
-		this.exportPlugins = exportPlugins;
-		this.editPlugins = editPlugins;
 
 		addTab("Import", buildPluginPanel(importPlugins));
 		addTab("Export", buildPluginPanel(exportPlugins));
