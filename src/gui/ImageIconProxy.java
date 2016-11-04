@@ -25,6 +25,9 @@ public class ImageIconProxy
 		imageIconHashMap.put("saveas", new ImageIcon("rsc/saveas.png"));
 		imageIconHashMap.put("exportweb", new ImageIcon("rsc/exportweb.png"));
 		imageIconHashMap.put("open", new ImageIcon("rsc/open.png"));
+
+		imageIconHashMap.put("conf2", new ImageIcon("rsc/conf2.png"));
+		imageIconHashMap.put("info", new ImageIcon("rsc/info.png"));
 	}
 
 	public static ImageIcon getIcon(String path)

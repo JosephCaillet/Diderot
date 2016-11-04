@@ -61,13 +61,15 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		rootRoutes = new Route(Project.getActiveProject().getDomain());
 
-		//createSampleRoute();
-
 		buildUI();
 
 		setPreferredSize(new Dimension(900, 800));
 		pack();
 		setLocationRelativeTo(null);
+
+		setUpImportPlugins();
+		setUpExportPlugins();
+		setUpEditPlugins();
 
 		DiderotProjectImporter importer = importPlugins.get(DefaultDiderotProjectImporter.class.getName());
 		DefaultDiderotProjectImporter defaultImporter = (DefaultDiderotProjectImporter) importer;
@@ -258,7 +260,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)
 			{
-				ProjectSettingsDialog projectSettingsDialog = new ProjectSettingsDialog(parent, rootRoutes);
+				ProjectSettingsDialog projectSettingsDialog = new ProjectSettingsDialog(parent, rootRoutes, importPlugins, exportPlugins, editPlugins);
 				projectSettingsDialog.display();
 
 				TreePath selectedElement = routesTreePanel.getSelectionPath();
@@ -360,6 +362,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 								setTitle("Diderot - " + Project.getActiveProject().getName());
 								routesTreePanel.updateModel();
+								enableButton(false);
 							}
 							catch(NoSuchMethodException e1)
 							{
@@ -559,17 +562,14 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		importMenu = new JMenu("Import");
 		importMenu.setMnemonic('I');
-		setUpImportPlugins();
 		menuBar.add(importMenu);
 
 		exportMenu = new JMenu("Export");
 		exportMenu.setMnemonic('E');
-		setUpExportPlugins();
 		menuBar.add(exportMenu);
 
 		editMenu = new JMenu("Edit");
 		editMenu.setMnemonic('U');
-		setUpEditPlugins();
 		menuBar.add(editMenu);
 
 

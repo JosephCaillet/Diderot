@@ -303,7 +303,14 @@ public class MethodsManagementPanel extends JPanel
 		if(scrollPane != null)
 		{
 			methodsTabbedPanel.setSelectedIndex(savedMethodIndex);
-			scrollPane.getVerticalScrollBar().setValue(savedViewHorizontalPosition);
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					scrollPane.getVerticalScrollBar().setValue(savedViewHorizontalPosition);
+				}
+			});
 		}
 	}
 }

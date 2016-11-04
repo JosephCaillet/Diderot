@@ -18,6 +18,7 @@ public class Main
 		try
 		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 		}
 		catch(UnsupportedLookAndFeelException e){}
 		catch(ClassNotFoundException e){}

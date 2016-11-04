@@ -2,19 +2,23 @@ package gui.dialog.settings;
 
 import gui.ImageIconProxy;
 import model.Route;
+import plugin.editor.DiderotProjectEditor;
+import plugin.exporter.DiderotProjectExporter;
+import plugin.importer.DiderotProjectImporter;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.TreeMap;
 
 /**
  * Created by joseph on 16/07/16.
  */
 public class ProjectSettingsDialog extends JDialog
 {
-	private static final String[] settingsSections = {"Project", "User defined properties", "Response output format"};
+	private static final String[] settingsSections = {"Project", "User defined properties", "Response output format", "Plugins' configurations"};
 	private static String lastSelectedMenu = settingsSections[0];
 
 	private Route rootRoutes;
@@ -25,11 +29,20 @@ public class ProjectSettingsDialog extends JDialog
 	private JPanel settingsPanel;
 	private JButton exitButton = new JButton("Close project settings window", ImageIconProxy.getIcon("exit"));
 
+	private TreeMap<String, DiderotProjectImporter> importPlugins = new TreeMap<>();
+	private TreeMap<String, DiderotProjectExporter> exportPlugins = new TreeMap<>();
+	private TreeMap<String, DiderotProjectEditor> editPlugins = new TreeMap<>();
 
-	public ProjectSettingsDialog(Frame owner, Route rootRoutes)
+	public ProjectSettingsDialog(Frame owner, Route rootRoutes,
+	                             TreeMap<String, DiderotProjectImporter> importPlugins,
+	                             TreeMap<String, DiderotProjectExporter> exportPlugins,
+	                             TreeMap<String, DiderotProjectEditor> editPlugins)
 	{
 		super(owner, "Project settings", true);
 		this.rootRoutes = rootRoutes;
+		this.importPlugins = importPlugins;
+		this.exportPlugins = exportPlugins;
+		this.editPlugins = editPlugins;
 
 		parent = owner;
 		buildUI();
@@ -62,6 +75,10 @@ public class ProjectSettingsDialog extends JDialog
 
 		//response output format
 		settingsPanel.add(new ResponsePanel(parent, rootRoutes), settingsSections[2]);
+
+		//plugins' configuration
+		settingsPanel.add(new PluginConfigPanel(parent, importPlugins, exportPlugins, editPlugins), settingsSections[3]);
+
 
 		mainPanel.add(settingsPanel, BorderLayout.CENTER);
 		JPanel panel = new JPanel();
