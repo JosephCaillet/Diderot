@@ -71,7 +71,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 	@Override
 	public String getPluginDescription()
 	{
-		return "Diderot project file importer";
+		return "This default plugin is used to provide diderot project opening.";
 	}
 
 	@Override

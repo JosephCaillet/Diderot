@@ -71,7 +71,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 	@Override
 	public String getPluginDescription()
 	{
-		return "Diderot project file saver.";
+		return "This default plugin is used to provide diderot project saving.";
 	}
 
 	@Override

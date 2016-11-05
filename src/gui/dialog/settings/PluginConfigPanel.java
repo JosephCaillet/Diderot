@@ -87,7 +87,7 @@ public class PluginConfigPanel extends JTabbedPane
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			System.out.println("conf :" + plugin.getPluginName());
+			plugin.openConfigDialog();
 		}
 	}
 
@@ -103,7 +103,8 @@ public class PluginConfigPanel extends JTabbedPane
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			System.out.println("info :" + plugin.getPluginName());
+			PluginInfoDialog pluginInfoDialog = new PluginInfoDialog(parent, plugin);
+			pluginInfoDialog.setVisible(true);
 		}
 	}
 }
