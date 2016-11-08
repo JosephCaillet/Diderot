@@ -78,6 +78,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		routesTreePanel.updateModel();
 
 		setTitle("Diderot - " + Project.getActiveProject().getName());
+		setIconImage(ImageIconProxy.getIcon("icon").getImage());
 		setVisible(true);
 		//getWindowListeners()[0].windowClosing(null);
 	}

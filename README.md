@@ -7,6 +7,9 @@ A tool to help designing web routes. This project is still under active developm
 
 The main application window
 
+![Main window with generated web documentation](https://raw.githubusercontent.com/JosephCaillet/Diderot/master/rsc/diderot.png)
+
+
 ![The main application window](https://raw.githubusercontent.com/JosephCaillet/Diderot/master/rsc/mainWindow.png)
 
 The project settings dialog

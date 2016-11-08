@@ -28,6 +28,8 @@ public class ImageIconProxy
 
 		imageIconHashMap.put("conf2", new ImageIcon("rsc/conf2.png"));
 		imageIconHashMap.put("info", new ImageIcon("rsc/info.png"));
+
+		imageIconHashMap.put("icon", new ImageIcon("rsc/icon.png"));
 	}
 
 	public static ImageIcon getIcon(String path)
