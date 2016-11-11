@@ -5,13 +5,39 @@ A tool to help designing web routes. This project is still under active developm
 
 ## Screenshots
 
-The main application window
+The main window with generated web documentation
 
 ![Main window with generated web documentation](https://raw.githubusercontent.com/JosephCaillet/Diderot/master/rsc/diderot.png)
-
 
 ![The main application window](https://raw.githubusercontent.com/JosephCaillet/Diderot/master/rsc/mainWindow.png)
 
 The project settings dialog
 
 ![The project settings dialog](https://raw.githubusercontent.com/JosephCaillet/Diderot/master/rsc/projectSettingsdialog.png)
+
+## Building instruction
+
+### Compile
+```bash
+mkdik build
+javac -cp src/ -d build/ src/Main.java
+```
+
+### Create Jar file
+```bash
+cd build
+jar cfe ../Diderot.jar Main .
+cd ..
+```
+
+### Execute Jar file
+```bash
+cd ..
+java -jar Diderot.jar
+```
+
+### Generate javadoc
+```bash
+cd src
+javadoc -d ../diderot_docs -subpackages . Main.java
+```
