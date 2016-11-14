@@ -15,7 +15,7 @@ The project settings dialog
 
 ![The project settings dialog](https://raw.githubusercontent.com/JosephCaillet/Diderot/master/rsc/projectSettingsdialog.png)
 
-## Building instruction
+## Build instructions
 
 ### Compile
 ```bash
