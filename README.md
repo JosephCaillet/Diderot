@@ -19,7 +19,7 @@ The project settings dialog
 
 ### Compile
 ```bash
-mkdik build
+mkdir build
 javac -cp src/ -d build/ src/Main.java
 ```
 
@@ -32,7 +32,6 @@ cd ..
 
 ### Execute Jar file
 ```bash
-cd ..
 java -jar Diderot.jar
 ```
 

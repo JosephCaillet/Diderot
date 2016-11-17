@@ -5,6 +5,7 @@ import gui.dialog.settings.ProjectSettingsDialog;
 import model.Project;
 import model.Route;
 import plugin.OperationNameIcon;
+import plugin.PluginClassLoader;
 import plugin.editor.DiderotProjectEditor;
 import plugin.exporter.DefaultDiderotDocumentationExporter;
 import plugin.exporter.DefaultDiderotProjectExporter;
@@ -18,11 +19,15 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.Vector;
+import java.util.jar.JarFile;
 
 import static model.Route.getAbsoluteNodePath;
 
@@ -67,9 +72,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		pack();
 		setLocationRelativeTo(null);
 
-		setUpImportPlugins();
-		setUpExportPlugins();
-		setUpEditPlugins();
+		loadPlugins();
 
 		DiderotProjectImporter importer = importPlugins.get(DefaultDiderotProjectImporter.class.getName());
 		DefaultDiderotProjectImporter defaultImporter = (DefaultDiderotProjectImporter) importer;
@@ -318,19 +321,86 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		jPopupMenu.show(routesTreePanel, x, y);
 	}
 
-	private void setUpImportPlugins()
+	public void loadPlugins()
+	{
+		Vector<String> availableImporters = new Vector<>();
+		availableImporters.add(DefaultDiderotProjectImporter.class.getName());
+
+		Vector<String> availableExporters = new Vector<>();
+		availableExporters.add(DefaultDiderotProjectExporter.class.getName());
+		availableExporters.add(DefaultDiderotDocumentationExporter.class.getName());
+
+		Vector<String> availableEditors = new Vector<>();
+
+		File[] jarFiles = new File("plugins").listFiles();
+		for(File file : jarFiles)
+		{
+			if(file.isDirectory())
+			{
+				continue;
+			}
+
+			try
+			{
+				JarFile jar = new JarFile(file);
+				PluginClassLoader.getInstance().addURL(file.toURI().toURL());
+
+				Enumeration jarEntries = jar.entries();
+				while(jarEntries.hasMoreElements())
+				{
+					String entryName = jarEntries.nextElement().toString();
+
+					if(entryName.endsWith(".class"))
+					{
+						String className = entryName.substring(0, entryName.length() - 6).replaceAll("/", ".");
+						Class pluginClass = Class.forName(className, true, PluginClassLoader.getInstance());
+						Class[] interfaces = pluginClass.getInterfaces();
+
+						for(Class implementedInterface : interfaces)
+						{
+							if(implementedInterface.equals(DiderotProjectImporter.class))
+							{
+								availableImporters.add(className);
+							}
+							else if(implementedInterface.equals(DiderotProjectExporter.class))
+							{
+								availableExporters.add(className);
+							}
+							else if(implementedInterface.equals(DiderotProjectEditor.class))
+							{
+								availableEditors.add(className);
+							}
+						}
+					}
+				}
+			}
+			catch(IOException e)
+			{
+				System.out.println("Cannot load \"" + file.getName() + "\".");
+				//e.printStackTrace();
+			}
+			catch(ClassNotFoundException e)
+			{
+				e.printStackTrace();
+			}
+		}
+
+		setUpImportPlugins(availableImporters);
+		setUpExportPlugins(availableExporters);
+		setUpEditPlugins(availableEditors);
+	}
+
+	private void setUpImportPlugins(Vector<String> availableImporters)
 	{
 		importPlugins.clear();
 		importMenu.removeAll();
-		Vector<String> availableImporters = new Vector<>();
-		availableImporters.add(DefaultDiderotProjectImporter.class.getName());
 
 		for(String importerName : availableImporters)
 		{
 			Class importer = null;
 			try
 			{
-				importer = Class.forName(importerName);
+				importer = Class.forName(importerName, true, PluginClassLoader.getInstance());
 
 				DiderotProjectImporter importerInstance = (DiderotProjectImporter) importer.newInstance();
 				importPlugins.put(importerName, importerInstance);
@@ -415,20 +485,17 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		}
 	}
 
-	private void setUpExportPlugins()
+	private void setUpExportPlugins(Vector<String> availableExporters)
 	{
 		exportPlugins.clear();
 		exportMenu.removeAll();
-		Vector<String> availableExporters = new Vector<>();
-		availableExporters.add(DefaultDiderotProjectExporter.class.getName());
-		availableExporters.add(DefaultDiderotDocumentationExporter.class.getName());
 
 		for(String exporterName : availableExporters)
 		{
 			Class exporter = null;
 			try
 			{
-				exporter = Class.forName(exporterName);
+				exporter = Class.forName(exporterName, true, PluginClassLoader.getInstance());
 
 				DiderotProjectExporter exporterInstance = (DiderotProjectExporter) exporter.newInstance();
 				exportPlugins.put(exporterName, exporterInstance);
@@ -503,19 +570,17 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		}
 	}
 
-	private void setUpEditPlugins()
+	private void setUpEditPlugins(Vector<String> availableEditors)
 	{
 		editPlugins.clear();
 		editMenu.removeAll();
-		Vector<String> availableEditors = new Vector<>();
-		//availableEditors.add(DefaultDiderotProjectImporter.class.getName());
 
 		for(String editorName : availableEditors)
 		{
 			Class importer = null;
 			try
 			{
-				importer = Class.forName(editorName);
+				importer = Class.forName(editorName, true, PluginClassLoader.getInstance());
 
 				DiderotProjectEditor editorInstance = (DiderotProjectEditor) importer.newInstance();
 				editPlugins.put(editorName, editorInstance);
@@ -537,7 +602,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 					actionMenu.add(actionMenuItem);
 				}
 
-				importMenu.add(actionMenu);
+				editMenu.add(actionMenu);
 			}
 			catch(ClassNotFoundException e)
 			{
