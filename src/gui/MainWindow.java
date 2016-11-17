@@ -546,6 +546,10 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 							actionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK + InputEvent.SHIFT_DOWN_MASK));
 						}
 					}
+					else if("plugin.exporter.DefaultDiderotDocumentationExporter".equals(exporterName))
+					{
+						actionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.CTRL_DOWN_MASK));
+					}
 
 					actionMenu.add(actionMenuItem);
 				}
