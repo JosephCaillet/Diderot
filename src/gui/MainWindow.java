@@ -577,25 +577,46 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		for(String editorName : availableEditors)
 		{
-			Class importer = null;
+			Class editor = null;
 			try
 			{
-				importer = Class.forName(editorName, true, PluginClassLoader.getInstance());
+				editor = Class.forName(editorName, true, PluginClassLoader.getInstance());
 
-				DiderotProjectEditor editorInstance = (DiderotProjectEditor) importer.newInstance();
+				DiderotProjectEditor editorInstance = (DiderotProjectEditor) editor.newInstance();
 				editPlugins.put(editorName, editorInstance);
 
 				JMenu actionMenu = new JMenu(editorInstance.getPluginName());
 				HashMap<String, OperationNameIcon> editingOperations = editorInstance.getAvailableEditingOperations();
 
+				JFrame parent = this;
+
 				for(String actionName : editingOperations.keySet())
 				{
+					final Class finalEditor = editor;
 					JMenuItem actionMenuItem = new JMenuItem(new AbstractAction(actionName, editingOperations.get(actionName).operationIcon)
 					{
 						@Override
 						public void actionPerformed(ActionEvent e)
 						{
-							System.out.println(actionName);
+							editorInstance.setDiderotData(rootRoutes, Project.getActiveProject());
+							editorInstance.setParentFrame(parent);
+							try
+							{
+								Method method = finalEditor.getMethod(editorInstance.getAvailableEditingOperations().get(actionName).methodName);
+								method.invoke(editorInstance);
+							}
+							catch(NoSuchMethodException e1)
+							{
+								e1.printStackTrace();
+							}
+							catch(InvocationTargetException e1)
+							{
+								e1.printStackTrace();
+							}
+							catch(IllegalAccessException e1)
+							{
+								e1.printStackTrace();
+							}
 						}
 					});
 
