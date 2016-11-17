@@ -332,56 +332,62 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		Vector<String> availableEditors = new Vector<>();
 
+
+		//inspired by http://vincentlaine.developpez.com/tutoriel/java/plugins/
 		File[] jarFiles = new File("plugins").listFiles();
-		for(File file : jarFiles)
+
+		if(jarFiles != null)
 		{
-			if(file.isDirectory())
+			for(File file : jarFiles)
 			{
-				continue;
-			}
-
-			try
-			{
-				JarFile jar = new JarFile(file);
-				PluginClassLoader.getInstance().addURL(file.toURI().toURL());
-
-				Enumeration jarEntries = jar.entries();
-				while(jarEntries.hasMoreElements())
+				if(file.isDirectory())
 				{
-					String entryName = jarEntries.nextElement().toString();
+					continue;
+				}
 
-					if(entryName.endsWith(".class"))
+				try
+				{
+					JarFile jar = new JarFile(file);
+					PluginClassLoader.getInstance().addURL(file.toURI().toURL());
+
+					Enumeration jarEntries = jar.entries();
+					while(jarEntries.hasMoreElements())
 					{
-						String className = entryName.substring(0, entryName.length() - 6).replaceAll("/", ".");
-						Class pluginClass = Class.forName(className, true, PluginClassLoader.getInstance());
-						Class[] interfaces = pluginClass.getInterfaces();
+						String entryName = jarEntries.nextElement().toString();
 
-						for(Class implementedInterface : interfaces)
+						if(entryName.endsWith(".class"))
 						{
-							if(implementedInterface.equals(DiderotProjectImporter.class))
+							String className = entryName.substring(0, entryName.length() - 6).replaceAll("/", ".");
+							Class pluginClass = Class.forName(className, true, PluginClassLoader.getInstance());
+							Class[] interfaces = pluginClass.getInterfaces();
+
+							for(Class implementedInterface : interfaces)
 							{
-								availableImporters.add(className);
-							}
-							else if(implementedInterface.equals(DiderotProjectExporter.class))
-							{
-								availableExporters.add(className);
-							}
-							else if(implementedInterface.equals(DiderotProjectEditor.class))
-							{
-								availableEditors.add(className);
+								if(implementedInterface.equals(DiderotProjectImporter.class))
+								{
+									availableImporters.add(className);
+								}
+								else if(implementedInterface.equals(DiderotProjectExporter.class))
+								{
+									availableExporters.add(className);
+								}
+								else if(implementedInterface.equals(DiderotProjectEditor.class))
+								{
+									availableEditors.add(className);
+								}
 							}
 						}
 					}
 				}
-			}
-			catch(IOException e)
-			{
-				System.out.println("Cannot load \"" + file.getName() + "\".");
-				//e.printStackTrace();
-			}
-			catch(ClassNotFoundException e)
-			{
-				e.printStackTrace();
+				catch(IOException e)
+				{
+					System.out.println("Cannot load \"" + file.getName() + "\".");
+					//e.printStackTrace();
+				}
+				catch(ClassNotFoundException e)
+				{
+					e.printStackTrace();
+				}
 			}
 		}
 
