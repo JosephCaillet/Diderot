@@ -14,12 +14,19 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Created by joseph on 28/09/16.
+ * Panel listing loaded plugins by type.
+ * @author joseph
  */
 public class PluginConfigPanel extends JTabbedPane
 {
 	private Frame parent;
 
+	/**
+	 * @param parent Parent frame
+	 * @param importPlugins Instance map of importing plugins
+	 * @param exportPlugins Instance map of exporting plugins
+	 * @param editPlugins Instance map of editing plugins
+	 */
 	public PluginConfigPanel(Frame parent, TreeMap<String, DiderotProjectImporter> importPlugins, TreeMap<String, DiderotProjectExporter> exportPlugins, TreeMap<String, DiderotProjectEditor> editPlugins)
 	{
 		super(TOP);
@@ -30,6 +37,11 @@ public class PluginConfigPanel extends JTabbedPane
 		addTab("Edit", buildPluginPanel(editPlugins));
 	}
 
+	/**
+	 * Create a panel listing plugins passed in argument.
+	 * @param pluginTreeMap Plugin map to be displayed
+	 * @return ScrollPane containing plugins list
+	 */
 	private JScrollPane buildPluginPanel(TreeMap<String, ? extends DiderotPlugin> pluginTreeMap)
 	{
 		Box box = Box.createVerticalBox();
@@ -48,14 +60,14 @@ public class PluginConfigPanel extends JTabbedPane
 
 			if(plugin.isConfigurable())
 			{
-				confBtn.addActionListener(new confPluginActionListener(plugin));
+				confBtn.addActionListener(new ConfPluginActionListener(plugin));
 			}
 			else
 			{
 				confBtn.setEnabled(false);
 			}
 
-			infoBtn.addActionListener(new infoPluginActionListener(plugin));
+			infoBtn.addActionListener(new InfoPluginActionListener(plugin));
 
 			buttonContainer.add(confBtn);
 			buttonContainer.add(infoBtn);
@@ -75,15 +87,25 @@ public class PluginConfigPanel extends JTabbedPane
 		return scrollPane;
 	}
 
-	private class confPluginActionListener implements ActionListener
+	/**
+	 * Listener for plugin configuration button.
+	 */
+	private class ConfPluginActionListener implements ActionListener
 	{
 		private DiderotPlugin plugin;
 
-		public confPluginActionListener(DiderotPlugin plugin)
+		/**
+		 * @param plugin Plugin to configure
+		 */
+		public ConfPluginActionListener(DiderotPlugin plugin)
 		{
 			this.plugin = plugin;
 		}
 
+		/**
+		 * Open the config dialog of the plugin.
+		 * @param e Action event
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
@@ -91,20 +113,30 @@ public class PluginConfigPanel extends JTabbedPane
 		}
 	}
 
-	private class infoPluginActionListener implements ActionListener
+	/**
+	 * Listener for plugin information button.
+	 */
+	private class InfoPluginActionListener implements ActionListener
 	{
 		private DiderotPlugin plugin;
 
-		public infoPluginActionListener(DiderotPlugin plugin)
+		/**
+		 * @param plugin Plugin were information will be found.
+		 */
+		public InfoPluginActionListener(DiderotPlugin plugin)
 		{
 			this.plugin = plugin;
 		}
 
+		/**
+		 * Open information dialog about plugin.
+		 * @param e
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
 			PluginInfoDialog pluginInfoDialog = new PluginInfoDialog(parent, plugin);
-			pluginInfoDialog.setVisible(true);
+			pluginInfoDialog.display();
 		}
 	}
 }

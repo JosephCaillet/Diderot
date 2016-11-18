@@ -34,6 +34,8 @@ cd src
 javadoc -d ../diderot_docs -subpackages . Main.java
 ```
 
+If you want to see private stuff, ad the `-private`.
+
 ## Plugin
 Diderot supports 3 types of plugins:
 

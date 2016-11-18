@@ -14,7 +14,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 /**
- * Created by joseph on 27/09/16.
+ * Panel displaying user defined properties.
+ * @author joseph
  */
 public class UserDefinedPropertiesPanel extends JSplitPane
 {
@@ -34,7 +35,10 @@ public class UserDefinedPropertiesPanel extends JSplitPane
 			renameValueBtn = new JButton("Rename value", ImageIconProxy.getIcon("edit")),
 			deleteValueBtn = new JButton("Delete value", ImageIconProxy.getIcon("del"));
 
-
+	/**
+	 * @param parent Parent frame
+	 * @param rootRoutes Root route
+	 */
 	public UserDefinedPropertiesPanel(Frame parent, Route rootRoutes)
 	{
 		super(HORIZONTAL_SPLIT, true);
@@ -52,6 +56,10 @@ public class UserDefinedPropertiesPanel extends JSplitPane
 		}
 	}
 
+	/**
+	 * Build user defined properties panel
+	 * @return Build panel
+	 */
 	private Box buildUserDefinedPropertiesPanel()
 	{
 		Box mainPanel = Box.createVerticalBox();
@@ -114,6 +122,10 @@ public class UserDefinedPropertiesPanel extends JSplitPane
 		return mainPanel;
 	}
 
+	/**
+	 * Build user defined property values panel
+	 * @return Build panel
+	 */
 	private Box buildUserDefinedPropertyValuesPanel()
 	{
 		Box mainPanel = Box.createVerticalBox();
@@ -142,6 +154,9 @@ public class UserDefinedPropertiesPanel extends JSplitPane
 		return mainPanel;
 	}
 
+	/**
+	 * Add listeners
+	 */
 	public void addListeners()
 	{
 		//project settings
@@ -309,7 +324,7 @@ public class UserDefinedPropertiesPanel extends JSplitPane
 				}
 			}
 		});
-//TODO: disable listener when the program itself act on componant to set teir state (typicaly jcheckbox)
+//TODO: disable listener when the program itself act on component to set their state (typicaly jcheckbox)
 		checkBoxMemorizeNewValue.addItemListener(new ItemListener()
 		{
 			@Override

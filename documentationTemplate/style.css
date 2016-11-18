@@ -416,7 +416,7 @@ a:before, h3:before
 	background: #7f8c8d;
 	color: white;
 	display: inline-block;
-	padding: 0.5em;
+	padding: 0.05em;
 	border-radius: 0.7em 0.7em 0 0;
 	cursor: pointer;
 	transition: border-radius ease 0.5s, background ease 0.25s;

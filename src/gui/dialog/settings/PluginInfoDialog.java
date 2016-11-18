@@ -10,7 +10,8 @@ import java.awt.event.ActionListener;
 import java.net.URI;
 
 /**
- * Created by joseph on 05/11/16.
+ * Dialog box displaying information about plugin.
+ * @author joseph
  */
 public class PluginInfoDialog extends JDialog
 {
@@ -19,6 +20,10 @@ public class PluginInfoDialog extends JDialog
 	private JButton closeBtn = new JButton("Close");
 	private Component owner;
 
+	/**
+	 * @param owner Parent frame
+	 * @param plugin Plugin containing information
+	 */
 	public PluginInfoDialog(Frame owner, DiderotPlugin plugin)
 	{
 		super(owner, true);
@@ -33,6 +38,9 @@ public class PluginInfoDialog extends JDialog
 		setLocationRelativeTo(owner);
 	}
 
+	/**
+	 * Build user interface.
+	 */
 	private void buildUI()
 	{
 		Box box = Box.createVerticalBox();
@@ -64,6 +72,9 @@ public class PluginInfoDialog extends JDialog
 		addListener();
 	}
 
+	/**
+	 * Add listeners.
+	 */
 	private void addListener()
 	{
 		contactBtn.addActionListener(new ActionListener()
@@ -97,10 +108,12 @@ public class PluginInfoDialog extends JDialog
 		});
 	}
 
-	@Override
-	public void setVisible(boolean b)
+	/**
+	 * Show dialog box
+	 */
+	public void display()
 	{
 		closeBtn.requestFocusInWindow();
-		super.setVisible(b);
+		super.setVisible(true);
 	}
 }

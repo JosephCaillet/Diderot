@@ -8,7 +8,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 /**
- * Created by joseph on 31/10/16.
+ * Panel displaying project information.
+ * @author joseph
  */
 public class ProjectPanel extends JPanel
 {
@@ -17,6 +18,9 @@ public class ProjectPanel extends JPanel
 	private JTextField name, company, domain, authors, contact;
 	private JTextArea description;
 
+	/**
+	 * @param parent Parent frame
+	 */
 	public ProjectPanel(Frame parent)
 	{
 		this.parent = parent;
@@ -24,6 +28,9 @@ public class ProjectPanel extends JPanel
 		buildUI();
 	}
 
+	/**
+	 * Build user interface.
+	 */
 	private void buildUI()
 	{
 		Project project = Project.getActiveProject();
@@ -70,6 +77,9 @@ public class ProjectPanel extends JPanel
 		addListener();
 	}
 
+	/**
+	 * Add listeners.
+	 */
 	private void addListener()
 	{
 		Project project = Project.getActiveProject();

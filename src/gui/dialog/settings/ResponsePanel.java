@@ -12,7 +12,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 /**
- * Created by joseph on 28/09/16.
+ * Panel displaying available response type.
+ * @author joseph
  */
 public class ResponsePanel extends JPanel
 {
@@ -26,6 +27,10 @@ public class ResponsePanel extends JPanel
 	private JComboBox<String> defaultRespFormat = new JComboBox<String>(new DefaultComboBoxModel<String>(Project.getActiveProject().getResponsesFormat()));
 	private Boolean enableComboListener = false;
 
+	/**
+	 * @param parent Parent Frame
+	 * @param rootRoute Root route
+	 */
 	public ResponsePanel(Frame parent, Route rootRoute)
 	{
 		super();
@@ -35,6 +40,9 @@ public class ResponsePanel extends JPanel
 		buildUI();
 	}
 
+	/**
+	 * Build user interface
+	 */
 	private void buildUI()
 	{
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -66,6 +74,9 @@ public class ResponsePanel extends JPanel
 		addListeners();
 	}
 
+	/**
+	 * Add listeners
+	 */
 	private void addListeners()
 	{
 		addRespFormatBtn.addActionListener(new ActionListener()

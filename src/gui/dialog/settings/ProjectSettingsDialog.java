@@ -14,7 +14,8 @@ import java.awt.event.ActionEvent;
 import java.util.TreeMap;
 
 /**
- * Created by joseph on 16/07/16.
+ * Dialog showing project setting.
+ * @author joseph
  */
 public class ProjectSettingsDialog extends JDialog
 {
@@ -23,7 +24,6 @@ public class ProjectSettingsDialog extends JDialog
 
 	private Route rootRoutes;
 	private Frame parent;
-	private boolean changeMade = false;
 	private JList<String> settingsSectionList;
 	private CardLayout cardLayout;
 	private JPanel settingsPanel;
@@ -33,6 +33,13 @@ public class ProjectSettingsDialog extends JDialog
 	private TreeMap<String, DiderotProjectExporter> exportPlugins = new TreeMap<>();
 	private TreeMap<String, DiderotProjectEditor> editPlugins = new TreeMap<>();
 
+	/**
+	 * @param owner Parent frame
+	 * @param rootRoutes Root route
+	 * @param importPlugins Import plugin map
+	 * @param exportPlugins Export plugin map
+	 * @param editPlugins Edit plugin map
+	 */
 	public ProjectSettingsDialog(Frame owner, Route rootRoutes,
 	                             TreeMap<String, DiderotProjectImporter> importPlugins,
 	                             TreeMap<String, DiderotProjectExporter> exportPlugins,
@@ -52,6 +59,9 @@ public class ProjectSettingsDialog extends JDialog
 		setLocationRelativeTo(parent);
 	}
 
+	/**
+	 * Build user interface.
+	 */
 	private void buildUI()
 	{
 		//settings categories
@@ -93,6 +103,9 @@ public class ProjectSettingsDialog extends JDialog
 		settingsSectionList.setSelectedValue(lastSelectedMenu, true);
 	}
 
+	/**
+	 * Add listeners.
+	 */
 	private void addListeners()
 	{
 		//settings selection
@@ -118,13 +131,13 @@ public class ProjectSettingsDialog extends JDialog
 				setVisible(false);
 			}
 		});
-
-
 	}
 
-	public boolean display()
+	/**
+	 * Display dialog box
+	 */
+	public void display()
 	{
 		setVisible(true);
-		return changeMade;
 	}
 }
