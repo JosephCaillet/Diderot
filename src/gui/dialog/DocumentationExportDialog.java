@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 /**
- * Created by joseph on 03/11/16.
+ * Configuration dialog for documentation export.
  */
 public class DocumentationExportDialog extends JDialog
 {
@@ -18,10 +18,16 @@ public class DocumentationExportDialog extends JDialog
 	private JCheckBox openInBrowserAsked;
 	private JButton browseLocationBtn = new JButton("Browse"), browseLogoBtn = new JButton("Browse");
 
-	private boolean editMade = false;
+	private boolean exportAsked = false;
 	private JButton exportBtn = new JButton("Export"), cancelBtn = new JButton("Cancel");
 	private Container owner;
 
+	/**
+	 * @param owner Parent frame
+	 * @param exportLocation Path to export folder
+	 * @param logoLocation Path to project logo
+	 * @param openInBrowserAsked Open generated doc in browser
+	 */
 	public DocumentationExportDialog(Container owner, String exportLocation, String logoLocation, boolean openInBrowserAsked)
 	{
 		super((Frame) owner, true);
@@ -40,6 +46,9 @@ public class DocumentationExportDialog extends JDialog
 		setLocationRelativeTo(owner);
 	}
 
+	/**
+	 * Build UI.
+	 */
 	private void buildUI()
 	{
 		JPanel mainPanel = new JPanel();
@@ -80,6 +89,9 @@ public class DocumentationExportDialog extends JDialog
 		addListener();
 	}
 
+	/**
+	 * Add listeners
+	 */
 	private void addListener()
 	{
 		browseLocationBtn.addActionListener(new ActionListener()
@@ -122,7 +134,7 @@ public class DocumentationExportDialog extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				editMade = true;
+				exportAsked = true;
 				setVisible(false);
 			}
 		});
@@ -137,23 +149,39 @@ public class DocumentationExportDialog extends JDialog
 		});
 	}
 
+	/**
+	 * Display dialog box.
+	 * @return True if user asked for documentation generation, false otherwise.
+	 */
 	public boolean display()
 	{
 		exportBtn.requestFocusInWindow();
 		setVisible(true);
-		return editMade;
+		return exportAsked;
 	}
 
+	/**
+	 * Get export location.
+	 * @return Path to export folder
+	 */
 	public String  getExportLocation()
 	{
 		return exportLocation.getText();
 	}
 
+	/**
+	 * Get logo location.
+	 * @return Path to logo
+	 */
 	public String  getLogoLocation()
 	{
 		return logoLocation;
 	}
 
+	/**
+	 * Know if the user wants to open generated documentation.
+	 * @return True if opening asked, false otherwise
+	 */
 	public boolean isOpenInBrowserAsked()
 	{
 		return openInBrowserAsked.isSelected();

@@ -157,7 +157,7 @@ public class UserDefinedPropertiesPanel extends JSplitPane
 	/**
 	 * Add listeners
 	 */
-	public void addListeners()
+	private void addListeners()
 	{
 		//project settings
 

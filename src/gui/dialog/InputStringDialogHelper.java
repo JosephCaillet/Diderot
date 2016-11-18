@@ -5,10 +5,20 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created by joseph on 14/05/16.
+ * No empty string input dialog.
+ * @author joseph
  */
 public class InputStringDialogHelper
 {
+	/**
+	 * Displays an input string dialog, input string will not be empty.
+	 * @param parentComponent Parent component
+	 * @param message  Text to display above input field
+	 * @param title Title
+	 * @param messageType Message type : @see JOptionPane
+	 * @param defaultInput Default input text
+	 * @return a non empty string, or null if cancel button hit
+	 */
 	public static String showInputNoSpacesDialog(Component parentComponent, String message, String title, int messageType, String defaultInput)
 	{
 		String str = (String) JOptionPane.showInputDialog(parentComponent, message, title, messageType, null, null, defaultInput);
@@ -30,9 +40,16 @@ public class InputStringDialogHelper
 		return null;
 	}
 
+	/**
+	 * Displays an input string dialog, input string will not be empty.
+	 * @param parentComponent Parent component
+	 * @param message  Text to display above input field
+	 * @param title Title
+	 * @param messageType Message type : @see JOptionPane
+	 * @return a non empty string, or null if cancel button hit
+	 */
 	public static String showInputNoSpacesDialog(Component parentComponent, String message, String title, int messageType)
 	{
 		return showInputNoSpacesDialog(parentComponent, message, title, messageType, "");
 	}
-
 }

@@ -8,7 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Created by joseph on 24/09/16.
+ * Dialog for editing response description and schema in wider window.
+ * @author joseph
  */
 public class ResponseEditionDialog extends JDialog
 {
@@ -17,6 +18,11 @@ public class ResponseEditionDialog extends JDialog
 	private JTextArea description = new JTextArea(), schema = new JTextArea();
 	private JButton okBtn = new JButton("Save"), cancelBtn = new JButton("Cancel");
 
+	/**
+	 * @param owner Parent frame
+	 * @param responseName Name of the response to edit
+	 * @param response Response to edit
+	 */
 	public ResponseEditionDialog(Container owner, String responseName, Response response)
 	{
 		super((Frame) owner, "Editing of response: " + responseName, true);
@@ -28,6 +34,9 @@ public class ResponseEditionDialog extends JDialog
 		setLocationRelativeTo(owner);
 	}
 
+	/**
+	 * Build user interface.
+	 */
 	private void buildUI()
 	{
 		setLayout(new BorderLayout());
@@ -66,6 +75,9 @@ public class ResponseEditionDialog extends JDialog
 		addListener();
 	}
 
+	/**
+	 * Add listeners.
+	 */
 	private void addListener()
 	{
 		okBtn.addActionListener(new ActionListener()
@@ -91,6 +103,10 @@ public class ResponseEditionDialog extends JDialog
 		});
 	}
 
+	/**
+	 * Display the dialog
+	 * @return true if changed made, false otherwise.
+	 */
 	public boolean display()
 	{
 		setVisible(true);
