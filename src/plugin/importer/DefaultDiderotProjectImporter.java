@@ -98,6 +98,12 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		project.addResponseFormat("Plain text");
 		project.setDefaultResponseFormat("JSON");
 
+		project.addUserRouteProperty("Status", "implemented");
+		Project.UserDefinedRouteProperty udp = project.getUserRouteProperty("Status");
+		udp.add("beta");
+		udp.add("depreciated");
+		udp.setNewValuesDisabled(true);
+
 		project.setName("New Project");
 		project.setDomain("newProject.com");
 		project.setAuthors(System.getProperty("user.name"));
