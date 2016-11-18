@@ -4,7 +4,8 @@ import javax.swing.*;
 import java.util.HashMap;
 
 /**
- * Created by joseph on 06/07/16.
+ * Icon manager, loads some icons in ./rsc folder.
+ * @author joseph
  */
 public class ImageIconProxy
 {
@@ -33,15 +34,20 @@ public class ImageIconProxy
 		imageIconHashMap.put("icon", new ImageIcon("rsc/icon.png"));
 	}
 
-	public static ImageIcon getIcon(String path)
+	/**
+	 * Get an icon.
+	 * @param iconName icon name's.
+	 * @return The requested icon.
+	 */
+	public static ImageIcon getIcon(String iconName)
 	{
-		if(imageIconHashMap.containsKey(path))
+		if(imageIconHashMap.containsKey(iconName))
 		{
-			return  imageIconHashMap.get(path);
+			return  imageIconHashMap.get(iconName);
 		}
 
-		ImageIcon imageIcon = new ImageIcon(path);
-		imageIconHashMap.put(path, imageIcon);
+		ImageIcon imageIcon = new ImageIcon(iconName);
+		imageIconHashMap.put(iconName, imageIcon);
 		return imageIcon;
 	}
 }

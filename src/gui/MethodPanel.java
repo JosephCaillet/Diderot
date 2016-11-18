@@ -17,7 +17,8 @@ import java.awt.event.*;
 import java.util.Arrays;
 
 /**
- * Created by joseph on 10/07/16.
+ * Panel displaying an http method stuff.
+ * @author joseph
  */
 public class MethodPanel extends JPanel implements Scrollable
 {
@@ -37,6 +38,9 @@ public class MethodPanel extends JPanel implements Scrollable
 			responseSchema = new JTextArea();
 	private JList<String> responseList;
 
+	/**
+	 * @param httpMethod The method to display.
+	 */
 	public MethodPanel(HttpMethod httpMethod)
 	{
 		super();
@@ -45,6 +49,9 @@ public class MethodPanel extends JPanel implements Scrollable
 		buildUI();
 	}
 
+	/**
+	 * Build user interface.
+	 */
 	private void buildUI()
 	{
 		Border labelBorder = BorderFactory.createEmptyBorder(5, 5, 0, 2);
@@ -244,6 +251,9 @@ public class MethodPanel extends JPanel implements Scrollable
 		}
 	}
 
+	/**
+	 * Add listeners/
+	 */
 	private void addListener()
 	{
 		description.getDocument().addDocumentListener(new DocumentListener()
@@ -492,6 +502,10 @@ public class MethodPanel extends JPanel implements Scrollable
 		enableResponseEditingButtons(false);
 	}
 
+	/**
+	 * Enable/disable response editing buttons.
+	 * @param enabled Enabled status
+	 */
 	private void enableResponseEditingButtons(boolean enabled)
 	{
 		editRespAction.setEnabled(enabled);
@@ -539,15 +553,25 @@ public class MethodPanel extends JPanel implements Scrollable
 		return false;
 	}
 
+	/**
+	 * Listener for adding new value to user defined property available values.
+	 */
 	private static class UserDefinedPropertyNewValueListener extends FocusAdapter
 	{
 		private Project.UserDefinedRouteProperty userProperty;
 
+		/**
+		 * @param userProperty Concerned user property
+		 */
 		public UserDefinedPropertyNewValueListener(Project.UserDefinedRouteProperty userProperty)
 		{
 			this.userProperty = userProperty;
 		}
 
+		/**
+		 * Add current value on available values list
+		 * @param e Event
+		 */
 		@Override
 		public void focusLost(FocusEvent e)
 		{
@@ -559,15 +583,25 @@ public class MethodPanel extends JPanel implements Scrollable
 		}
 	}
 
+	/**
+	 * Listener for showing auto-completion popup menu.
+	 */
 	private static class UserDefinedPropertyAutocompletionListener extends KeyAdapter
 	{
 		private final Project.UserDefinedRouteProperty userProperty;
 
+		/**
+		 * @param userProperty Concerned user property
+		 */
 		public UserDefinedPropertyAutocompletionListener(Project.UserDefinedRouteProperty userProperty)
 		{
 			this.userProperty = userProperty;
 		}
 
+		/**
+		 * Show autocompletion popup menu.
+		 * @param e
+		 */
 		@Override
 		public void keyReleased(KeyEvent e)
 		{
@@ -601,15 +635,25 @@ public class MethodPanel extends JPanel implements Scrollable
 		}
 	}
 
+	/**
+	 * Listener for saving new value of a user defined property.
+	 */
 	private class UserDefinedPropertyEditedValueListener extends FocusAdapter
 	{
 		private String property;
 
+		/**
+		 * @param property Concerned user property name
+		 */
 		public UserDefinedPropertyEditedValueListener(String property)
 		{
 			this.property = property;
 		}
 
+		/**
+		 * Save value for property.
+		 * @param e Event
+		 */
 		@Override
 		public void focusLost(FocusEvent e)
 		{

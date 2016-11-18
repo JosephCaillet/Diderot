@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 import java.util.Map;
 
 /**
- * Created by joseph on 06/07/16.
+ * Panel displaying HttpMethods contained by a certain route.
  */
 public class MethodsManagementPanel extends JPanel
 {
@@ -33,27 +33,46 @@ public class MethodsManagementPanel extends JPanel
 	private int savedMethodIndex;
 	private int savedViewHorizontalPosition;
 
+	/**
+	 * Create methods management panel.
+	 */
 	public MethodsManagementPanel()
 	{
 		super(new BorderLayout());
 		buildUI();
 	}
 
+	/**
+	 * Get add method action.
+	 * @return add method action
+	 */
 	public AbstractAction getAddMethodAction()
 	{
 		return addMethodAction;
 	}
 
+	/**
+	 * Get update method action.
+	 * @return update method action
+	 */
 	public AbstractAction getUpdMethodAction()
 	{
 		return updMethodAction;
 	}
 
+	/**
+	 * Get delete method action.
+	 * @return delete method action
+	 */
 	public AbstractAction getDelMethodAction()
 	{
 		return delMethodAction;
 	}
 
+	/**
+	 * Set displayed route.
+	 * @param route Route to display
+	 */
 	public void setRoute(Route route)
 	{
 		this.route = route;
@@ -71,6 +90,9 @@ public class MethodsManagementPanel extends JPanel
 		}
 	}
 
+	/**
+	 * Rebuild tabs.
+	 */
 	private void rebuildTabbedPane()
 	{
 		methodsTabbedPanel.removeAll();
@@ -87,6 +109,9 @@ public class MethodsManagementPanel extends JPanel
 		}
 	}
 
+	/**
+	 * Build user interface.
+	 */
 	private void buildUI()
 	{
 		JPanel topPanel = new JPanel(new BorderLayout());
@@ -117,6 +142,9 @@ public class MethodsManagementPanel extends JPanel
 		addListeners();
 	}
 
+	/**
+	 * Add action listeners.
+	 */
 	private void addListeners()
 	{
 		addMethodAction = new AbstractAction("Add new http method", ImageIconProxy.getIcon("add"))
@@ -198,6 +226,10 @@ public class MethodsManagementPanel extends JPanel
 		});
 	}
 
+	/**
+	 * Get http method menu.
+	 * @return menu to act on http methods
+	 */
 	public JMenu getMethodMenu()
 	{
 		JMenu methodMenu = new JMenu("Method");
@@ -217,6 +249,10 @@ public class MethodsManagementPanel extends JPanel
 		return methodMenu;
 	}
 
+	/**
+	 * Enable actions on http methods.
+	 * @param enabled Enables status
+	 */
 	private void setEnabledButton(boolean enabled)
 	{
 		updMethodAction.setEnabled(enabled);
@@ -224,6 +260,9 @@ public class MethodsManagementPanel extends JPanel
 		sortMethodBtn.setEnabled(enabled);
 	}
 
+	/**
+	 * Add new http method.
+	 */
 	private void actionAddMethod()
 	{
 		String methodToAdd = InputStringDialogHelper.showInputNoSpacesDialog(this, "Which HTTP method would you add?", "Add HTTP method", JOptionPane.PLAIN_MESSAGE);
@@ -249,6 +288,9 @@ public class MethodsManagementPanel extends JPanel
 		}
 	}
 
+	/**
+	 * Rename selected http method.
+	 */
 	private void actionUpdateMethod()
 	{
 		int currentTab = methodsTabbedPanel.getSelectedIndex();
@@ -268,6 +310,9 @@ public class MethodsManagementPanel extends JPanel
 		}
 	}
 
+	/**
+	 * Delete selected method.
+	 */
 	private void actionRemoveMethod()
 	{
 		int currentTab = methodsTabbedPanel.getSelectedIndex();
@@ -287,6 +332,9 @@ public class MethodsManagementPanel extends JPanel
 		}
 	}
 
+	/**
+	 * Save selected tab, and scrollbar position.
+	 */
 	public void saveDisplayStatus()
 	{
 		JScrollPane scrollPane = (JScrollPane) methodsTabbedPanel.getSelectedComponent();
@@ -297,12 +345,15 @@ public class MethodsManagementPanel extends JPanel
 		}
 	}
 
+	/**
+	 * Restore selected tab, and scrollbar position.
+	 */
 	public void restoreDisplayStatus()
 	{
-		JScrollPane scrollPane = (JScrollPane) methodsTabbedPanel.getSelectedComponent();
-		if(scrollPane != null)
+		if(methodsTabbedPanel.getTabCount() != 0)
 		{
 			methodsTabbedPanel.setSelectedIndex(savedMethodIndex);
+			JScrollPane scrollPane = (JScrollPane) methodsTabbedPanel.getSelectedComponent();
 			SwingUtilities.invokeLater(new Runnable()
 			{
 				@Override

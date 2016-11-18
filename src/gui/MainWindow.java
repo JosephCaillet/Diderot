@@ -32,7 +32,8 @@ import java.util.jar.JarFile;
 import static model.Route.getAbsoluteNodePath;
 
 /**
- * Created by joseph on 14/05/16.
+ * Main window of the application.
+ * @author joseph
  */
 public class MainWindow extends JFrame implements TreeSelectionListener
 {
@@ -59,6 +60,9 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 	private TreeMap<String, DiderotProjectExporter> exportPlugins = new TreeMap<>();
 	private TreeMap<String, DiderotProjectEditor> editPlugins = new TreeMap<>();
 
+	/**
+	 * Creates the main window.
+	 */
 	public MainWindow()
 	{
 		super();
@@ -86,6 +90,9 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		//getWindowListeners()[0].windowClosing(null);
 	}
 
+	/**
+	 * Create sample routes. Used for testing purposes.
+	 */
 	private void createSampleRoute()
 	{
 		//rootRoutes.addRoute("index");
@@ -118,6 +125,9 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		rootRoutes.changeUserPropertyValue("View", "old val", "new val");
 	}
 
+	/**
+	 * Build user interface.
+	 */
 	private void buildUI()
 	{
 		//button for route management
@@ -197,6 +207,9 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		enableButton(false);
 	}
 
+	/**
+	 * Add listeners.
+	 */
 	private void addListeners()
 	{
 		JFrame that = this;
@@ -312,6 +325,11 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		});
 	}
 
+	/**
+	 * Show route editing popup menu on given coordinates.
+	 * @param x x position
+	 * @param y y position
+	 */
 	private void showRoutePopUpMenu(int x, int y)
 	{
 		JPopupMenu jPopupMenu = new JPopupMenu();
@@ -321,7 +339,10 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		jPopupMenu.show(routesTreePanel, x, y);
 	}
 
-	public void loadPlugins()
+	/**
+	 * Load plugins in ./plugins directory.
+	 */
+	private void loadPlugins()
 	{
 		Vector<String> availableImporters = new Vector<>();
 		availableImporters.add(DefaultDiderotProjectImporter.class.getName());
@@ -396,6 +417,10 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		setUpEditPlugins(availableEditors);
 	}
 
+	/**
+	 * Instantiates importing plugins and fill related menu.
+	 * @param availableImporters List of importing plugin class names
+	 */
 	private void setUpImportPlugins(Vector<String> availableImporters)
 	{
 		importPlugins.clear();
@@ -491,6 +516,10 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		}
 	}
 
+	/**
+	 * Instantiates exporting plugins and fill related menu.
+	 * @param availableExporters List of exporting plugin class names
+	 */
 	private void setUpExportPlugins(Vector<String> availableExporters)
 	{
 		exportPlugins.clear();
@@ -580,6 +609,10 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		}
 	}
 
+	/**
+	 *  Instantiates editing plugins and fill related menu.
+	 * @param availableEditors List of editing plugin class names
+	 */
 	private void setUpEditPlugins(Vector<String> availableEditors)
 	{
 		editPlugins.clear();
@@ -653,6 +686,9 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		}
 	}
 
+	/**
+	 * Build menu bar.
+	 */
 	private void buildMenuBar()
 	{
 		JMenuBar menuBar = new JMenuBar();
@@ -700,12 +736,20 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		setJMenuBar(menuBar);
 	}
 
+	/**
+	 * Enable action on selected route.
+	 * @param enabled Should action be enabled or not
+	 */
 	private void enableButton(boolean enabled)
 	{
 		moveRouteAction.setEnabled(enabled);
 		delRouteAction.setEnabled(enabled);
 	}
 
+	/**
+	 * Display information about the selected route, and enable/disable actions.
+	 * @param e Selection event
+	 */
 	@Override
 	public void valueChanged(TreeSelectionEvent e)
 	{
@@ -731,6 +775,9 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		}
 	}
 
+	/**
+	 * Creates a new route, child of the selected one.
+	 */
 	private void actionAddRoute()
 	{
 		String defaultRoute = "";
@@ -755,6 +802,9 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		}
 	}
 
+	/**
+	 * Delete selected route.
+	 */
 	private void actionRemoveRoute()
 	{
 		TreePath treePath = routesTreePanel.getSelectionPath();
@@ -781,6 +831,9 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		}
 	}
 
+	/**
+	 * Move the selected route. Can be used to rename a route.
+	 */
 	private void actionMoveRoute()
 	{
 		TreePath treePath = routesTreePanel.getSelectionPath();
@@ -803,9 +856,13 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 				JOptionPane.showMessageDialog(this, "The destination route already exists, or contains multiple occurrence of '/' without character between them.", "Cannot move route", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
+			methodsManagementPanel.saveDisplayStatus();
+
 			TreePath tp = new TreePath(rootRoutes.getPathToRoute(newRoutePath));
 			routesTreePanel.updateModel(treePath, tp);
 			routesTreePanel.setSelectionPath(tp);
+
+			methodsManagementPanel.restoreDisplayStatus();
 		}
 	}
 }

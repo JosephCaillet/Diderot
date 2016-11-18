@@ -9,13 +9,17 @@ import javax.swing.tree.*;
 import java.util.Vector;
 
 /**
- * Created by joseph on 04/07/16.
+ * Panel displaying routes tree.
+ * @author joseph
  */
 public class RoutesTreePanel extends JTree implements TreeExpansionListener
 {
 	private Vector<TreePath> expandedNodes = new Vector<TreePath>();
 	private Vector<TreePath> collapsedNodes = new Vector<TreePath>();
 
+	/**
+	 * @param rootRoutes Root route
+	 */
 	public RoutesTreePanel(Route rootRoutes)
 	{
 		super();
@@ -24,6 +28,10 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 	}
 
+	/**
+	 * Memorize a node has been expanded.
+	 * @param treeExpansionEvent Event
+	 */
 	@Override
 	public void treeExpanded(TreeExpansionEvent treeExpansionEvent)
 	{
@@ -32,6 +40,10 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 		//System.out.println("expand : " + treeExpansionEvent.getPath());
 	}
 
+	/**
+	 * Memorize a node has been collapsed.
+	 * @param treeExpansionEvent Event
+	 */
 	@Override
 	public void treeCollapsed(TreeExpansionEvent treeExpansionEvent)
 	{
@@ -40,6 +52,11 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 		//System.out.println("colapse : " + treeExpansionEvent.getPath());
 	}
 
+	/**
+	 * Update tree routes model.
+	 * @param treePathToRemove Path to the node that will me marked as collapsed
+	 * @param treePathToAdd Path to the node that will me marked as expanded, if treePathToRemove is already marked as expanded.
+	 */
 	public void updateModel(TreePath treePathToRemove, TreePath treePathToAdd)
 	{
 		if(treePathToAdd != null && expandedNodes.contains(treePathToRemove))
@@ -49,6 +66,10 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 		updateModel(treePathToRemove);
 	}
 
+	/**
+	 * Update tree routes model.
+	 * @param treePathToRemove Path to the node that will me marked as collapsed
+	 */
 	public void updateModel(TreePath treePathToRemove)
 	{
 		expandedNodes.remove(treePathToRemove);
@@ -56,6 +77,9 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 		updateModel();
 	}
 
+	/**
+	 * Update tree routes model.
+	 */
 	public void updateModel()
 	{
 		TreeModel model = getModel();
