@@ -31,7 +31,7 @@ java -jar Diderot.jar
 ### Generate javadoc
 ```bash
 cd src
-javadoc -d ../diderot_docs -subpackages . Main.java
+javadoc -d ../diderot_docs -subpackages . Main.java -link http://docs.oracle.com/javase/8/docs/api/
 ```
 
 If you want to see private stuff, ad the `-private`.

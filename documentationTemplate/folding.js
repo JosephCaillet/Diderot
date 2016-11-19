@@ -120,7 +120,7 @@ var folder = {
 				event.preventDefault();
 				let source = event.target || event.srcElement;
 				let offset = parseInt(window.getComputedStyle(document.querySelector("header")).height);
-				offset += 15;
+				offset += 25;
 				window.scrollTo(0, folder.findPos(source.getAttribute("href").replace(new RegExp("/", "g"), "\\/")) - offset);
 			});
 		});
