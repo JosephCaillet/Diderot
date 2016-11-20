@@ -647,6 +647,14 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 							{
 								Method method = finalEditor.getMethod(editorInstance.getAvailableEditingOperations().get(actionName).methodName);
 								method.invoke(editorInstance);
+
+								setTitle("Diderot - " + Project.getActiveProject().getName());
+
+								TreePath tp = routesTreePanel.getSelectionPath();
+								methodsManagementPanel.saveDisplayStatus();
+								routesTreePanel.updateModel();
+								methodsManagementPanel.restoreDisplayStatus();
+								routesTreePanel.setSelectionPath(tp);
 							}
 							catch(NoSuchMethodException e1)
 							{

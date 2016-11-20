@@ -53,6 +53,8 @@ Important: please note that Diderot does not control what a plugin does. Be sure
 Disclaimer: this is section covers only the basics of Diderot plugin development. If you want to know more, read the docs/sources.
 (have a look on `model` and `plugin` packages)
 
+Please note that this project is still in development (no release released yet), so you should expect changes in class interfaces. 
+
 For each plugin type, there is an interface to implement, plus a base plugin interface that define general methods to get plugin's name, authors, ect.
 As each plugin interfaces extends this base plugin interface, you do not have to explicitly implement it.
 If you want to create a plugin with both import and export capabilities, feel free to do so, a plugin is not restricted to one type only.

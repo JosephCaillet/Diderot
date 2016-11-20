@@ -9,6 +9,7 @@ import java.util.Vector;
 
 /**
  * Created by joseph on 13/05/16.
+ * Will maybe be moved as a member of the Project class.
  */
 public class Route implements TreeModel
 {
