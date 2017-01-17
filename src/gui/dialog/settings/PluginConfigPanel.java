@@ -104,7 +104,7 @@ public class PluginConfigPanel extends JTabbedPane
 
 		/**
 		 * Open the config dialog of the plugin.
-		 * @param e Action event
+		 * @param e {@inheritDoc}
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e)
@@ -130,7 +130,7 @@ public class PluginConfigPanel extends JTabbedPane
 
 		/**
 		 * Open information dialog about plugin.
-		 * @param e
+		 * @param e {@inheritDoc}
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e)

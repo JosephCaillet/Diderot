@@ -523,30 +523,56 @@ public class MethodPanel extends JPanel implements Scrollable
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Dimension getPreferredScrollableViewportSize()
 	{
-		return null;
+		return getPreferredSize();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param rectangle {@inheritDoc}
+	 * @param i {@inheritDoc}
+	 * @param i1 {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public int getScrollableUnitIncrement(Rectangle rectangle, int i, int i1)
 	{
 		return 10;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param rectangle {@inheritDoc}
+	 * @param i {@inheritDoc}
+	 * @param i1 {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public int getScrollableBlockIncrement(Rectangle rectangle, int i, int i1)
 	{
 		return 10;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public boolean getScrollableTracksViewportWidth()
 	{
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public boolean getScrollableTracksViewportHeight()
 	{
@@ -600,7 +626,7 @@ public class MethodPanel extends JPanel implements Scrollable
 
 		/**
 		 * Show autocompletion popup menu.
-		 * @param e
+		 * @param e {@inheritDoc}
 		 */
 		@Override
 		public void keyReleased(KeyEvent e)

@@ -30,7 +30,7 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 
 	/**
 	 * Memorize a node has been expanded.
-	 * @param treeExpansionEvent Event
+	 * @param treeExpansionEvent {@inheritDoc}
 	 */
 	@Override
 	public void treeExpanded(TreeExpansionEvent treeExpansionEvent)
@@ -42,7 +42,7 @@ public class RoutesTreePanel extends JTree implements TreeExpansionListener
 
 	/**
 	 * Memorize a node has been collapsed.
-	 * @param treeExpansionEvent Event
+	 * @param treeExpansionEvent {@inheritDoc}
 	 */
 	@Override
 	public void treeCollapsed(TreeExpansionEvent treeExpansionEvent)

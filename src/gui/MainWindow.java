@@ -215,6 +215,10 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		JFrame that = this;
 		this.addWindowListener(new WindowAdapter()
 		{
+			/**
+			 * Close the window.
+			 * @param e {@inheritDoc}
+			 */
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
@@ -233,6 +237,10 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		focusOnRouteAction = new AbstractAction("Set focus on route panel")
 		{
+			/**
+			 * Set focus on route panel.
+			 * @param actionEvent {@inheritDoc}
+			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)
 			{
@@ -242,6 +250,11 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		addRouteAction = new AbstractAction("Add new route", ImageIconProxy.getIcon("add"))
 		{
+			/**
+			 * Calls MainWindow#actionAddRoute()
+			 * @see MainWindow#actionAddRoute()
+			 * @param actionEvent {@inheritDoc}
+			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)
 			{
@@ -251,6 +264,11 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		delRouteAction = new AbstractAction("Delete route", ImageIconProxy.getIcon("del"))
 		{
+			/**
+			 * Calls MainWindow#actionRemoveRoute()
+			 * @see MainWindow#actionRemoveRoute()
+			 * @param actionEvent {@inheritDoc}
+			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)
 			{
@@ -260,6 +278,11 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		moveRouteAction = new AbstractAction("Move route", ImageIconProxy.getIcon("edit"))
 		{
+			/**
+			 * Calls MainWindow#actionMoveRoute()
+			 * @see MainWindow#actionMoveRoute()
+			 * @param actionEvent {@inheritDoc}
+			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)
 			{
@@ -274,6 +297,10 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		final JFrame parent = this;
 		confBtn.setAction(new AbstractAction("Project settings", ImageIconProxy.getIcon("conf"))
 		{
+			/**
+			 * Show project's settings dialog
+			 * @param actionEvent {@inheritDoc}
+			 */
 			@Override
 			public void actionPerformed(ActionEvent actionEvent)
 			{
@@ -293,6 +320,10 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		routesTreePanel.addTreeSelectionListener(this);
 		routesTreePanel.addMouseListener(new MouseAdapter()
 		{
+			/**
+			 * Show context menu on routes panel on right click.
+			 * @param e {@inheritDoc}
+			 */
 			@Override
 			public void mousePressed(MouseEvent e )
 			{
@@ -309,6 +340,10 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 		});
 		routesTreePanel.addKeyListener(new KeyAdapter()
 		{
+			/**
+			 * Show context menu on context menu key press.
+			 * @param e {@inheritDoc}
+			 */
 			@Override
 			public void keyReleased(KeyEvent e)
 			{
@@ -446,6 +481,10 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 					final Class finalImporter = importer;
 					JMenuItem actionMenuItem = new JMenuItem(new AbstractAction(actionName, importingOperations.get(actionName).operationIcon)
 					{
+						/**
+						 * Launch import plugin's action
+						 * @param e {@inheritDoc}
+						 */
 						@Override
 						public void actionPerformed(ActionEvent e)
 						{
@@ -545,6 +584,10 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 					final Class finalExporter = exporter;
 					JMenuItem actionMenuItem = new JMenuItem(new AbstractAction(actionName, exportingOperations.get(actionName).operationIcon)
 					{
+						/**
+						 * Launch export plugin's action.
+						 * @param e {@inheritDoc}
+						 */
 						@Override
 						public void actionPerformed(ActionEvent e)
 						{
@@ -610,7 +653,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 	}
 
 	/**
-	 *  Instantiates editing plugins and fill related menu.
+	 *  Instantiates editing plugins and fills related menu.
 	 * @param availableEditors List of editing plugin class names
 	 */
 	private void setUpEditPlugins(Vector<String> availableEditors)
@@ -638,6 +681,10 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 					final Class finalEditor = editor;
 					JMenuItem actionMenuItem = new JMenuItem(new AbstractAction(actionName, editingOperations.get(actionName).operationIcon)
 					{
+						/**
+						 * Launch edit plugin's action
+						 * @param e {@inheritDoc}
+						 */
 						@Override
 						public void actionPerformed(ActionEvent e)
 						{
@@ -756,7 +803,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 	/**
 	 * Display information about the selected route, and enable/disable actions.
-	 * @param e Selection event
+	 * @param e {@inheritDoc}
 	 */
 	@Override
 	public void valueChanged(TreeSelectionEvent e)

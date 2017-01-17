@@ -8,6 +8,8 @@ import java.util.TreeMap;
 import java.util.Vector;
 
 /**
+ * Represents a web route.
+ * @author joseph
  * Created by joseph on 13/05/16.
  * Will maybe be moved as a member of the Project class.
  */
@@ -22,7 +24,15 @@ public class Route implements TreeModel
 	private Route root;
 
 
-	//Static method
+	//Statics methods
+
+	/**
+	 * Transforms a tree path into a string url representation of the path.
+	 * eg: {"potatoes.com","I","love","them"} -> potatoes.com/I/love/them
+	 * @param treePath Tree path.
+	 * @param removeRoot Should the url's root be removed or not.
+	 * @return A a string url representation of the path.
+	 */
 	public static String getAbsoluteNodePath(TreePath treePath, boolean removeRoot)
 	{
 		String absPath = "";
@@ -47,6 +57,12 @@ public class Route implements TreeModel
 		return absPath;
 	}
 
+	/**
+	 * Extracts the first path of a url.
+	 * eg: /i/love/potatoes -> i (the first / is not required)
+	 * @param name Url.
+	 * @return First path of a url.
+	 */
 	private static String extractRouteFirstPart(String name)
 	{
 		if(name.startsWith("/"))
@@ -61,6 +77,12 @@ public class Route implements TreeModel
 		return name;
 	}
 
+	/**
+	 * Removes the first path of a url.
+	 * eg: /i/love/potatoes -> love/potatoes (the first / is not required)
+	 * @param name Url.
+	 * @return Url without first part.
+	 */
 	private static String extractRouteWithoutFirstPart(String name)
 	{
 		String lastPart = "";
@@ -77,6 +99,12 @@ public class Route implements TreeModel
 		return lastPart;
 	}
 
+	/**
+	 * Extracts the last path of a url.
+	 * eg: /i/love/potatoes -> potatoes (the first / is not required)
+	 * @param name Url.
+	 * @return Last path of a url.
+	 */
 	private static String extractRouteLastPart(String name)
 	{
 		if(name.startsWith("/"))
@@ -91,7 +119,13 @@ public class Route implements TreeModel
 		return name;
 	}
 
-	//Constructor
+	//Constructors
+
+	/**
+	 * Create a route that will be the top level root of other routes.
+	 * Use it only for top level root.
+	 * @param name Route's name
+	 */
 	public Route(String name)
 	{
 		subRoutes = new TreeMap<String, Route>();
@@ -101,12 +135,20 @@ public class Route implements TreeModel
 		//createSampleHttpMethods();
 	}
 
+	/**
+	 * Create a route, child of an other route.
+	 * @param name Route's name
+	 * @param root Top level root (not the parent route, unless parent and top level route are the same).
+	 */
 	public Route(String name, Route root)
 	{
 		this(name);
 		this.root = root;
 	}
 
+	/**
+	 * Create sample http methods.
+	 */
 	private void createSampleHttpMethods()
 	{
 		httpMethods.put("GET", new HttpMethod());
@@ -114,6 +156,9 @@ public class Route implements TreeModel
 		httpMethods.put("POST", new HttpMethod());
 	}
 
+	/**
+	 * Clears the route.
+	 */
 	public void clear()
 	{
 		name = "";
@@ -123,43 +168,85 @@ public class Route implements TreeModel
 	}
 
 	//Getter and setter
+
+	/**
+	 * Get route's name.
+	 * @return route's name
+	 */
 	public String getName()
 	{
 		return name;
 	}
 
-	public void setName(String name)
+	/**
+	 * Set route's name.
+	 * @param name New route's name.
+	 */
+	private void setName(String name)
 	{
 		this.name = name;
 	}
 
+	/**
+	 * Rename routes' root. To rename a child route, use Route#moveRoute.
+	 * @see Route#moveRoute(String, String)
+	 * @param name New route's name.
+	 * @throws RuntimeException if you try to rename an other route than the root route.
+	 */
+	public void rename(String name) throws RuntimeException
+	{
+		if(root != this)
+		{
+			throw new RuntimeException("You cannot setName directly a route different from the root route. Use moveRoute() instead.");
+		}
+		this.name = name;
+	}
+
+	/**
+	 * Get route's description.
+	 * @return Route's description.
+	 */
 	public String getDescription()
 	{
 		return description;
 	}
 
+	/**
+	 * Set route's description.
+	 * @param description New route's description.
+	 */
 	public void setDescription(String description)
 	{
 		this.description = description;
 	}
 
-	//TODO : replace this method usage by getHttpMethodNames() and getHttpMethod()
-	public TreeMap<String, HttpMethod> getHttpMethods()
-	{
-		return httpMethods;
-	}
-
 	//Route management
+
+	/**
+	 * Get children routes' names.
+	 * @return Sub routes' names.
+	 */
 	public String[] getRoutesNames()
 	{
 		return subRoutes.keySet().toArray(new String[subRoutes.size()]);
 	}
 
+	/**
+	 * Get a sub route by its name.
+	 * @param name Name of the wanted route.
+	 * @return The requested route.
+	 */
 	public Route getRoute(String name)
 	{
 		return subRoutes.get(name);
 	}
 
+	/**
+	 * Add a blank route to an other one.
+	 * eg: with /i/really/love/potatoes given as path, this method will create a route named 'potatoes', and will add it as a child of /i/really/love route. Sub routes will be created if needed.
+	 * @param path Path to route you want to create.
+	 * @return True if the route as been successfully created, false otherwise.
+	 */
 	public boolean addRoute(String path)
 	{
 		String name = extractRouteLastPart(path);
@@ -167,20 +254,27 @@ public class Route implements TreeModel
 
 		if(name.isEmpty())
 		{
-			r = new Route(extractRouteFirstPart(path));
+			r = new Route(extractRouteFirstPart(path), root);
 		}
 		else
 		{
-			r = new Route(name);
+			r = new Route(name, root);
 		}
 
 		return addRoute(path, r);
 	}
 
-	public boolean addRoute(String name, Route newRoute)
+	/**
+	 * Add the given route to an other one.
+	 * eg: with /i/really/love/potatoes given as path, this method will create a route named 'potatoes', and will add it as a child of /i/really/love route. Sub routes will be created if needed.
+	 * @param path Path to the route that will contain the given route.
+	 * @param newRoute The route to add, relative to the current route.
+	 * @return True if the route as been successfully created, false otherwise.
+	 */
+	public boolean addRoute(String path, Route newRoute)
 	{
-		String firstPart = extractRouteFirstPart(name);
-		String lastPart = extractRouteWithoutFirstPart(name);
+		String firstPart = extractRouteFirstPart(path);
+		String lastPart = extractRouteWithoutFirstPart(path);
 
 		if(firstPart.isEmpty())
 		{
@@ -209,10 +303,15 @@ public class Route implements TreeModel
 		}
 	}
 
-	public boolean deleteRoute(String name)
+	/**
+	 * Delete a route.
+	 * @param path Path to the route to delete, relative to the current route.
+	 * @return True if removal successful, false otherwise.
+	 */
+	public boolean deleteRoute(String path)
 	{
-		String firstPart = extractRouteFirstPart(name);
-		String lastPart = extractRouteWithoutFirstPart(name);
+		String firstPart = extractRouteFirstPart(path);
+		String lastPart = extractRouteWithoutFirstPart(path);
 
 		if(subRoutes.containsKey(firstPart))
 		{
@@ -226,6 +325,12 @@ public class Route implements TreeModel
 		return false;
 	}
 
+	/**
+	 * Move (or rename) a route.
+	 * @param oldPath Path of the old route, relative to the current route.
+	 * @param newPath Path of the new route, relative to the current route.
+	 * @return true if moved successfully, false otherwise
+	 */
 	public boolean moveRoute(String oldPath, String newPath)
 	{
 		if(oldPath.equals(newPath))
@@ -252,6 +357,11 @@ public class Route implements TreeModel
 		return true;
 	}
 
+	/**
+	 * Get all routes that are in the given path.
+	 * @param path Path of the last route wanted.
+	 * @return An array of all the routes in the path given, null if any route in the path is not found.
+	 */
 	public Object[] getPathToRoute(String path)
 	{
 		if(extractRouteLastPart(path).isEmpty())
@@ -268,6 +378,12 @@ public class Route implements TreeModel
 		return null;
 	}
 
+	/**
+	 * Add the first Route in path to routeVector.
+	 * @param path Path of the routes to add in routeVector.
+	 * @param routeVector Vector where to add find routes.
+	 * @return True if the first route in path exist, false otherwise.
+	 */
 	private boolean getPathToRoute(String path, Vector<Route> routeVector)
 	{
 		String firstPart = extractRouteFirstPart(path);
@@ -285,6 +401,11 @@ public class Route implements TreeModel
 		return false;
 	}
 
+	/**
+	 * Get the last route of the given path.
+	 * @param path Path of the required route.
+	 * @return Null if the given route does not exist.
+	 */
 	public Route getLastRoute(String path)
 	{
 		Object[] routePath = this.getPathToRoute(path);
@@ -338,6 +459,13 @@ public class Route implements TreeModel
 	}
 
 	//User defined properties management
+	//TODO call only on root routes?
+
+	/**
+	 * Add a user property.
+	 * @param name Property's name.
+	 * @param defaultValue Default value of the new Property.
+	 */
 	public void addUserProperty(String name, String defaultValue)
 	{
 		for(Map.Entry<String, HttpMethod> entry : httpMethods.entrySet())
@@ -351,6 +479,10 @@ public class Route implements TreeModel
 		}
 	}
 
+	/**
+	 * Remove a user property.
+	 * @param name
+	 */
 	public void removeUserProperty(String name)
 	{
 		for(Map.Entry<String, HttpMethod> entry : httpMethods.entrySet())

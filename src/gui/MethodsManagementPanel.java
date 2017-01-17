@@ -13,7 +13,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.Map;
 
 /**
  * Panel displaying HttpMethods contained by a certain route.
@@ -97,15 +96,16 @@ public class MethodsManagementPanel extends JPanel
 	{
 		methodsTabbedPanel.removeAll();
 
-		for(Map.Entry<String, HttpMethod> entry: route.getHttpMethods().entrySet())
+		for(String methodName : route.getHttpMethodNames())
 		{
+			HttpMethod method = route.getHttpMethod(methodName);
 			//methodsTabbedPanel.addTab(entry.getKey(), new JLabel(entry.getKey()));
-			MethodPanel methodPanel = new MethodPanel(entry.getValue());
+			MethodPanel methodPanel = new MethodPanel(method);
 			JScrollPane scrollPane = new JScrollPane(methodPanel,
 					ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
 			scrollPane.getViewport().setOpaque(false);
-			methodsTabbedPanel.addTab(entry.getKey(), scrollPane);
+			methodsTabbedPanel.addTab(methodName, scrollPane);
 		}
 	}
 

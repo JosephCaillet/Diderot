@@ -135,18 +135,6 @@ public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectEx
 		return "This default plugin generates web documentation of your routes.";
 	}
 
-	@Override
-	public void openConfigDialog()
-	{
-		JOptionPane.showMessageDialog(parent, "Not yet implemented");
-	}
-
-	@Override
-	public boolean isConfigurable()
-	{
-		return true;
-	}
-
 	public void generateHtmlDocumentation()
 	{
 		String fileName = PluginsSettings.getPropertyValue(getPluginName() + "documentationFolder");

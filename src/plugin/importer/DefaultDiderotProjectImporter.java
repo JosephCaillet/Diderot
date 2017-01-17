@@ -109,7 +109,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		project.setAuthors(System.getProperty("user.name"));
 
 		rootRoute.clear();
-		rootRoute.setName("newProject.com");
+		rootRoute.rename("newProject.com");
 
 		PluginsSettings.clear();
 	}
@@ -252,7 +252,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 	{
 		String routeName = routeNode.getAttributes().getNamedItem("name").getTextContent();
 		project.setDomain(routeName);
-		rootRoute.setName(routeName);
+		rootRoute.rename(routeName);
 		loadRoutes(routeNode, rootRoute);
 	}
 

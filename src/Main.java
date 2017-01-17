@@ -7,12 +7,19 @@ import javax.swing.*;
  */
 public class Main
 {
+	/**
+	 * Application entry point, launch the program.
+	 * @param args Command line arguments
+	 */
 	public static void main(String[] args)
 	{
 		setSystemLookAndFeel();
 		new MainWindow();
 	}
 
+	/**
+	 * Set system's look and fell.
+	 */
 	static public void setSystemLookAndFeel()
 	{
 		try

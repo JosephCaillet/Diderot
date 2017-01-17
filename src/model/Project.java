@@ -5,7 +5,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
- * A Diderot project
+ * A Diderot project.
  * @author joseph
  */
 public class Project
@@ -150,7 +150,7 @@ public class Project
 
 	/**
 	 * Set project domain/root name.
-	 * @param domain
+	 * @param domain domain
 	 */
 	public void setDomain(String domain)
 	{

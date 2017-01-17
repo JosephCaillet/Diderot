@@ -6,7 +6,7 @@ import java.util.TreeMap;
 import java.util.Vector;
 
 /**
- * An http method, like GET, POST,...
+ * An http method, like GET, POST...
  * @author joseph
  */
 public class HttpMethod extends AbstractTableModel
@@ -292,18 +292,33 @@ public class HttpMethod extends AbstractTableModel
 	}
 
 	//AbstractTreeModel
+
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public int getRowCount()
 	{
 		return parameters.size();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public int getColumnCount()
 	{
 		return columnsNames.length;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param rowIndex {@inheritDoc}
+	 * @param colIndex {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Object getValueAt(int rowIndex, int colIndex)
 	{
@@ -324,24 +339,46 @@ public class HttpMethod extends AbstractTableModel
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param column {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public String getColumnName(int column)
 	{
 		return columnsNames[column];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param columnIndex {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Class getColumnClass(int columnIndex)
 	{
 		return getValueAt(0, columnIndex).getClass();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param rowIndex {@inheritDoc}
+	 * @param columnIndex {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex)
 	{
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param aValue {@inheritDoc}
+	 * @param rowIndex {@inheritDoc}
+	 * @param columnIndex {@inheritDoc}
+	 */
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex)
 	{
