@@ -9,7 +9,7 @@ import java.util.HashMap;
  */
 public class ImageIconProxy
 {
-	private static HashMap<String, ImageIcon> imageIconHashMap = new HashMap<String, ImageIcon>();
+	private static HashMap<String, ImageIcon> imageIconHashMap = new HashMap<>();
 
 	static
 	{
@@ -50,4 +50,6 @@ public class ImageIconProxy
 		imageIconHashMap.put(iconName, imageIcon);
 		return imageIcon;
 	}
+
+	//TODO : add a way to load an icon specifying its key
 }

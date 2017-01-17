@@ -7,6 +7,7 @@ import javax.swing.*;
 
 /**
  * Diderot base plugin interface.
+ * @author joseph
  */
 public interface DiderotPlugin
 {
