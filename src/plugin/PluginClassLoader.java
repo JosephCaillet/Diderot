@@ -4,12 +4,17 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 /**
- * Created by joseph on 17/11/16.
+ * Plugin loader.
+ * @author joseph
  */
 public class PluginClassLoader extends URLClassLoader
 {
 	private static PluginClassLoader instance = new PluginClassLoader();
 
+	/**
+	 * Gets instance.
+	 * @return the instance
+	 */
 	public static PluginClassLoader getInstance()
 	{
 		return instance;
@@ -20,6 +25,10 @@ public class PluginClassLoader extends URLClassLoader
 		super(new URL[0], ClassLoader.getSystemClassLoader());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param url {@inheritDoc}
+	 */
 	public void addURL(URL url)
 	{
 		super.addURL(url);
