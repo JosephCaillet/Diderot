@@ -23,9 +23,9 @@ public class HttpMethod extends AbstractTableModel
 	 */
 	public HttpMethod()
 	{
-		parameters = new TreeMap<String, Parameter>();
-		responses = new TreeMap<String, Response>();
-		userDefinedPropertiesValues = new TreeMap<String, String>();
+		parameters = new TreeMap<>();
+		responses = new TreeMap<>();
+		userDefinedPropertiesValues = new TreeMap<>();
 
 		Project project = Project.getActiveProject();
 		for(String prop : project.getUserRoutesPropertiesNames())
@@ -139,7 +139,7 @@ public class HttpMethod extends AbstractTableModel
 	 */
 	public void removeUnauthorizedValues(String propName)
 	{
-		Vector<String> allowedValues = new Vector<String>(Project.getActiveProject().getUserRouteProperty(propName).descendingSet());
+		Vector<String> allowedValues = new Vector<>(Project.getActiveProject().getUserRouteProperty(propName).descendingSet());
 		String val = userDefinedPropertiesValues.get(propName);
 		if(!allowedValues.contains(val))
 		{

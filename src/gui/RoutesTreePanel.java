@@ -14,8 +14,8 @@ import java.util.Vector;
  */
 public class RoutesTreePanel extends JTree implements TreeExpansionListener
 {
-	private Vector<TreePath> expandedNodes = new Vector<TreePath>();
-	private Vector<TreePath> collapsedNodes = new Vector<TreePath>();
+	private Vector<TreePath> expandedNodes = new Vector<>();
+	private Vector<TreePath> collapsedNodes = new Vector<>();
 
 	/**
 	 * @param rootRoutes Root route

@@ -35,9 +35,9 @@ public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectEx
 	{
 		if (source.isDirectory())
 		{
-			if (!destination.exists())
+			if (!destination.exists() && !destination.mkdirs())
 			{
-				destination.mkdirs();
+				return false;
 			}
 
 			String files[] = source.list();
