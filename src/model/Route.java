@@ -417,16 +417,32 @@ public class Route implements TreeModel
 	}
 
 	//HttpMethod management
+
+	/**
+	 * Get names of all HttpMethod this route use.
+	 * @return http methods' names
+	 */
 	public String[] getHttpMethodNames()
 	{
 		return httpMethods.keySet().toArray(new String[httpMethods.size()]);
 	}
 
+	/**
+	 * Get an HttpMethod used by this route.
+	 * @param name http method's name
+	 * @return http method by name
+	 */
 	public HttpMethod getHttpMethod(String name)
 	{
 		return httpMethods.get(name);
 	}
 
+	/**
+	 * Add an http method.
+	 * @param methodName method's name
+	 * @param method method to add
+	 * @return true if successfully added, false otherwise
+	 */
 	public boolean addHttpMethod(String methodName, HttpMethod method)
 	{
 		if(httpMethods.containsKey(methodName))
@@ -437,12 +453,22 @@ public class Route implements TreeModel
 		return true;
 	}
 
-	public boolean removeHttpMethod(String methodName)
+	/**
+	 * Remove an http method.
+	 * @param methodName method's name
+	 */
+	public void removeHttpMethod(String methodName)
 	{
-		return null == httpMethods.remove(methodName);
+		httpMethods.remove(methodName);
 	}
 
-	public boolean changeHttpMethod(String oldName, String newName)
+	/**
+	 * Rename an http method.
+	 * @param oldName method's old name
+	 * @param newName method's new name
+	 * @return true if renaming successful, false otherwise
+	 */
+	public boolean renameHttpMethod(String oldName, String newName)
 	{
 		if(oldName.equals(newName))
 		{
@@ -462,7 +488,7 @@ public class Route implements TreeModel
 	//TODO call only on root routes?
 
 	/**
-	 * Add a user property.
+	 * Add a user property to all HttpMethods contained (sub routes included).
 	 * @param name Property's name.
 	 * @param defaultValue Default value of the new Property.
 	 */
@@ -480,8 +506,8 @@ public class Route implements TreeModel
 	}
 
 	/**
-	 * Remove a user property.
-	 * @param name
+	 * Remove a user property in all HttpMethods contained (sub routes included).
+	 * @param name User property's name
 	 */
 	public void removeUserProperty(String name)
 	{
@@ -496,6 +522,11 @@ public class Route implements TreeModel
 		}
 	}
 
+	/**
+	 * Rename a user property in all HttpMethods contained (sub routes included).
+	 * @param oldName property's old name
+	 * @param newName property's new annm
+	 */
 	public void renameUserProperty(String oldName, String newName)
 	{
 		for(Map.Entry<String, HttpMethod> entry : httpMethods.entrySet())
@@ -511,6 +542,12 @@ public class Route implements TreeModel
 		}
 	}
 
+	/**
+	 * Change the value of a user defined property in all HttpMethods contained (sub routes included).
+	 * @param name property's name
+	 * @param oldValue old value
+	 * @param newValue new value
+	 */
 	public void changeUserPropertyValue(String name, String oldValue, String newValue)
 	{
 		for(Map.Entry<String, HttpMethod> entry : httpMethods.entrySet())
@@ -528,6 +565,10 @@ public class Route implements TreeModel
 		}
 	}
 
+	/**
+	 * Replace non allowed values by the default value, in all HttpMethods contained (sub routes included).
+	 * @param propName property's name
+	 */
 	public void removeForbiddenUserPropertyValues(String propName)
 	{
 		for(Map.Entry<String, HttpMethod> entry : httpMethods.entrySet())
@@ -543,6 +584,12 @@ public class Route implements TreeModel
 	}
 
 	//Response format management
+
+	/**
+	 * Rename a response format in all responses contained (sub routes included).
+	 * @param oldName response's format old name
+	 * @param newName response's format new name
+	 */
 	public void renameResponseFormatValue(String oldName, String newName)
 	{
 		for(Map.Entry<String, HttpMethod> entry : httpMethods.entrySet())
@@ -565,12 +612,23 @@ public class Route implements TreeModel
 	}
 
 	//interface TreeModel
+
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Object getRoot()
 	{
 		return root;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param o {@inheritDoc}
+	 * @param i {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public Object getChild(Object o, int i)
 	{
@@ -578,6 +636,11 @@ public class Route implements TreeModel
 		return r.subRoutes.get(r.subRoutes.keySet().toArray()[i]);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param o {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public int getChildCount(Object o)
 	{
@@ -585,6 +648,11 @@ public class Route implements TreeModel
 		return r.subRoutes.size();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param o {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public boolean isLeaf(Object o)
 	{
@@ -630,6 +698,11 @@ public class Route implements TreeModel
 	}
 
 	//toString override
+
+	/**
+	 * {@inheritDoc}
+	 * @return route's name.
+	 */
 	@Override
 	public String toString()
 	{

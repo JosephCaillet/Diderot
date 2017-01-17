@@ -300,7 +300,7 @@ public class MethodsManagementPanel extends JPanel
 		if(methodRenamed != null)
 		{
 			methodRenamed = methodRenamed.toUpperCase();
-			if(!route.changeHttpMethod(methodToRename, methodRenamed))
+			if(!route.renameHttpMethod(methodToRename, methodRenamed))
 			{
 				JOptionPane.showMessageDialog(this, "This method already exists.", "Cannot modify http method", JOptionPane.WARNING_MESSAGE);
 				return;
