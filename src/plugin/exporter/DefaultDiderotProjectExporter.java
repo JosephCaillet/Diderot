@@ -22,7 +22,8 @@ import java.util.HashMap;
 import static plugin.exporter.DiderotProjectExporter.encodeNewLine;
 
 /**
- * Created by joseph on 05/10/16.
+ * The type Default diderot project exporter.
+ * @author joseph
  */
 public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 {
@@ -38,42 +39,71 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		availableOperations.put("Save project as", new OperationNameIcon("exportProjectAs", "saveas"));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public HashMap<String, OperationNameIcon> getAvailableExportingOperations()
 	{
 		return availableOperations;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public String getPluginName()
 	{
 		return "Diderot default project exporter";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public String getPluginAuthor()
 	{
 		return "Joseph Caillet";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public String getPluginContactInformation()
 	{
 		return "https://github.com/JosephCaillet/Diderot";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public String getPluginVersion()
 	{
 		return "1.0";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public String getPluginDescription()
 	{
 		return "This default plugin is used to provide diderot project saving.";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param rootRoute {@inheritDoc}
+	 * @param project   {@inheritDoc}
+	 */
 	@Override
 	public void setDiderotData(Route rootRoute, Project project)
 	{
@@ -81,12 +111,19 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		this.project = project;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param parent {@inheritDoc}
+	 */
 	@Override
 	public void setParentFrame(JFrame parent)
 	{
 		this.parent = parent;
 	}
 
+	/**
+	 * Export project.
+	 */
 	public void exportProject()
 	{
 		String fileName = PluginsSettings.getPropertyValue(getPluginName() + "projectFileName");
@@ -98,6 +135,9 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		launchExport(fileName);
 	}
 
+	/**
+	 * Export project as.
+	 */
 	public void exportProjectAs()
 	{
 		//Todo: remove "." to start in home directory of user
@@ -121,6 +161,10 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		PluginsSettings.setPropertyValue(getPluginName() + "projectFileName", fileName);
 	}
 
+	/**
+	 * Launch export.
+	 * @param fileName the file name where to save the project
+	 */
 	private void launchExport(String fileName)
 	{
 		try
@@ -141,6 +185,11 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		}
 	}
 
+	/**
+	 * Create xml document.
+	 * @return the document
+	 * @throws ParserConfigurationException the parser configuration exception
+	 */
 	protected Document createDocument() throws ParserConfigurationException
 	{
 		Document xmlSaveDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
@@ -167,6 +216,11 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		return xmlSaveDocument;
 	}
 
+	/**
+	 * Build plugins properties xml element.
+	 * @param rootXml the root xml
+	 * @return the element
+	 */
 	private Element buildPluginsPropertiesXml(Document rootXml)
 	{
 		Element pluginsProperties = rootXml.createElement("pluginsProperties");
@@ -183,6 +237,11 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		return pluginsProperties;
 	}
 
+	/**
+	 * Build response output format xml element.
+	 * @param rootXml the root xml
+	 * @return the element
+	 */
 	private Element buildResponseOutputFormatXml(Document rootXml)
 	{
 		Element responseOutputFormat = rootXml.createElement("responseOutputFormat");
@@ -197,6 +256,11 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		return responseOutputFormat;
 	}
 
+	/**
+	 * Build user defined properties xml element.
+	 * @param rootXml the root xml
+	 * @return the element
+	 */
 	private Element buildUserDefinedPropertiesXml(Document rootXml)
 	{
 		Element userDefinedProperties = rootXml.createElement("userDefinedProperties");
@@ -229,6 +293,12 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		return userDefinedProperties;
 	}
 
+	/**
+	 * Build routes xml elements.
+	 * @param rootXml  the root xml
+	 * @param route    the route's root
+	 * @param routeXml the route xml
+	 */
 	private void buildRouteXml(Document rootXml, Route route, Element routeXml)
 	{
 		Element description = rootXml.createElement("description");
