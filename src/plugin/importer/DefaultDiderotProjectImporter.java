@@ -22,7 +22,8 @@ import java.util.Vector;
 import static plugin.importer.DiderotProjectImporter.decodeNewLine;
 
 /**
- * Created by joseph on 09/10/16.
+ * The type Default diderot project importer.
+ * @author joseph
  */
 public class DefaultDiderotProjectImporter extends DefaultHandler implements DiderotProjectImporter
 {
@@ -38,42 +39,71 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		availableOperations.put("Open project", new OperationNameIcon("importProject", "open"));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public HashMap<String, OperationNameIcon> getAvailableImportingOperations()
 	{
 		return availableOperations;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public String getPluginName()
 	{
 		return "Diderot default project importer";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public String getPluginAuthor()
 	{
 		return "Joseph Caillet";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public String getPluginContactInformation()
 	{
 		return "https://github.com/JosephCaillet/Diderot";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public String getPluginVersion()
 	{
 		return "1.0";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public String getPluginDescription()
 	{
 		return "This default plugin is used to provide diderot project opening.";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param rootRoute {@inheritDoc}
+	 * @param project   {@inheritDoc}
+	 */
 	@Override
 	public void setDiderotData(Route rootRoute, Project project)
 	{
@@ -81,12 +111,19 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		this.project = project;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @param parent {@inheritDoc}
+	 */
 	@Override
 	public void setParentFrame(JFrame parent)
 	{
 		this.parent = parent;
 	}
 
+	/**
+	 * Create and initialize a new project.
+	 */
 	public void createProject()
 	{
 		project.clear();
@@ -114,6 +151,9 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		PluginsSettings.clear();
 	}
 
+	/**
+	 * Import a project.
+	 */
 	public void importProject()
 	{
 		//Todo: remove "." to start in home directory of user
@@ -156,6 +196,10 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		}
 	}
 
+	/**
+	 * Load project object.
+	 * @param projectElement the project element
+	 */
 	private void loadProject(Element projectElement)
 	{
 		project.setName(projectElement.getAttribute("name"));
@@ -170,6 +214,10 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		}
 	}
 
+	/**
+	 * Load plugins properties.
+	 * @param projectElement the project element
+	 */
 	private void loadPluginsProperties(Element projectElement)
 	{
 		Node pluginsProperties = projectElement.getElementsByTagName("pluginsProperties").item(0);
@@ -192,6 +240,10 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		}
 	}
 
+	/**
+	 * Load responses output format.
+	 * @param projectElement the project element
+	 */
 	private void loadResponsesOutputFormat(Element projectElement)
 	{
 		//TODO fix typo in: responseOutputFormat
@@ -208,6 +260,10 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		}
 	}
 
+	/**
+	 * Load user defined properties.
+	 * @param projectElement the project element
+	 */
 	private void loadUserDefinedProperties(Element projectElement)
 	{
 		Node userDefinedProperties = projectElement.getElementsByTagName("userDefinedProperties").item(0);
@@ -248,6 +304,10 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		}
 	}
 
+	/**
+	 * Initialise routes loading.
+	 * @param routeNode the route node
+	 */
 	private void loadRoutes(Node routeNode)
 	{
 		String routeName = routeNode.getAttributes().getNamedItem("name").getTextContent();
@@ -256,6 +316,11 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		loadRoutes(routeNode, rootRoute);
 	}
 
+	/**
+	 * Load routes.
+	 * @param routeNode the route node
+	 * @param route     the route
+	 */
 	private void loadRoutes(Node routeNode, Route route)
 	{
 		NodeList routeChildren = routeNode.getChildNodes();
