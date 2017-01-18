@@ -35,8 +35,7 @@ public class OperationNameIcon
 	}
 
 	/**
-	 * Creates a new Operation name icon.
-	 *
+	 * Creates a new Operation name icon, without icon.
 	 * @param methodName the method name
 	 */
 	public OperationNameIcon(String methodName)

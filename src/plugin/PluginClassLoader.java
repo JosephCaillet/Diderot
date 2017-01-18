@@ -20,6 +20,9 @@ public class PluginClassLoader extends URLClassLoader
 		return instance;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	private PluginClassLoader()
 	{
 		super(new URL[0], ClassLoader.getSystemClassLoader());
