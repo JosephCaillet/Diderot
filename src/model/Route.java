@@ -128,8 +128,8 @@ public class Route implements TreeModel
 	 */
 	public Route(String name)
 	{
-		subRoutes = new TreeMap<String, Route>();
-		httpMethods = new TreeMap<String, HttpMethod>();
+		subRoutes = new TreeMap<>();
+		httpMethods = new TreeMap<>();
 		this.name = name;
 		root = this;
 		//createSampleHttpMethods();
@@ -197,7 +197,7 @@ public class Route implements TreeModel
 	{
 		if(root != this)
 		{
-			throw new RuntimeException("You cannot setName directly a route different from the root route. Use moveRoute() instead.");
+			throw new DataConsistencyViolationException("You cannot setName directly a route different from the root route. Use moveRoute() instead.");
 		}
 		this.name = name;
 	}
@@ -369,7 +369,7 @@ public class Route implements TreeModel
 			return new Route[]{this};
 		}
 
-		Vector<Route> routeVector = new Vector<Route>();
+		Vector<Route> routeVector = new Vector<>();
 		routeVector.add(this);
 		if(getPathToRoute(path, routeVector))
 		{
