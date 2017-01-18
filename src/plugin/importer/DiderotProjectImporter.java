@@ -6,15 +6,24 @@ import plugin.OperationNameIcon;
 import java.util.HashMap;
 
 /**
- * Created by joseph on 04/10/16.
+ * The interface Diderot project importer, use to import project.
+ * @author joseph
  */
 public interface DiderotProjectImporter extends DiderotPlugin
 {
+	/**
+	 * Decode new line string, replacing "&#xA;" by "\n".
+	 * @param str the string to decode
+	 * @return the string decoded
+	 */
 	static public String decodeNewLine(String str)
 	{
 		return str.replace("&#xA;", "\n");
 	}
 
-	//Todo: add icon per action support
+	/**
+	 * Gets available importing operations.
+	 * @return the available importing operations
+	 */
 	public HashMap<String, OperationNameIcon> getAvailableImportingOperations();
 }

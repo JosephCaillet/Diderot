@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 /**
  * The interface Diderot project editor, use to edit project.
+ * @author joseph
  */
 public interface DiderotProjectEditor extends DiderotPlugin
 {
