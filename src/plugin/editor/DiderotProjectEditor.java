@@ -6,10 +6,13 @@ import plugin.OperationNameIcon;
 import java.util.HashMap;
 
 /**
- * Created by joseph on 04/10/16.
+ * The interface Diderot project editor, use to edit project.
  */
 public interface DiderotProjectEditor extends DiderotPlugin
 {
-	//Todo: add icon per action support
+	/**
+	 * Gets available editing operations.
+	 * @return the available editing operations
+	 */
 	public HashMap<String, OperationNameIcon> getAvailableEditingOperations();
 }
