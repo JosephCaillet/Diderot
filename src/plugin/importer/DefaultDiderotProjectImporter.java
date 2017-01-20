@@ -9,6 +9,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import plugin.OperationNameIcon;
 import plugin.PluginsSettings;
+import plugin.exporter.DefaultDiderotProjectExporter;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -180,7 +181,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 			loadUserDefinedProperties(diderotProject);
 			loadRoutes(diderotProject.getElementsByTagName("route").item(0));
 			project.setOpenedStatus(true);
-			PluginsSettings.setPropertyValue("Diderot default project exporter" + "projectFileName", fileChooser.getSelectedFile().getAbsolutePath());
+			PluginsSettings.setPropertyValue(DefaultDiderotProjectExporter.class.getName() + "projectFileName", fileChooser.getSelectedFile().getAbsolutePath());
 		}
 		catch(SAXException e)
 		{

@@ -171,10 +171,10 @@ public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectEx
 	 */
 	public void generateHtmlDocumentation()
 	{
-		String fileName = PluginsSettings.getPropertyValue(getPluginName() + "documentationFolder");
+		String fileName = PluginsSettings.getPropertyValue(getClass().getName() + "documentationFolder");
 		if(fileName == null)
 		{
-			fileName = PluginsSettings.getPropertyValue("Diderot default project exporter" + "projectFileName", ".");
+			fileName = PluginsSettings.getPropertyValue(DefaultDiderotProjectExporter.class.getName() + "projectFileName", ".");
 		}
 
 		String logoLocation = PluginsSettings.getPropertyValue(getClass().getName() + "documentationLogo", ".");
@@ -197,7 +197,7 @@ public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectEx
 			return;
 		}
 
-		PluginsSettings.setPropertyValue(getPluginName() + "documentationFolder", fileName);
+		PluginsSettings.setPropertyValue(getClass().getName() + "documentationFolder", fileName);
 		PluginsSettings.setPropertyValue(getClass().getName() + "documentationLogo", logoLocation);
 		PluginsSettings.setPropertyValue(getClass().getName() + "documentationOpenInBrowser", String.valueOf(openBrowser));
 

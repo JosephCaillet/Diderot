@@ -13,7 +13,7 @@ public class PluginsSettings
 
 	/**
 	 * Sets property value if property does not exists.
-	 * @param propertyName the property name, should be construct by concatenating the plugin's name and property's name
+	 * @param propertyName the property name, should be construct by concatenating the plugin's class name and property's name
 	 * @param value        the value
 	 */
 	static public void setPropertyValueIfNotExists(String propertyName, String value)
@@ -26,7 +26,7 @@ public class PluginsSettings
 
 	/**
 	 * Gets property value.
-	 * @param propertyName the property name, should be construct by concatenating the plugin's name and property's name
+	 * @param propertyName the property name, should be construct by concatenating the plugin's class name and property's name
 	 * @return the property value
 	 */
 	static public String getPropertyValue(String propertyName)
@@ -36,7 +36,7 @@ public class PluginsSettings
 
 	/**
 	 * Gets property value.
-	 * @param propertyName the property name, should be construct by concatenating the plugin's name and property's name
+	 * @param propertyName the property name, should be construct by concatenating the plugin's class name and property's name
 	 * @param defaultValue the default value
 	 * @return the property value
 	 */
@@ -48,7 +48,7 @@ public class PluginsSettings
 
 	/**
 	 * Sets property value.
-	 * @param propertyName the property name, should be construct by concatenating the plugin's name and property's name
+	 * @param propertyName the property name, should be construct by concatenating the plugin's class name and property's name
 	 * @param value        the value
 	 */
 	static public void setPropertyValue(String propertyName, String value)
@@ -58,7 +58,7 @@ public class PluginsSettings
 
 	/**
 	 * Know if property already exists.
-	 * @param property the property name, should be construct by concatenating the plugin's name and property's name
+	 * @param property the property name, should be construct by concatenating the plugin's class name and property's name
 	 * @return true if the property already exists
 	 */
 	static public boolean containsProperty(String property)
