@@ -34,7 +34,7 @@ cd src
 javadoc -d ../diderot_docs -subpackages . Main.java -link http://docs.oracle.com/javase/8/docs/api/
 ```
 
-If you want to see private stuff, ad the `-private`.
+If you want to see private stuff, add the `-private` command line parameter.
 
 ## Plugin
 Diderot supports 3 types of plugins:
@@ -45,7 +45,7 @@ Diderot supports 3 types of plugins:
 
 ### Plugin installation
 
-Get the `.jar` file of your plugin, an place it in the `plugins` directory. Il will be loaded on Diderot's startup.
+Get the `.jar` file of your plugin, and place it in the `plugins` directory. Il will be loaded on Diderot's startup.
 Important: please note that Diderot does not control what a plugin does. Be sure to do not use a plugin that you do not trust.
 
 ### Create a plugin
