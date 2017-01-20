@@ -19,7 +19,8 @@ import java.io.*;
 import java.util.HashMap;
 
 /**
- * Created by joseph on 20/10/16.
+ * Default Diderot Documentation Exporter, exports project to html using an xslt file.
+ * @author joseph
  */
 public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectExporter
 {
@@ -30,6 +31,12 @@ public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectEx
 		availableOperations.put("Generate documentation", new OperationNameIcon("generateHtmlDocumentation", "exportweb"));
 	}
 
+	/**
+	 * Copy directory recursively.
+	 * @param source      the source
+	 * @param destination the destination
+	 * @return true if operation successful, false otherwise
+	 */
 	//method strongly inspired by kayz1's solution here: http://stackoverflow.com/questions/6214703/copy-entire-directory-contents-to-another-directory
 	static public boolean copyDirectory(File source, File destination)
 	{
@@ -99,42 +106,69 @@ public class DefaultDiderotDocumentationExporter extends DefaultDiderotProjectEx
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public HashMap<String, OperationNameIcon> getAvailableExportingOperations()
 	{
 		return availableOperations;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public String getPluginName()
 	{
 		return "Diredot default documentation exporter";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public String getPluginAuthor()
 	{
 		return "Joseph Caillet";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public String getPluginContactInformation()
 	{
 		return "https://github.com/JosephCaillet/Diderot";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public String getPluginVersion()
 	{
 		return "1.0";
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @return {@inheritDoc}
+	 */
 	@Override
 	public String getPluginDescription()
 	{
 		return "This default plugin generates web documentation of your routes.";
 	}
 
+	/**
+	 * Generate html documentation.
+	 */
 	public void generateHtmlDocumentation()
 	{
 		String fileName = PluginsSettings.getPropertyValue(getPluginName() + "documentationFolder");

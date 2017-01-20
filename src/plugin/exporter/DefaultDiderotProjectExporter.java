@@ -22,7 +22,7 @@ import java.util.HashMap;
 import static plugin.exporter.DiderotProjectExporter.encodeNewLine;
 
 /**
- * The type Default diderot project exporter.
+ * Default diderot project exporter.
  * @author joseph
  */
 public class DefaultDiderotProjectExporter implements DiderotProjectExporter
@@ -181,7 +181,6 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		catch(ParserConfigurationException | TransformerException e)
 		{
 			e.printStackTrace();
-			return;
 		}
 	}
 
