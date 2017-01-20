@@ -42,7 +42,8 @@ public interface DiderotPlugin
 	public String getPluginDescription();
 
 	/**
-	 * Open config dialog.
+	 * Opens config dialog.
+	 * This function will be call by Diderot if the user want to configure the plugin, from setting panel.
 	 * Does nothing by default.
 	 */
 	public default void openConfigDialog()
@@ -51,7 +52,7 @@ public interface DiderotPlugin
 	}
 
 	/**
-	 * Is configurable boolean.
+	 * Can the plugin be configured?
 	 * @return false by default
 	 */
 	public default boolean isConfigurable()
