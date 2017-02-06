@@ -47,6 +47,7 @@ public class ResponseEditionDialog extends JDialog
 		//description.setLineWrap(true);
 		description.setTabSize(2);
 		description.setText(response.getDescription());
+		description.setCaretPosition(0);
 
 		schema.setTabSize(2);
 		schema.setFont(new Font(Font.MONOSPACED, Font.PLAIN, schema.getFont().getSize()- 2));
@@ -57,6 +58,7 @@ public class ResponseEditionDialog extends JDialog
 		schema.setForeground(color);
 		schema.setCaretColor(color);
 		schema.setText(response.getSchema());
+		schema.setCaretPosition(0);
 
 		JPanel descriptionPanel = new JPanel(new BorderLayout()),
 				schemaPanel = new JPanel(new BorderLayout()),

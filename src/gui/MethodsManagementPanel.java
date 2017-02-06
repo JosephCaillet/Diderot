@@ -76,6 +76,7 @@ public class MethodsManagementPanel extends JPanel
 	{
 		this.route = route;
 		descriptionTextArea.setText(route.getDescription());
+		descriptionTextArea.setCaretPosition(0);
 
 		rebuildTabbedPane();
 

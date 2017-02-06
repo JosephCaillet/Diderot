@@ -48,6 +48,7 @@ public class MethodPanel extends JPanel implements Scrollable
 		super();
 		this.httpMethod = httpMethod;
 		description.setText(httpMethod.getDescription());
+		description.setCaretPosition(0);
 		buildUI();
 	}
 
@@ -315,9 +316,11 @@ public class MethodPanel extends JPanel implements Scrollable
 
 				Response response = httpMethod.getResponse(responseName);
 				responseDescription.setText(response.getDescription());
+				responseDescription.setCaretPosition(0);
 				responseType.setModel(new DefaultComboBoxModel<String>(Project.getActiveProject().getResponsesFormat()));
 				responseType.setSelectedItem(response.getOutputType());
 				responseSchema.setText(response.getSchema());
+				responseSchema.setCaretPosition(0);
 				enableResponseEditingButtons(true);
 
 				revalidate();
