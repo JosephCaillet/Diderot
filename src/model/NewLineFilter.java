@@ -39,7 +39,7 @@ public class NewLineFilter extends DocumentFilter
 		{
 			String temp = doc.getText(i, 1);
 
-			if (temp.equals(" ") || temp.equals("\t"))
+			if (" ".equals(temp) || "\t".equals(temp))
 			{
 				whiteSpace.append(temp);
 				i++;
