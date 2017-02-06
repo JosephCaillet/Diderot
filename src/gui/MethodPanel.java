@@ -2,6 +2,7 @@ package gui;
 
 import gui.dialog.ResponseEditionDialog;
 import model.HttpMethod;
+import model.NewLineFilter;
 import model.Project;
 import model.Response;
 
@@ -12,6 +13,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumnModel;
+import javax.swing.text.AbstractDocument;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Arrays;
@@ -176,6 +178,8 @@ public class MethodPanel extends JPanel implements Scrollable
 		responseSchema.setCaretColor(color);
 		JScrollPane scrollPane = new JScrollPane(responseSchema);
 		scrollPane.setRowHeaderView(new TextLineNumber(responseSchema));
+		AbstractDocument doc = (AbstractDocument) responseSchema.getDocument();
+		doc.setDocumentFilter(new NewLineFilter());
 		respEditPanel.add(scrollPane, c);
 
 		respPanel.add(respEditPanel, JSplitPane.RIGHT);

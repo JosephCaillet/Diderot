@@ -1,9 +1,11 @@
 package gui.dialog;
 
 import gui.TextLineNumber;
+import model.NewLineFilter;
 import model.Response;
 
 import javax.swing.*;
+import javax.swing.text.AbstractDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -66,6 +68,8 @@ public class ResponseEditionDialog extends JDialog
 		schemaPanel.add(new JLabel("Schema:"), BorderLayout.NORTH);
 		JScrollPane scrollPane = new JScrollPane(schema);
 		scrollPane.setRowHeaderView(new TextLineNumber(schema));
+		AbstractDocument doc = (AbstractDocument) schema.getDocument();
+		doc.setDocumentFilter(new NewLineFilter());
 		schemaPanel.add(scrollPane, BorderLayout.CENTER);
 
 		buttonPanel.add(okBtn);
