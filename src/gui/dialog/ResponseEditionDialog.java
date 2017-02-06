@@ -1,5 +1,6 @@
 package gui.dialog;
 
+import gui.ImageIconProxy;
 import gui.TextLineNumber;
 import model.NewLineFilter;
 import model.Response;
@@ -18,8 +19,10 @@ public class ResponseEditionDialog extends JDialog
 {
 	private Response response;
 	private Boolean editMade = false;
-	private JTextArea description = new JTextArea(), schema = new JTextArea();
-	private JButton okBtn = new JButton("Save"), cancelBtn = new JButton("Cancel");
+	private JTextArea description = new JTextArea(),
+			schema = new JTextArea();
+	private JButton okBtn = new JButton("Save", ImageIconProxy.getIcon("check")),
+			cancelBtn = new JButton("Cancel", ImageIconProxy.getIcon("cancel"));
 
 	/**
 	 * @param owner Parent frame
@@ -74,8 +77,8 @@ public class ResponseEditionDialog extends JDialog
 		doc.setDocumentFilter(new NewLineFilter());
 		schemaPanel.add(scrollPane, BorderLayout.CENTER);
 
-		buttonPanel.add(okBtn);
 		buttonPanel.add(cancelBtn);
+		buttonPanel.add(okBtn);
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, descriptionPanel, schemaPanel);
 		splitPane.setDividerLocation(0.5);
 		add(splitPane, BorderLayout.CENTER);

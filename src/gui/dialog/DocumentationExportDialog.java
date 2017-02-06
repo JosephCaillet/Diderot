@@ -1,5 +1,7 @@
 package gui.dialog;
 
+import gui.ImageIconProxy;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
@@ -16,10 +18,12 @@ public class DocumentationExportDialog extends JDialog
 	private JLabel logo;
 	private String logoLocation;
 	private JCheckBox openInBrowserAsked;
-	private JButton browseLocationBtn = new JButton("Browse"), browseLogoBtn = new JButton("Browse");
+	private JButton browseLocationBtn = new JButton("Browse", ImageIconProxy.getIcon("open")),
+			browseLogoBtn = new JButton("Browse", ImageIconProxy.getIcon("open"));
 
 	private boolean exportAsked = false;
-	private JButton exportBtn = new JButton("Export"), cancelBtn = new JButton("Cancel");
+	private JButton exportBtn = new JButton("Export", ImageIconProxy.getIcon("exportweb")),
+			cancelBtn = new JButton("Cancel", ImageIconProxy.getIcon("cancel"));
 	private Container owner;
 
 	/**
@@ -79,8 +83,8 @@ public class DocumentationExportDialog extends JDialog
 
 		JPanel btnPanel = new JPanel();
 		btnPanel.setAlignmentX(LEFT_ALIGNMENT);
-		btnPanel.add(exportBtn);
 		btnPanel.add(cancelBtn);
+		btnPanel.add(exportBtn);
 		mainPanel.add(btnPanel);
 
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));

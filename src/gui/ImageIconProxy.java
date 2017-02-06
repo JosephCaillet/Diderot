@@ -32,6 +32,9 @@ public class ImageIconProxy
 		imageIconHashMap.put("help", new ImageIcon("rsc/help.png"));
 
 		imageIconHashMap.put("icon", new ImageIcon("rsc/icon.png"));
+
+		imageIconHashMap.put("cancel", new ImageIcon("rsc/cancel.png"));
+		imageIconHashMap.put("check", new ImageIcon("rsc/check.png"));
 	}
 
 	/**

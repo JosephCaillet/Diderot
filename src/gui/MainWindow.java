@@ -489,7 +489,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 						public void actionPerformed(ActionEvent e)
 						{
 							if(Project.getActiveProject().isOpened() && JOptionPane.YES_OPTION !=
-									JOptionPane.showConfirmDialog(parent, "Project \"" + Project.getActiveProject().getName() + "\" is currently opened.\nUnsaved modifications may be lost.\nDo you want to continue?", "Project already opened", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE))
+									JOptionPane.showConfirmDialog(parent, "Project \"" + Project.getActiveProject().getName() + "\" is currently opened.\nUnsaved modifications will be lost.\nDo you want to continue?", "Project already opened", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE))
 							{
 								return;
 							}
