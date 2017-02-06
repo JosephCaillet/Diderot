@@ -85,13 +85,17 @@ public class TextLineNumber extends JPanel
 		setFont( component.getFont() );
 
 		setBorderGap( 5 );
-		setCurrentLineForeground( Color.RED );
+		//setCurrentLineForeground( Color.RED );
+		setCurrentLineForeground( new Color(249, 38, 114) );
 		setDigitAlignment( RIGHT );
 		setMinimumDisplayDigits( minimumDisplayDigits );
 
 		component.getDocument().addDocumentListener(this);
 		component.addCaretListener( this );
 		component.addPropertyChangeListener("font", this);
+
+		setBackground(component.getBackground());
+		setForeground(component.getForeground());
 	}
 
 	/**
