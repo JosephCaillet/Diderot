@@ -1,5 +1,6 @@
 package gui.dialog;
 
+import gui.TextLineNumber;
 import model.Response;
 
 import javax.swing.*;
@@ -63,7 +64,9 @@ public class ResponseEditionDialog extends JDialog
 		descriptionPanel.add(new JScrollPane(description), BorderLayout.CENTER);
 
 		schemaPanel.add(new JLabel("Schema:"), BorderLayout.NORTH);
-		schemaPanel.add(new JScrollPane(schema), BorderLayout.CENTER);
+		JScrollPane scrollPane = new JScrollPane(schema);
+		scrollPane.setRowHeaderView(new TextLineNumber(schema));
+		schemaPanel.add(scrollPane, BorderLayout.CENTER);
 
 		buttonPanel.add(okBtn);
 		buttonPanel.add(cancelBtn);

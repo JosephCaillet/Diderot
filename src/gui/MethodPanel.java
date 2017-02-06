@@ -174,7 +174,9 @@ public class MethodPanel extends JPanel implements Scrollable
 		responseSchema.setBackground(description.getForeground().darker());
 		responseSchema.setForeground(color);
 		responseSchema.setCaretColor(color);
-		respEditPanel.add(new JScrollPane(responseSchema), c);
+		JScrollPane scrollPane = new JScrollPane(responseSchema);
+		scrollPane.setRowHeaderView(new TextLineNumber(responseSchema));
+		respEditPanel.add(scrollPane, c);
 
 		respPanel.add(respEditPanel, JSplitPane.RIGHT);
 
