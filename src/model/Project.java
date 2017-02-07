@@ -12,9 +12,11 @@ public class Project
 {
 	private static Project activeProject = new Project();
 
-	private TreeMap<String, UserDefinedRouteProperty> userDefinedRouteProperties;
+	private TreeMap<String, UserDefinedRouteProperty> userDefinedRouteProperties = new TreeMap<>();
 	private TreeSet<String> responseFormatList = new TreeSet<>();
 	private String defaultResponseFormat;
+
+	private TreeMap<String, TreeSet<String>> paramsTypes = new TreeMap<>();
 
 	private boolean openedStatus = false;
 
@@ -40,7 +42,29 @@ public class Project
 	 */
 	private Project()
 	{
-		userDefinedRouteProperties = new TreeMap<String, UserDefinedRouteProperty>();
+		//TODO: move to import plugin
+		TreeSet<String> ts = new TreeSet();
+		ts.add(" ");
+		ts.add("date");
+		ts.add("email");
+		ts.add("password");
+		paramsTypes.put("String", ts);
+
+		ts = new TreeSet<>();
+		ts.add(" ");
+		paramsTypes.put("Number", new TreeSet<String>(ts));
+
+		ts = new TreeSet<>();
+		ts.add(" ");
+		paramsTypes.put("Integer", new TreeSet<String>(ts));
+
+		ts = new TreeSet<>();
+		ts.add(" ");
+		paramsTypes.put("Boolean", new TreeSet<String>(ts));
+
+		ts = new TreeSet<>();
+		ts.add(" ");
+		paramsTypes.put("File", new TreeSet<String>(ts));
 	}
 
 	/**
@@ -191,6 +215,28 @@ public class Project
 	public void setContact(String contact)
 	{
 		this.contact = contact;
+	}
+
+	//parameters' types management
+	/**
+	 * Get parameters types.
+	 * @return parameters types.
+	 */
+	public String[] getParamsTypes()
+	{
+		Object[] valuesList =  paramsTypes.keySet().toArray();
+		return Arrays.copyOf(valuesList, valuesList.length, String[].class);
+	}
+
+	/**
+	 * Get sub parameters' types.
+	 * @param parentType parent's type
+	 * @return sub parameters types
+	 */
+	public String[] getSubParamsTypes(String parentType)
+	{
+		Object[] valuesList =  paramsTypes.get(parentType).toArray();
+		return Arrays.copyOf(valuesList, valuesList.length, String[].class);
 	}
 
 	//user defined properties management

@@ -11,7 +11,7 @@ import java.util.Vector;
  */
 public class HttpMethod extends AbstractTableModel
 {
-	public final static String[] columnsNames = {"Name", "Required", "Description"};
+	public final static String[] columnsNames = {"Name", "Required", "Type", "Sub type", "Location", "Description"};
 	private String description = "";
 
 	private TreeMap<String, Parameter> parameters;
@@ -333,6 +333,12 @@ public class HttpMethod extends AbstractTableModel
 			case 1:
 				return parameter.isRequired();
 			case 2:
+				return parameter.getType();
+			case 3:
+				return parameter.getSubType();
+			case 4:
+				return parameter.getLocation();
+			case 5:
 				return parameter.getDescription();
 			default:
 				return 404;
@@ -401,6 +407,17 @@ public class HttpMethod extends AbstractTableModel
 				parameter.setRequired((Boolean) aValue);
 				break;
 			case 2:
+				parameter.setType((String) aValue);
+				parameter.setSubType(Project.getActiveProject().getSubParamsTypes((String) aValue)[0]);
+				fireTableCellUpdated(rowIndex, 3);
+				break;
+			case 3:
+				parameter.setSubType((String) aValue);
+				break;
+			case 4:
+				parameter.setLocation((String) aValue);
+				break;
+			case 5:
 				parameter.setDescription((String) aValue);
 				break;
 			default:

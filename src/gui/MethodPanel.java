@@ -1,10 +1,7 @@
 package gui;
 
 import gui.dialog.ResponseEditionDialog;
-import model.HttpMethod;
-import model.NewLineFilter;
-import model.Project;
-import model.Response;
+import model.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -12,6 +9,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumnModel;
 import javax.swing.text.AbstractDocument;
 import java.awt.*;
@@ -93,7 +91,15 @@ public class MethodPanel extends JPanel implements Scrollable
 		colMod.getColumn(0).setPreferredWidth(100);
 		colMod.getColumn(0).setMaxWidth(400);
 		colMod.getColumn(1).setMaxWidth(100);
-		colMod.getColumn(2).setPreferredWidth(400);
+		colMod.getColumn(2).setMaxWidth(100);
+		colMod.getColumn(3).setMaxWidth(100);
+		colMod.getColumn(3).setMinWidth(70);
+		colMod.getColumn(4 ).setMaxWidth(100);
+		colMod.getColumn(5).setPreferredWidth(400);
+
+		colMod.getColumn(2).setCellEditor(new DefaultCellEditor(new JComboBox(Project.getActiveProject().getParamsTypes())));
+		colMod.getColumn(3).setCellEditor(new ParamsSubTypesEditor());
+		colMod.getColumn(4).setCellEditor(new DefaultCellEditor(new JComboBox(Parameter.PARAMS_LOCATION)));
 
 		Box box = Box.createVerticalBox();
 		box.setBorder(componentBorder);
@@ -703,6 +709,46 @@ public class MethodPanel extends JPanel implements Scrollable
 				JComboBox<String> comboBox = (JComboBox<String>) e.getSource();
 				httpMethod.setUserProperty(property, (String) comboBox.getSelectedItem());
 			}
+		}
+	}
+
+	private class ParamsSubTypesEditor extends AbstractCellEditor implements TableCellEditor, ActionListener
+	{
+		String subType = "";
+		JComboBox<String> combo = new JComboBox<>();
+
+		public ParamsSubTypesEditor()
+		{
+			super();
+			combo.addActionListener(this);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			System.out.println("actionPerformed");
+			subType = (String) combo.getSelectedItem();
+		}
+
+		@Override
+		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
+		{
+			System.out.println("getTableCellEditorComponent");
+			subType = (String) value;
+			String type = (String) table.getModel().getValueAt(row, 2);
+
+			System.out.println();
+			combo.setModel(new DefaultComboBoxModel<>(Project.getActiveProject().getSubParamsTypes(type)));
+			combo.setSelectedItem(subType);
+			//System.out.println("a: " + value.getClass());
+			return combo;
+		}
+
+		@Override
+		public Object getCellEditorValue()
+		{
+			System.out.println("getCellEditorValue");
+			return subType;
 		}
 	}
 }
