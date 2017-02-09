@@ -19,7 +19,7 @@ public class Parameter
 
 	static
 	{
-		Collections.addAll(PARAMS_LOCATION, new String[]{"query", "header", "formData", "body"});
+		Collections.addAll(PARAMS_LOCATION, "query", "header", "form data", "body");
 	}
 
 	/**

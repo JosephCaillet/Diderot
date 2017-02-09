@@ -99,7 +99,7 @@ public class MethodPanel extends JPanel implements Scrollable
 
 		colMod.getColumn(2).setCellEditor(new DefaultCellEditor(new JComboBox(Project.getActiveProject().getParamsTypes())));
 		colMod.getColumn(3).setCellEditor(new ParamsSubTypesEditor());
-		colMod.getColumn(4).setCellEditor(new DefaultCellEditor(new JComboBox(Parameter.PARAMS_LOCATION)));
+		colMod.getColumn(4).setCellEditor(new ParameterLocationEditor(httpMethod));
 
 		Box box = Box.createVerticalBox();
 		box.setBorder(componentBorder);
@@ -132,7 +132,7 @@ public class MethodPanel extends JPanel implements Scrollable
 
 
 		JSplitPane respPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
-		responseList = new JList<String>(httpMethod.getResponsesNames());
+		responseList = new JList<>(httpMethod.getResponsesNames());
 		responseList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
 		respPanel.add(new JScrollPane(responseList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -231,7 +231,7 @@ public class MethodPanel extends JPanel implements Scrollable
 				Project.UserDefinedRouteProperty userProperty = Project.getActiveProject().getUserRouteProperty(property);
 				if(userProperty.isNewValuesDisabled())
 				{
-					JComboBox<String> comboBox = new JComboBox<String>(userProperty.getValues());
+					JComboBox<String> comboBox = new JComboBox<>(userProperty.getValues());
 					panel.add(comboBox);
 
 					comboBox.setSelectedItem(httpMethod.getUserPropertyValue(property));
@@ -323,7 +323,7 @@ public class MethodPanel extends JPanel implements Scrollable
 				Response response = httpMethod.getResponse(responseName);
 				responseDescription.setText(response.getDescription());
 				responseDescription.setCaretPosition(0);
-				responseType.setModel(new DefaultComboBoxModel<String>(Project.getActiveProject().getResponsesFormat()));
+				responseType.setModel(new DefaultComboBoxModel<>(Project.getActiveProject().getResponsesFormat()));
 				responseType.setSelectedItem(response.getOutputType());
 				responseSchema.setText(response.getSchema());
 				responseSchema.setCaretPosition(0);
@@ -390,7 +390,7 @@ public class MethodPanel extends JPanel implements Scrollable
 								"This response already exists.", "Cannot add response", JOptionPane.WARNING_MESSAGE);
 						return;
 					}
-					responseList.setModel(new DefaultComboBoxModel<String>(httpMethod.getResponsesNames()));
+					responseList.setModel(new DefaultComboBoxModel<>(httpMethod.getResponsesNames()));
 					responseList.setSelectedValue(responseToAdd, true);
 					revalidate();
 					repaint();
@@ -422,7 +422,7 @@ public class MethodPanel extends JPanel implements Scrollable
 								"This response already exists.", "Cannot rename response", JOptionPane.WARNING_MESSAGE);
 						return;
 					}
-					responseList.setModel(new DefaultComboBoxModel<String>(httpMethod.getResponsesNames()));
+					responseList.setModel(new DefaultComboBoxModel<>(httpMethod.getResponsesNames()));
 					responseList.setSelectedValue(responseRenamed, true);
 				}
 			}
@@ -458,7 +458,7 @@ public class MethodPanel extends JPanel implements Scrollable
 				{
 					httpMethod.delResponse(responseToDelete);
 					String[] responsesNames = httpMethod.getResponsesNames();
-					responseList.setModel(new DefaultComboBoxModel<String>(responsesNames));
+					responseList.setModel(new DefaultComboBoxModel<>(responsesNames));
 
 					if(responsesNames.length == 0)
 					{
@@ -712,6 +712,96 @@ public class MethodPanel extends JPanel implements Scrollable
 		}
 	}
 
+	private class ParameterLocationEditor extends AbstractCellEditor implements TableCellEditor, ItemListener
+	{
+		private String location;
+		private JComboBox comboBox = new JComboBox(Parameter.PARAMS_LOCATION);
+		HttpMethod httpMethod;
+
+		public ParameterLocationEditor(HttpMethod httpMethod)
+		{
+			this.httpMethod = httpMethod;
+			comboBox.addItemListener(this);
+		}
+
+		@Override
+		public void itemStateChanged(ItemEvent e)
+		{
+			if(e.getStateChange() == ItemEvent.SELECTED)
+			{
+				if(!checkDataConsistency(httpMethod, (String) e.getItem()))
+				{
+					fireEditingCanceled();
+					return;
+				}
+				location = (String) e.getItem();
+				fireEditingStopped();
+			}
+		}
+
+		@Override
+		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
+		{
+			location = (String) value;
+			comboBox.setSelectedItem(value);
+			return comboBox;
+		}
+
+		@Override
+		public Object getCellEditorValue()
+		{
+			return location;
+		}
+
+		private boolean checkDataConsistency(HttpMethod httpMethod, String loc)
+		{
+			if("body".equals(loc))//only 1 body, and no form with body.
+			{
+				int formDataFound = 0;
+
+				for(String paramName : httpMethod.getParametersNames())
+				{
+					Parameter param = httpMethod.getParameter(paramName);
+
+					if("body".equals(param.getLocation()))
+					{
+						comboBox.hidePopup();
+						JOptionPane.showMessageDialog(null, "Only one parameter with \"body\" location can exists per request.", "Parameter location error", JOptionPane.ERROR_MESSAGE);
+						return false;
+					}
+					else if("form data".equals(param.getLocation()))
+					{
+						formDataFound++;
+					}
+				}
+
+				if(formDataFound > 1 || formDataFound == 1 && !"form data".equals(getCellEditorValue()))
+				{
+					comboBox.hidePopup();
+					JOptionPane.showMessageDialog(null, "Parameter with \"body\" location cannot exists alongside parameter(s) with \"form data\" location.", "Parameter location error", JOptionPane.ERROR_MESSAGE);
+					return false;
+				}
+			}
+			else if("form data".equals(loc))
+			{
+				boolean preError = false;
+				for(String paramName : httpMethod.getParametersNames())
+				{
+					Parameter param = httpMethod.getParameter(paramName);
+
+					if("body".equals(param.getLocation()) && !"body".equals(getCellEditorValue()))
+					{
+						comboBox.hidePopup();
+						JOptionPane.showMessageDialog(null, "Parameter with \"form data\" location cannot exists alongside parameter(s) with \"body\" location.", "Parameter location error", JOptionPane.ERROR_MESSAGE);
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+	}
+
 	private class ParamsSubTypesEditor extends AbstractCellEditor implements TableCellEditor, ActionListener
 	{
 		String subType = "";
@@ -726,28 +816,24 @@ public class MethodPanel extends JPanel implements Scrollable
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			System.out.println("actionPerformed");
 			subType = (String) combo.getSelectedItem();
+			fireEditingStopped();
 		}
 
 		@Override
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
 		{
-			System.out.println("getTableCellEditorComponent");
 			subType = (String) value;
 			String type = (String) table.getModel().getValueAt(row, 2);
 
-			System.out.println();
 			combo.setModel(new DefaultComboBoxModel<>(Project.getActiveProject().getSubParamsTypes(type)));
 			combo.setSelectedItem(subType);
-			//System.out.println("a: " + value.getClass());
 			return combo;
 		}
 
 		@Override
 		public Object getCellEditorValue()
 		{
-			System.out.println("getCellEditorValue");
 			return subType;
 		}
 	}
