@@ -716,7 +716,7 @@ public class MethodPanel extends JPanel implements Scrollable
 	{
 		private String location;
 		private JComboBox comboBox = new JComboBox(Parameter.PARAMS_LOCATION);
-		HttpMethod httpMethod;
+		private HttpMethod httpMethod;
 
 		public ParameterLocationEditor(HttpMethod httpMethod)
 		{
@@ -784,7 +784,6 @@ public class MethodPanel extends JPanel implements Scrollable
 			}
 			else if("form data".equals(loc))
 			{
-				boolean preError = false;
 				for(String paramName : httpMethod.getParametersNames())
 				{
 					Parameter param = httpMethod.getParameter(paramName);
