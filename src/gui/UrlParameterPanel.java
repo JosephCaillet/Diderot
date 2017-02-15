@@ -21,7 +21,7 @@ public class UrlParameterPanel extends JPanel
 
 	public UrlParameterPanel()
 	{
-		super(new BorderLayout());
+		super(new BorderLayout(0, 2));
 		buildUI();
 	}
 
@@ -48,7 +48,8 @@ public class UrlParameterPanel extends JPanel
 		bottomPanel.add(new JLabel("Description: "), BorderLayout.WEST);
 		bottomPanel.add(description, BorderLayout.CENTER);
 
-		add(topPanel, BorderLayout.NORTH);
+		add(new JLabel("Url parameter:"), BorderLayout.NORTH);
+		add(topPanel, BorderLayout.CENTER);
 		add(bottomPanel, BorderLayout.SOUTH);
 	}
 
@@ -56,7 +57,7 @@ public class UrlParameterPanel extends JPanel
 	{
 		this.route = route;
 
-		name.setText(route.getName());
+		name.setText(route.getUrlParamName());
 
 		typeCombo.setModel(new DefaultComboBoxModel(Project.getActiveProject().getParamsTypes()));
 		typeCombo.setSelectedItem(route.getUrlParamType());

@@ -32,6 +32,8 @@ public class MethodsManagementPanel extends JPanel
 	private JTextArea descriptionTextArea = new JTextArea();
 	private int savedMethodIndex;
 	private int savedViewHorizontalPosition;
+	private JSplitPane mainPanel;
+	private int dividerLocationBeforeUrlParameterPanelDisplay;
 
 	/**
 	 * Create methods management panel.
@@ -79,7 +81,19 @@ public class MethodsManagementPanel extends JPanel
 		descriptionTextArea.setText(route.getDescription());
 		descriptionTextArea.setCaretPosition(0);
 
-		urlParameterPanel.setRoute(route);
+		if(route.hasUrlParameter())
+		{
+			dividerLocationBeforeUrlParameterPanelDisplay = mainPanel.getDividerLocation();
+			urlParameterPanel.setVisible(true);
+			urlParameterPanel.setRoute(route);
+			mainPanel.setDividerLocation(dividerLocationBeforeUrlParameterPanelDisplay + urlParameterPanel.getSize().height);
+		}
+		else
+		{
+			urlParameterPanel.setVisible(false);
+			mainPanel.setDividerLocation(dividerLocationBeforeUrlParameterPanelDisplay);
+		}
+
 
 		rebuildTabbedPane();
 
@@ -143,10 +157,10 @@ public class MethodsManagementPanel extends JPanel
 
 		bottomPanel.add(btnPanel, BorderLayout.NORTH);
 		bottomPanel.add(methodsTabbedPanel, BorderLayout.CENTER);
-
-		JSplitPane mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, topPanel, bottomPanel);
+		mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, topPanel, bottomPanel);
 		add(mainPanel);
 
+		dividerLocationBeforeUrlParameterPanelDisplay = mainPanel.getDividerLocation();
 		addListeners();
 	}
 

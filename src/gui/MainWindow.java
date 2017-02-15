@@ -514,11 +514,11 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 					if("plugin.importer.DefaultDiderotProjectImporter".equals(importerName))
 					{
-						if("createProject".equals(importerInstance.getAvailableImportingOperations().get(actionName).methodName))
+						/*if("createProject".equals(importerInstance.getAvailableImportingOperations().get(actionName).methodName))
 						{
 							actionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
 						}
-						else if("importProject".equals(importerInstance.getAvailableImportingOperations().get(actionName).methodName))
+						else */if("importProject".equals(importerInstance.getAvailableImportingOperations().get(actionName).methodName))
 						{
 							actionMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 						}
