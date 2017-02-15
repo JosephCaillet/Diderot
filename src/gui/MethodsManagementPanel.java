@@ -28,6 +28,7 @@ public class MethodsManagementPanel extends JPanel
 
 	private JTabbedPane methodsTabbedPanel = new JTabbedPane();
 	private Route route;
+	private UrlParameterPanel urlParameterPanel = new UrlParameterPanel();
 	private JTextArea descriptionTextArea = new JTextArea();
 	private int savedMethodIndex;
 	private int savedViewHorizontalPosition;
@@ -78,6 +79,8 @@ public class MethodsManagementPanel extends JPanel
 		descriptionTextArea.setText(route.getDescription());
 		descriptionTextArea.setCaretPosition(0);
 
+		urlParameterPanel.setRoute(route);
+
 		rebuildTabbedPane();
 
 		if(methodsTabbedPanel.getTabCount() == 0)
@@ -115,14 +118,18 @@ public class MethodsManagementPanel extends JPanel
 	 */
 	private void buildUI()
 	{
-		JPanel topPanel = new JPanel(new BorderLayout());
+		JPanel baseRouteInfoPanel = new JPanel(new BorderLayout());
 
 		descriptionTextArea = new JTextArea();
 		descriptionTextArea.setTabSize(2);
 		JScrollPane scrollPanel = new JScrollPane(descriptionTextArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-		topPanel.add(new JLabel("Global route description:"), BorderLayout.NORTH);
-		topPanel.add(scrollPanel, BorderLayout.CENTER);
+		baseRouteInfoPanel.add(new JLabel("Global route description:"), BorderLayout.NORTH);
+		baseRouteInfoPanel.add(scrollPanel, BorderLayout.CENTER);
+
+		JPanel topPanel = new JPanel(new BorderLayout());
+		topPanel.add(baseRouteInfoPanel, BorderLayout.CENTER);
+		topPanel.add(urlParameterPanel, BorderLayout.SOUTH);
 
 
 		JPanel bottomPanel = new JPanel(new BorderLayout());
@@ -203,10 +210,10 @@ public class MethodsManagementPanel extends JPanel
 				insertUpdate(documentEvent);
 			}
 
-			@Override
 			/**
 			 * Not implemented
 			 */
+			@Override
 			public void changedUpdate(DocumentEvent documentEvent)
 			{
 				//This not the implementation you are looking for.
@@ -221,7 +228,7 @@ public class MethodsManagementPanel extends JPanel
 				int currentTab = methodsTabbedPanel.getSelectedIndex();
 				if(currentTab != -1)
 				{
-					//update jmenu
+					//TODO update jmenu
 				}
 			}
 		});

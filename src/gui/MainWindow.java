@@ -72,7 +72,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 		buildUI();
 
-		setPreferredSize(new Dimension(900, 800));
+		setPreferredSize(new Dimension(950, 800));
 		pack();
 		setLocationRelativeTo(null);
 
@@ -505,15 +505,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 								routesTreePanel.updateModel();
 								enableButton(false);
 							}
-							catch(NoSuchMethodException e1)
-							{
-								e1.printStackTrace();
-							}
-							catch(InvocationTargetException e1)
-							{
-								e1.printStackTrace();
-							}
-							catch(IllegalAccessException e1)
+							catch(NoSuchMethodException | InvocationTargetException | IllegalAccessException e1)
 							{
 								e1.printStackTrace();
 							}
@@ -537,20 +529,9 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 				importMenu.add(actionMenu);
 			}
-			catch(ClassNotFoundException e)
+			catch(ClassNotFoundException | InstantiationException | IllegalAccessException e)
 			{
 				e.printStackTrace();
-				continue;
-			}
-			catch(InstantiationException e)
-			{
-				e.printStackTrace();
-				continue;
-			}
-			catch(IllegalAccessException e)
-			{
-				e.printStackTrace();
-				continue;
 			}
 		}
 	}
@@ -598,15 +579,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 								Method method = finalExporter.getMethod(exporterInstance.getAvailableExportingOperations().get(actionName).methodName);
 								method.invoke(exporterInstance);
 							}
-							catch(NoSuchMethodException e1)
-							{
-								e1.printStackTrace();
-							}
-							catch(InvocationTargetException e1)
-							{
-								e1.printStackTrace();
-							}
-							catch(IllegalAccessException e1)
+							catch(NoSuchMethodException | InvocationTargetException | IllegalAccessException e1)
 							{
 								e1.printStackTrace();
 							}
@@ -634,20 +607,9 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 				exportMenu.add(actionMenu);
 			}
-			catch(ClassNotFoundException e)
+			catch(ClassNotFoundException | InstantiationException | IllegalAccessException e)
 			{
 				e.printStackTrace();
-				continue;
-			}
-			catch(InstantiationException e)
-			{
-				e.printStackTrace();
-				continue;
-			}
-			catch(IllegalAccessException e)
-			{
-				e.printStackTrace();
-				continue;
 			}
 		}
 	}
@@ -703,15 +665,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 								methodsManagementPanel.restoreDisplayStatus();
 								routesTreePanel.setSelectionPath(tp);
 							}
-							catch(NoSuchMethodException e1)
-							{
-								e1.printStackTrace();
-							}
-							catch(InvocationTargetException e1)
-							{
-								e1.printStackTrace();
-							}
-							catch(IllegalAccessException e1)
+							catch(NoSuchMethodException | InvocationTargetException | IllegalAccessException e1)
 							{
 								e1.printStackTrace();
 							}
@@ -723,20 +677,9 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 
 				editMenu.add(actionMenu);
 			}
-			catch(ClassNotFoundException e)
+			catch(ClassNotFoundException | InstantiationException | IllegalAccessException e)
 			{
 				e.printStackTrace();
-				continue;
-			}
-			catch(InstantiationException e)
-			{
-				e.printStackTrace();
-				continue;
-			}
-			catch(IllegalAccessException e)
-			{
-				e.printStackTrace();
-				continue;
 			}
 		}
 	}

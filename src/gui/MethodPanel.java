@@ -283,10 +283,10 @@ public class MethodPanel extends JPanel implements Scrollable
 				insertUpdate(documentEvent);
 			}
 
-			@Override
 			/**
 			 * Not implemented
 			 */
+			@Override
 			public void changedUpdate(DocumentEvent documentEvent)
 			{
 				//This not the implementation you are looking for.
@@ -801,22 +801,25 @@ public class MethodPanel extends JPanel implements Scrollable
 		}
 	}
 
-	private class ParamsSubTypesEditor extends AbstractCellEditor implements TableCellEditor, ActionListener
+	private class ParamsSubTypesEditor extends AbstractCellEditor implements TableCellEditor, ItemListener
 	{
-		String subType = "";
-		JComboBox<String> combo = new JComboBox<>();
+		private String subType = "";
+		private JComboBox<String> combo = new JComboBox<>();
 
 		public ParamsSubTypesEditor()
 		{
 			super();
-			combo.addActionListener(this);
+			combo.addItemListener(this);
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e)
+		public void itemStateChanged(ItemEvent e)
 		{
-			subType = (String) combo.getSelectedItem();
-			fireEditingStopped();
+			if(e.getStateChange() == ItemEvent.SELECTED)
+			{
+				subType = (String) combo.getSelectedItem();
+				fireEditingStopped();
+			}
 		}
 
 		@Override

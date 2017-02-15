@@ -23,6 +23,10 @@ public class Route implements TreeModel
 
 	private Route root;
 
+	private String urlParamDescription = "";
+	private String urlParamType = Project.getActiveProject().getParamsTypes()[0];
+	private String urlParamSubType = Project.getActiveProject().getSubParamsTypes(urlParamType)[0];
+
 
 	//Statics methods
 
@@ -218,6 +222,78 @@ public class Route implements TreeModel
 	public void setDescription(String description)
 	{
 		this.description = description;
+	}
+
+	/**
+	 * Get url parameter's description
+	 * @return url parameter's description
+	 */
+	public String getUrlParamDescription()
+	{
+		return urlParamDescription;
+	}
+
+	/**
+	 * Set url parameter's description
+	 * @param urlParamDescription url parameter's description
+	 */
+	public void setUrlParamDescription(String urlParamDescription)
+	{
+		this.urlParamDescription = urlParamDescription;
+	}
+
+	/**
+	 * Get url parameter's type
+	 * @return url parameter's type
+	 */
+	public String getUrlParamType()
+	{
+		return urlParamType;
+	}
+
+	/**
+	 * Set url parameter's type
+	 * @param urlParamType url parameter's type
+	 */
+	public void setUrlParamType(String urlParamType)
+	{
+		this.urlParamType = urlParamType;
+	}
+
+	/**
+	 * Get url parameter's subtype
+	 * @return url parameter's subtype
+	 */
+	public String getUrlParamSubType()
+	{
+		return urlParamSubType;
+	}
+
+	/**
+	 * Set url parameter's subtype
+	 * @param urlParamSubType url parameter's subtype
+	 */
+	public void setUrlParamSubType(String urlParamSubType)
+	{
+		this.urlParamSubType = urlParamSubType;
+	}
+
+	/**
+	 * Set url parameter's subtype
+	 * @return url parameter's subtype
+	 */
+	public boolean hasUrlParameter()
+	{
+		return name.startsWith(":");
+	}
+
+	/**
+	 * Get url parameter's name
+	 * @return url parameter's name
+	 */
+	public String getUrlParamName()
+	{
+		return name.substring(1);
 	}
 
 	//Route management
@@ -660,38 +736,38 @@ public class Route implements TreeModel
 		return r.subRoutes.size() == 0;
 	}
 
-	@Override
 	/**
 	 * Unused
 	 */
+	@Override
 	public void valueForPathChanged(TreePath treePath, Object o)
 	{
 		//This not the implementation you are looking for.
 	}
 
-	@Override
 	/**
 	 * Unused
 	 */
+	@Override
 	public int getIndexOfChild(Object o, Object o1)
 	{
 		//This not the implementation you are looking for.
 		return 0;
 	}
 
-	@Override
 	/**
 	 * Unused
 	 */
+	@Override
 	public void addTreeModelListener(TreeModelListener treeModelListener)
 	{
 		//This not the implementation you are looking for.
 	}
 
-	@Override
 	/**
 	 * Unused
 	 */
+	@Override
 	public void removeTreeModelListener(TreeModelListener treeModelListener)
 	{
 		//This not the implementation you are looking for.
