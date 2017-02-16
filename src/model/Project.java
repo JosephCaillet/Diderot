@@ -26,6 +26,7 @@ public class Project
 	private String domain = "";
 	private String authors = "";
 	private String contact = "";
+	private String version = "";
 
 	/**
 	 * Get singleton instance.
@@ -215,6 +216,24 @@ public class Project
 	public void setContact(String contact)
 	{
 		this.contact = contact;
+	}
+
+	/**
+	 * Gets project's version.
+	 * @return project's version
+	 */
+	public String getVersion()
+	{
+		return version;
+	}
+
+	/**
+	 * Sets project's version.
+	 * @param version project's version
+	 */
+	public void setVersion(String version)
+	{
+		this.version = version;
 	}
 
 	//parameters' types management

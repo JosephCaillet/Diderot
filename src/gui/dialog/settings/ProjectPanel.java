@@ -15,7 +15,7 @@ public class ProjectPanel extends JPanel
 {
 	private Frame parent;
 
-	private JTextField name, company, domain, authors, contact;
+	private JTextField name, company, domain, authors, contact, version;
 	private JTextArea description;
 
 	/**
@@ -42,6 +42,10 @@ public class ProjectPanel extends JPanel
 		vbox1.add(new JLabel("Name:"));
 		name = new JTextField(project.getName());
 		vbox1.add(name);
+
+		vbox1.add(new JLabel("Version:"));
+		version = new JTextField(project.getVersion());
+		vbox1.add(version);
 
 		vbox1.add(new JLabel("Company:"));
 		company = new JTextField(project.getCompany());
@@ -136,6 +140,15 @@ public class ProjectPanel extends JPanel
 			public void keyReleased(KeyEvent e)
 			{
 				project.setDescription(description.getText());
+			}
+		});
+
+		version.addKeyListener(new KeyAdapter()
+		{
+			@Override
+			public void keyReleased(KeyEvent e)
+			{
+				project.setVersion(version.getText());
 			}
 		});
 	}
