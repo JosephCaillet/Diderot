@@ -258,6 +258,28 @@ public class Project
 		return Arrays.copyOf(valuesList, valuesList.length, String[].class);
 	}
 
+	public boolean addParameterType(String type)
+	{
+		if(paramsTypes.containsKey(type))
+		{
+			return false;
+		}
+
+		paramsTypes.put(type, new TreeSet<>());
+		return true;
+	}
+
+	public boolean addSubParameterType(String type, String subType)
+	{
+		if(!paramsTypes.containsKey(type))
+		{
+			return false;
+		}
+
+		paramsTypes.get(type).add(subType);
+		return true;
+	}
+
 	//user defined properties management
 
 	/**

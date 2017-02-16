@@ -145,7 +145,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		project.setName("New Project");
 		project.setDomain("newProject.com");
 		project.setAuthors(System.getProperty("user.name"));
-		project.setVersion("1.0");
+		project.setAuthors(System.getProperty("user.name"));
 
 		rootRoute.clear();
 		rootRoute.rename("newProject.com");
@@ -177,6 +177,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 			PluginsSettings.clear();
 
 			loadProject(diderotProject);
+			loadParameterTypes(diderotProject);
 			loadPluginsProperties(diderotProject);
 			loadResponsesOutputFormat(diderotProject);
 			loadUserDefinedProperties(diderotProject);
@@ -195,6 +196,46 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		catch(ParserConfigurationException e)
 		{
 			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Load parameters types .
+	 * @param projectElement the project element
+	 */
+	private void loadParameterTypes(Element projectElement)
+	{
+		Node types = projectElement.getElementsByTagName("parameterTypes").item(0);
+		if(types == null)
+		{
+			return;
+		}
+
+		NodeList nodeList = types.getChildNodes();
+
+		for(int i = 0; i < nodeList.getLength(); i++)
+		{
+			Node node = nodeList.item(i);
+			if(node.getNodeType() == Node.TEXT_NODE)
+			{
+				continue;
+			}
+
+			project.addParameterType(node.getAttributes().getNamedItem("name").getTextContent());
+			System.out.println(node.getAttributes().getNamedItem("name").getTextContent());
+
+			NodeList nodeList2 = node.getChildNodes();
+			for(int j = 0; j < nodeList2.getLength(); j++)
+			{
+				Node node2 = nodeList2.item(j);
+				if(node2.getNodeType() == Node.TEXT_NODE)
+				{
+					continue;
+				}
+
+				project.addSubParameterType(node.getAttributes().getNamedItem("name").getTextContent(), node2.getTextContent());
+				System.out.println(node.getAttributes().getNamedItem("name").getTextContent() + " - " + node2.getTextContent() + "*");
+			}
 		}
 	}
 

@@ -204,9 +204,10 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		Element projectDescription = xmlSaveDocument.createElement("description");
 		projectDescription.appendChild(xmlSaveDocument.createTextNode(encodeNewLine(project.getDescription())));
 		diderotProject.appendChild(projectDescription);
-		diderotProject.appendChild(buildPluginsPropertiesXml(xmlSaveDocument));
 		diderotProject.appendChild(buildResponseOutputFormatXml(xmlSaveDocument));
 		diderotProject.appendChild(buildUserDefinedPropertiesXml(xmlSaveDocument));
+		diderotProject.appendChild(buildParameterTypesXml(xmlSaveDocument));
+		diderotProject.appendChild(buildPluginsPropertiesXml(xmlSaveDocument));
 
 		Element routeXml = xmlSaveDocument.createElement("route");
 		routeXml.setAttribute("name", project.getDomain());
@@ -214,6 +215,33 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		diderotProject.appendChild(routeXml);
 
 		return xmlSaveDocument;
+	}
+
+	/**
+	 * Build parameter type xml element.
+	 * @param rootXml the root xml
+	 * @return the element
+	 */
+	private Element buildParameterTypesXml(Document rootXml)
+	{
+		Element parameterTypes = rootXml.createElement("parameterTypes");
+
+		for(String typeName : project.getParamsTypes())
+		{
+			Element type = rootXml.createElement("type");
+			type.setAttribute("name", typeName);
+
+			for(String subTypeName : project.getSubParamsTypes(typeName))
+			{
+				Element subType = rootXml.createElement("subType");
+				subType.appendChild(rootXml.createTextNode(subTypeName));
+				type.appendChild(subType);
+			}
+
+			parameterTypes.appendChild(type);
+		}
+
+		return parameterTypes;
 	}
 
 	/**
