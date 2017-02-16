@@ -5,6 +5,10 @@ import model.Route;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 /**
  * Panel to edit url
@@ -23,6 +27,7 @@ public class UrlParameterPanel extends JPanel
 	{
 		super(new BorderLayout(0, 2));
 		buildUI();
+		addListeners();
 	}
 
 	private void buildUI()
@@ -53,6 +58,44 @@ public class UrlParameterPanel extends JPanel
 		add(bottomPanel, BorderLayout.SOUTH);
 	}
 
+	private void addListeners()
+	{
+		description.addKeyListener(new KeyAdapter()
+		{
+			@Override
+			public void keyReleased(KeyEvent e)
+			{
+				route.setUrlParamDescription(description.getText());
+			}
+		});
+
+		typeCombo.addItemListener(new ItemListener()
+		{
+			@Override
+			public void itemStateChanged(ItemEvent e)
+			{
+				if(e.getStateChange() == ItemEvent.SELECTED)
+				{
+					route.setUrlParamType((String) typeCombo.getSelectedItem());
+					subTypeCombo.setModel(new DefaultComboBoxModel(Project.getActiveProject().getSubParamsTypes(route.getUrlParamType())));
+				}
+			}
+		});
+
+		subTypeCombo.addItemListener(new ItemListener()
+		{
+			@Override
+			public void itemStateChanged(ItemEvent e)
+			{
+				if(e.getStateChange() == ItemEvent.SELECTED)
+				{
+					route.setUrlParamSubType((String) subTypeCombo.getSelectedItem());
+					//System.out.println(route.getUrlParamSubType());
+				}
+			}
+		});
+	}
+
 	public void setRoute(Route route)
 	{
 		this.route = route;
@@ -63,7 +106,7 @@ public class UrlParameterPanel extends JPanel
 		typeCombo.setSelectedItem(route.getUrlParamType());
 
 		subTypeCombo.setModel(new DefaultComboBoxModel(Project.getActiveProject().getSubParamsTypes(route.getUrlParamType())));
-		typeCombo.setSelectedItem(route.getUrlParamSubType());
+		subTypeCombo.setSelectedItem(route.getUrlParamSubType());
 
 		description.setText(route.getUrlParamDescription());
 	}
