@@ -198,6 +198,7 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		diderotProject.setAttribute("company", project.getCompany());
 		diderotProject.setAttribute("authors", project.getAuthors());
 		diderotProject.setAttribute("contact", project.getContact());
+		diderotProject.setAttribute("version", project.getVersion());
 		xmlSaveDocument.appendChild(diderotProject);
 
 		Element projectDescription = xmlSaveDocument.createElement("description");

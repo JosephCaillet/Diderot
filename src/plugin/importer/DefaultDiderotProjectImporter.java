@@ -145,6 +145,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		project.setName("New Project");
 		project.setDomain("newProject.com");
 		project.setAuthors(System.getProperty("user.name"));
+		project.setVersion("1.0");
 
 		rootRoute.clear();
 		rootRoute.rename("newProject.com");
@@ -207,6 +208,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 		project.setCompany(projectElement.getAttribute("company"));
 		project.setAuthors(projectElement.getAttribute("authors"));
 		project.setContact(projectElement.getAttribute("contact"));
+		project.setVersion(projectElement.getAttribute("version"));
 
 		Node description = projectElement.getElementsByTagName("description").item(0).getFirstChild();
 		if(description != null)
