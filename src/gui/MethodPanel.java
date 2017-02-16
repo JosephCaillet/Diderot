@@ -135,8 +135,10 @@ public class MethodPanel extends JPanel implements Scrollable
 		responseList = new JList<>(httpMethod.getResponsesNames());
 		responseList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
-		respPanel.add(new JScrollPane(responseList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), JSplitPane.LEFT);
+		respPanel.add(responseList, JSplitPane.LEFT);
+		responseList.setMinimumSize(new Dimension(50, 10));
+		//respPanel.add(new JScrollPane(responseList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+		//		ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), JSplitPane.LEFT);
 
 		JPanel respEditPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();

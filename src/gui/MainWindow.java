@@ -504,6 +504,7 @@ public class MainWindow extends JFrame implements TreeSelectionListener
 								setTitle("Diderot - " + Project.getActiveProject().getName());
 								routesTreePanel.updateModel();
 								enableButton(false);
+								currentRouteLbl.setVisible(false);
 							}
 							catch(NoSuchMethodException | InvocationTargetException | IllegalAccessException e1)
 							{

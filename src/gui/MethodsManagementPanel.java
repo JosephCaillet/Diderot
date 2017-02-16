@@ -86,7 +86,10 @@ public class MethodsManagementPanel extends JPanel
 			dividerLocationBeforeUrlParameterPanelDisplay = mainPanel.getDividerLocation();
 			urlParameterPanel.setVisible(true);
 			urlParameterPanel.setRoute(route);
-			mainPanel.setDividerLocation(dividerLocationBeforeUrlParameterPanelDisplay + urlParameterPanel.getSize().height);
+			if(dividerLocationBeforeUrlParameterPanelDisplay < urlParameterPanel.getSize().height)
+			{
+				mainPanel.setDividerLocation(dividerLocationBeforeUrlParameterPanelDisplay + urlParameterPanel.getSize().height);
+			}
 		}
 		else
 		{
