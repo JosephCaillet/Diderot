@@ -369,6 +369,12 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 			if("description".equals(nodeName))
 			{
 				route.setDescription(decodeNewLine(routeChildren.item(i).getTextContent()));
+				if(route.hasUrlParameter())
+				{
+					route.setUrlParamType(routeNode.getAttributes().getNamedItem("urlParamType").getTextContent());
+					route.setUrlParamSubType(routeNode.getAttributes().getNamedItem("urlParamSubType").getTextContent());
+					route.setUrlParamDescription(routeNode.getAttributes().getNamedItem("urlParamDescription").getTextContent());
+				}
 			}
 			else if("methods".equals(nodeName))
 			{
@@ -410,6 +416,9 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 								NamedNodeMap attributes = params.item(l).getAttributes();
 								Boolean isRequired = Boolean.valueOf(attributes.getNamedItem("required").getTextContent());
 								Parameter newParam = new Parameter(isRequired, attributes.getNamedItem("description").getTextContent());
+								newParam.setType(attributes.getNamedItem("type").getTextContent());
+								newParam.setSubType(attributes.getNamedItem("subType").getTextContent());
+								newParam.setLocation(attributes.getNamedItem("location").getTextContent());
 								newHttpMethod.addParameter(attributes.getNamedItem("name").getTextContent(), newParam);
 							}
 						}

@@ -333,6 +333,13 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 		description.appendChild(rootXml.createTextNode(encodeNewLine(route.getDescription())));
 		routeXml.appendChild(description);
 
+		if(route.hasUrlParameter())
+		{
+			routeXml.setAttribute("urlParamType", route.getUrlParamType());
+			routeXml.setAttribute("urlParamSubType", route.getUrlParamSubType());
+			routeXml.setAttribute("urlParamDescription", route.getUrlParamDescription());
+		}
+
 		//generate http methods
 		String[] httpMethodsNames = route.getHttpMethodNames();
 		if(httpMethodsNames.length != 0)
@@ -361,6 +368,9 @@ public class DefaultDiderotProjectExporter implements DiderotProjectExporter
 						param.setAttribute("name", paramName);
 						param.setAttribute("required", String.valueOf(parameter.isRequired()));
 						param.setAttribute("description", parameter.getDescription());
+						param.setAttribute("type", parameter.getType());
+						param.setAttribute("subType", parameter.getSubType());
+						param.setAttribute("location", parameter.getLocation());
 						parameters.appendChild(param);
 					}
 					newHttpMethod.appendChild(parameters);
