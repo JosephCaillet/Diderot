@@ -714,7 +714,7 @@ public class MethodPanel extends JPanel implements Scrollable
 		}
 	}
 
-	private class ParameterLocationEditor extends AbstractCellEditor implements TableCellEditor, ItemListener
+	private class ParameterLocationEditor extends AbstractCellEditor implements TableCellEditor
 	{
 		private String location;
 		private JComboBox comboBox = new JComboBox(Parameter.PARAMS_LOCATION);
@@ -723,22 +723,27 @@ public class MethodPanel extends JPanel implements Scrollable
 		public ParameterLocationEditor(HttpMethod httpMethod)
 		{
 			this.httpMethod = httpMethod;
-			comboBox.addItemListener(this);
+			comboBox.addActionListener(e ->
+			{
+				if(!location.equals(comboBox.getSelectedItem()))
+				{
+					stopCellEditing();
+				}
+			});
 		}
 
 		@Override
-		public void itemStateChanged(ItemEvent e)
+		public boolean stopCellEditing()
 		{
-			if(e.getStateChange() == ItemEvent.SELECTED)
+			boolean consistent = checkDataConsistency();
+			if(consistent)
 			{
-				if(!checkDataConsistency(httpMethod, (String) e.getItem()))
-				{
-					fireEditingCanceled();
-					return;
-				}
-				location = (String) e.getItem();
+				location = (String) comboBox.getSelectedItem();
 				fireEditingStopped();
+				return super.stopCellEditing();
 			}
+			fireEditingCanceled();
+			return false;
 		}
 
 		@Override
@@ -755,8 +760,9 @@ public class MethodPanel extends JPanel implements Scrollable
 			return location;
 		}
 
-		private boolean checkDataConsistency(HttpMethod httpMethod, String loc)
+		private boolean checkDataConsistency()
 		{
+			String loc = (String) comboBox.getSelectedItem();
 			if("body".equals(loc))//only 1 body, and no form with body.
 			{
 				int formDataFound = 0;

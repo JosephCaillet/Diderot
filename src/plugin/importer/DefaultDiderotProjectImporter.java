@@ -185,15 +185,7 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 			project.setOpenedStatus(true);
 			PluginsSettings.setPropertyValue(DefaultDiderotProjectExporter.class.getName() + "projectFileName", fileChooser.getSelectedFile().getAbsolutePath());
 		}
-		catch(SAXException e)
-		{
-			e.printStackTrace();
-		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-		}
-		catch(ParserConfigurationException e)
+		catch(SAXException | IOException | ParserConfigurationException e)
 		{
 			e.printStackTrace();
 		}
@@ -222,7 +214,6 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 			}
 
 			project.addParameterType(node.getAttributes().getNamedItem("name").getTextContent());
-			System.out.println(node.getAttributes().getNamedItem("name").getTextContent());
 
 			NodeList nodeList2 = node.getChildNodes();
 			for(int j = 0; j < nodeList2.getLength(); j++)
@@ -234,7 +225,6 @@ public class DefaultDiderotProjectImporter extends DefaultHandler implements Did
 				}
 
 				project.addSubParameterType(node.getAttributes().getNamedItem("name").getTextContent(), node2.getTextContent());
-				System.out.println(node.getAttributes().getNamedItem("name").getTextContent() + " - " + node2.getTextContent() + "*");
 			}
 		}
 	}
